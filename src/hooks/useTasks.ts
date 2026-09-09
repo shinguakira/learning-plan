@@ -3,7 +3,7 @@ import { readTasks, writeTasks } from '@/api/tasks'
 import { createSeedTasks } from '@/utils/seed'
 import type { Task, TaskDraft } from '@/types/task'
 
-export interface TasksApi {
+export type TasksApi = {
   tasks: Task[]
   addTask: (draft: TaskDraft) => void
   updateTask: (id: string, patch: Partial<TaskDraft>) => void

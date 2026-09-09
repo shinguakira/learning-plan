@@ -23,7 +23,7 @@ import { cn } from '@/lib/cn'
 import type { ISODate } from '@/types/date'
 import type { Category, Task } from '@/types/task'
 
-interface Domain {
+type Domain = {
   start: ISODate
   end: ISODate
   days: ISODate[]
@@ -45,7 +45,7 @@ function computeDomain(tasks: readonly Task[]): Domain {
   return { start, end, days: eachDay(start, end) }
 }
 
-interface MonthSegment {
+type MonthSegment = {
   key: string
   label: string
   span: number

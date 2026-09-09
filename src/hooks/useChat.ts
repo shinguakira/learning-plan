@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { fetchChatReply } from '@/api/chat'
 import type { ChatMessage } from '@/types/chat'
 
-export interface ChatApi {
+export type ChatApi = {
   messages: ChatMessage[]
   pending: boolean
   send: (text: string) => void
