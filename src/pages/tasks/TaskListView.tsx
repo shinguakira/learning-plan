@@ -125,7 +125,7 @@ function TaskRow({
           <button
             type="button"
             onClick={() => setConfirming(true)}
-            aria-label={`Delete ""`}
+            aria-label={`Delete "${task.title}"`}
             className="rounded-md p-1.5 text-slate-300 opacity-0 transition group-hover:opacity-100 hover:bg-rose-50 hover:text-rose-600 focus-visible:opacity-100"
           >
             <svg viewBox="0 0 16 16" className="size-4" fill="none" stroke="currentColor" strokeWidth={1.5}>

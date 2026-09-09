@@ -18,18 +18,26 @@ npm run dev
 Open http://localhost:5173. Tasks are stored in `localStorage`, and sample data is
 seeded on first run (`Reload sample data` restores it, `Delete all` clears it).
 
-| Command | What it does |
+## Available scripts
+
+Every script defined in [`package.json`](package.json), and nothing else:
+
+| Script | What it does |
 | --- | --- |
 | `npm run dev` | Dev server with HMR |
-| `npm run build` | Type-check (`tsc -b`) and build to `dist/` |
+| `npm run build` | Type-check, then build to `dist/` |
 | `npm run preview` | Serve the production build |
 | `npm run lint` | ESLint |
+| `npm run test:e2e` | Playwright end-to-end tests |
+| `npm run test:e2e:ui` | Playwright in watch/inspect mode |
 
 `dist/` is a plain static bundle — host it anywhere that serves files.
 
-## Layout
+## Folder structure
 
 ```
+test/e2e/                  Playwright specs: tasks, chat, navigation
+playwright.config.ts       starts the dev server, runs Chromium
 src/pages/tasks/           components only: TasksPage, TaskForm, TaskListView,
                            TimelineView, TaskStats, Field, Chip, EmptyState
 src/pages/chat/            components only: ChatPage, Markdown
@@ -51,8 +59,12 @@ eslint.config.js           ESLint flat config
   is a keyword scan over a constant and tasks persist to `localStorage`, so both sit
   in `src/utils/` under their real names. `src/lib/` is only for code that would drop
   into another project unchanged.
-- Type checking is `tsc -b`, which the `build` script runs before Vite. ESLint is
-  deliberately not type-aware — it covers lint rules only, so the two do not overlap.
+- End-to-end tests are the check that matters here; there are no unit tests. Each
+  Playwright test gets a fresh browser context, so `localStorage` starts empty and
+  the seed data is re-created - no per-test cleanup.
+- Type checking happens inside `npm run build`, so a type error fails the build.
+  ESLint is deliberately not type-aware, which keeps `npm run lint` and the build
+  from overlapping.
 - Category colours are a categorical palette and were validated for lightness,
   chroma, colour-vision separation and surface contrast rather than picked by eye.
   The reasoning is recorded in [`src/constants/task.ts`](src/constants/task.ts).
