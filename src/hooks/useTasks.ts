@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { readTasks, writeTasks } from '@/api/tasks'
+import { readTasks, writeTasks } from '@/utils/taskStorage'
 import { createSeedTasks } from '@/utils/seed'
 import type { Task, TaskDraft } from '@/types/task'
 

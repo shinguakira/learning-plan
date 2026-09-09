@@ -2,10 +2,6 @@ import { CATEGORIES, PRIORITIES, STATUSES, TASKS_STORAGE_KEY } from '@/constants
 import { createSeedTasks } from '@/utils/seed'
 import type { Task } from '@/types/task'
 
-/**
- * Task persistence. localStorage stands in for a server here, so `useTasks`
- * only ever calls these two functions.
- */
 function isTask(value: unknown): value is Task {
   if (typeof value !== 'object' || value === null) return false
   const task = value as Record<string, unknown>

@@ -5,3 +5,9 @@ export type ChatMessage = {
   role: ChatRole
   content: string
 }
+
+/** One keyword-matched answer the chat bot can return. */
+export type Topic = {
+  readonly keywords: readonly string[]
+  readonly reply: string
+}

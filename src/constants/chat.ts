@@ -1,4 +1,7 @@
-import type { Topic } from '@/api/types'
+import type { Topic } from '@/types/chat'
+
+/** Cosmetic pause before a reply, so the typing indicator registers. */
+export const REPLY_DELAY_MS = 300
 
 /** Prompts offered on the empty chat screen. */
 export const SUGGESTIONS = [

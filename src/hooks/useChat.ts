@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
-import { fetchChatReply } from '@/api/chat'
+import { REPLY_DELAY_MS } from '@/constants/chat'
+import { pickReply } from '@/utils/chat'
 import type { ChatMessage } from '@/types/chat'
 
 export type ChatApi = {
@@ -12,10 +13,14 @@ export type ChatApi = {
 export function useChat(): ChatApi {
   const [messages, setMessages] = useState<ChatMessage[]>([])
   const [pending, setPending] = useState(false)
-  // Bumped on reset and on unmount so a reply in flight is discarded.
-  const generation = useRef(0)
+  const timer = useRef<ReturnType<typeof setTimeout> | null>(null)
 
-  useEffect(() => () => void (generation.current += 1), [])
+  const cancelPending = () => {
+    if (timer.current !== null) clearTimeout(timer.current)
+    timer.current = null
+  }
+
+  useEffect(() => cancelPending, [])
 
   return {
     messages,
@@ -24,24 +29,25 @@ export function useChat(): ChatApi {
       const text = raw.trim()
       if (text === '' || pending) return
 
-      const current = generation.current
       setMessages((previous) => [
         ...previous,
         { id: crypto.randomUUID(), role: 'user', content: text },
       ])
       setPending(true)
 
-      void fetchChatReply(text).then((reply) => {
-        if (generation.current !== current) return
+      // Nothing is loading - `pickReply` is synchronous. The pause exists only
+      // so the typing indicator is visible instead of flashing.
+      timer.current = setTimeout(() => {
+        timer.current = null
         setMessages((previous) => [
           ...previous,
-          { id: crypto.randomUUID(), role: 'assistant', content: reply },
+          { id: crypto.randomUUID(), role: 'assistant', content: pickReply(text) },
         ])
         setPending(false)
-      })
+      }, REPLY_DELAY_MS)
     },
     reset: () => {
-      generation.current += 1
+      cancelPending()
       setMessages([])
       setPending(false)
     },
