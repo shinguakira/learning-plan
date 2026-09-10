@@ -1,5 +1,6 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { SUGGESTIONS } from '@/constants/chat'
+import { cn } from '@/lib/cn'
 import { useChat } from '@/hooks/useChat'
 import { Markdown } from '@/pages/chat/Markdown'
 import type { ChatMessage } from '@/types/chat'
@@ -26,7 +27,14 @@ function Bubble({ message }: { message: ChatMessage }) {
   return (
     <div className="animate-fade-rise flex gap-3">
       <AssistantAvatar />
-      <div className="max-w-[80%] space-y-1 rounded-2xl rounded-tl-md bg-white px-4 py-2.5 text-sm leading-relaxed text-slate-700 shadow-sm ring-1 ring-slate-200 ring-inset">
+      <div
+        className={cn(
+          'max-w-[80%] space-y-1 rounded-2xl rounded-tl-md px-4 py-2.5 text-sm leading-relaxed shadow-sm ring-1 ring-inset',
+          message.failed
+            ? 'bg-rose-50 text-rose-700 ring-rose-200'
+            : 'bg-white text-slate-700 ring-slate-200',
+        )}
+      >
         <Markdown text={message.content} />
       </div>
     </div>

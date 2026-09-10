@@ -16,8 +16,13 @@ export default defineConfig({
   webServer: {
     command: 'npm run dev',
     url: BASE_URL,
-    // Each test gets a fresh browser context, so localStorage starts empty and
-    // the seed data is re-created - no per-test cleanup needed.
-    reuseExistingServer: !process.env.CI,
+    // Point the chat at a host that never resolves, so a spec that forgets to
+    // stub the endpoint fails loudly instead of reaching a real provider.
+    env: {
+      VITE_CHAT_API_URL: 'https://chat.invalid/v1/chat/completions',
+      VITE_CHAT_MODEL: 'stub-model',
+    },
+    // The env above has to be in effect, so never reuse an outside server.
+    reuseExistingServer: false,
   },
 })

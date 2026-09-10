@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { REPLY_DELAY_MS } from '@/constants/chat'
-import { pickReply } from '@/utils/chat'
+import { fetchChatReply } from '@/api/chat'
 import type { ChatMessage } from '@/types/chat'
 
 export type ChatApi = {
@@ -13,14 +12,11 @@ export type ChatApi = {
 export function useChat(): ChatApi {
   const [messages, setMessages] = useState<ChatMessage[]>([])
   const [pending, setPending] = useState(false)
-  const timer = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const request = useRef<AbortController | null>(null)
 
-  const cancelPending = () => {
-    if (timer.current !== null) clearTimeout(timer.current)
-    timer.current = null
-  }
+  useEffect(() => () => request.current?.abort(), [])
 
-  useEffect(() => cancelPending, [])
+  const append = (message: ChatMessage) => setMessages((previous) => [...previous, message])
 
   return {
     messages,
@@ -29,25 +25,35 @@ export function useChat(): ChatApi {
       const text = raw.trim()
       if (text === '' || pending) return
 
-      setMessages((previous) => [
-        ...previous,
-        { id: crypto.randomUUID(), role: 'user', content: text },
-      ])
+      const history = [...messages, { id: crypto.randomUUID(), role: 'user' as const, content: text }]
+      setMessages(history)
       setPending(true)
 
-      // Nothing is loading - `pickReply` is synchronous. The pause exists only
-      // so the typing indicator is visible instead of flashing.
-      timer.current = setTimeout(() => {
-        timer.current = null
-        setMessages((previous) => [
-          ...previous,
-          { id: crypto.randomUUID(), role: 'assistant', content: pickReply(text) },
-        ])
-        setPending(false)
-      }, REPLY_DELAY_MS)
+      const controller = new AbortController()
+      request.current = controller
+
+      void fetchChatReply(history, controller.signal)
+        .then((content) => {
+          if (controller.signal.aborted) return
+          append({ id: crypto.randomUUID(), role: 'assistant', content })
+        })
+        .catch((error: unknown) => {
+          if (controller.signal.aborted) return
+          append({
+            id: crypto.randomUUID(),
+            role: 'assistant',
+            content: error instanceof Error ? error.message : 'The request failed.',
+            failed: true,
+          })
+        })
+        .finally(() => {
+          if (request.current === controller) request.current = null
+          setPending(false)
+        })
     },
     reset: () => {
-      cancelPending()
+      request.current?.abort()
+      request.current = null
       setMessages([])
       setPending(false)
     },

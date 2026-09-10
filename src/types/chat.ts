@@ -4,10 +4,6 @@ export type ChatMessage = {
   id: string
   role: ChatRole
   content: string
-}
-
-/** One keyword-matched answer the chat bot can return. */
-export type Topic = {
-  readonly keywords: readonly string[]
-  readonly reply: string
+  /** The request failed; rendered in the error style. */
+  failed?: boolean
 }

@@ -1,12 +1,13 @@
 # Learning Plan
 
 An IT study-planning app built with React, Vite, TypeScript and Tailwind CSS v4.
-Frontend only — no backend, no API keys, no network calls.
+Frontend only — there is no backend; the chat page calls a completions endpoint
+straight from the browser.
 
 - **Tasks** — add, delete and browse study tasks, with a switch between a list view
   and a Gantt-style timeline.
-- **AI chat** — a standalone chatbot, unrelated to the task page. It matches
-  keywords against a built-in set of topics and runs entirely in the browser.
+- **AI chat** — a standalone chatbot, unrelated to the task page. It POSTs to the
+  endpoint you configure in `.env`.
 
 ## Getting started
 
@@ -17,6 +18,19 @@ npm run dev
 
 Open http://localhost:5173. Tasks are stored in `localStorage`, and sample data is
 seeded on first run (`Reload sample data` restores it, `Delete all` clears it).
+
+The chat page needs an endpoint. Copy [`.env.example`](.env.example) to `.env` and set:
+
+```
+VITE_CHAT_API_URL=
+VITE_CHAT_API_KEY=
+VITE_CHAT_MODEL=
+```
+
+The request body is the OpenAI-style `/chat/completions` shape, so any provider or
+local runtime that speaks it works — no vendor is baked in. `VITE_CHAT_API_KEY` can
+be left blank for a local runtime that does not need one. Note that Vite inlines
+`VITE_*` into the bundle, so a key you set here ships inside `dist/`.
 
 ## Available scripts
 
@@ -43,6 +57,7 @@ src/pages/tasks/           components only: TasksPage, TaskForm, TaskListView,
 src/pages/chat/            components only: ChatPage, Markdown
 src/components/layout/     AppLayout - the shell both routes render inside
 src/components/buttons/    empty for now (.gitkeep)
+src/api/chat.ts            the completions request - the only network call
 src/hooks/                 useChat, useTasks
 src/types/                 app, chat, date, task
 src/constants/             app, chat, date, seedTasks, task, timeline
@@ -55,13 +70,17 @@ eslint.config.js           ESLint flat config
 
 - `src/pages/**` holds components and nothing else. Types live in `src/types/`,
   constants in `src/constants/`, hooks in `src/hooks/`.
-- There is no `src/api/` folder because the app makes no network calls. The chat bot
-  is a keyword scan over a constant and tasks persist to `localStorage`, so both sit
-  in `src/utils/` under their real names. `src/lib/` is only for code that would drop
-  into another project unchanged.
+- `src/api/` holds the one thing that talks to the outside world. Task persistence
+  is `localStorage`, so it sits in `src/utils/taskStorage.ts` rather than pretending
+  to be an API. `src/lib/` is only for code that would drop into another project
+  unchanged.
+- There is no offline fallback: if the endpoint is unset or fails, the chat says so
+  instead of inventing an answer.
 - End-to-end tests are the check that matters here; there are no unit tests. Each
   Playwright test gets a fresh browser context, so `localStorage` starts empty and
-  the seed data is re-created - no per-test cleanup.
+  the seed data is re-created - no per-test cleanup. The chat specs stub the endpoint
+  with `page.route`, and the test server points at an unresolvable host so a spec that
+  forgets to stub fails loudly instead of reaching a real provider.
 - Type checking happens inside `npm run build`, so a type error fails the build.
   ESLint is deliberately not type-aware, which keeps `npm run lint` and the build
   from overlapping.
