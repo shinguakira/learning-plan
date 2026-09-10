@@ -120,6 +120,7 @@ Every script defined in [`package.json`](package.json), and nothing else:
 doc/product.md             what the product is for, no tech
 doc/getting-started.md     a tour of the codebase for a first read
 doc/coding.md              why the code is arranged the way it is
+doc/branch-naming.md       where branches start and what they are called
 test/unit/                 Vitest specs for the search logic
 test/e2e/                  Playwright specs: tasks, chat, navigation
 playwright.config.ts       starts the dev server, runs Chromium
