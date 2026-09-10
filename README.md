@@ -36,14 +36,16 @@ be left blank for a local runtime that does not need one. Note that Vite inlines
 
 Every script defined in [`package.json`](package.json), and nothing else:
 
-| Script | What it does |
-| --- | --- |
-| `npm run dev` | Dev server with HMR |
-| `npm run build` | Type-check, then build to `dist/` |
-| `npm run preview` | Serve the production build |
-| `npm run lint` | ESLint |
-| `npm run test:e2e` | Playwright end-to-end tests |
-| `npm run test:e2e:ui` | Playwright in watch/inspect mode |
+| Script                 | What it does                      |
+| ---------------------- | --------------------------------- |
+| `npm run dev`          | Dev server with HMR               |
+| `npm run build`        | Type-check, then build to `dist/` |
+| `npm run preview`      | Serve the production build        |
+| `npm run lint`         | ESLint                            |
+| `npm run format`       | Prettier, writing changes         |
+| `npm run format:check` | Prettier, check only              |
+| `npm run test:e2e`     | Playwright end-to-end tests       |
+| `npm run test:e2e:ui`  | Playwright in watch/inspect mode  |
 
 `dist/` is a plain static bundle — host it anywhere that serves files.
 
@@ -64,6 +66,7 @@ src/constants/             app, chat, date, seedTasks, task, timeline
 src/utils/                 chat, date, task, seed, taskStorage - this project's helpers
 src/lib/                   cn - generic, reusable in any project
 eslint.config.js           ESLint flat config
+.prettierrc.json           Prettier options
 ```
 
 ## Notes
