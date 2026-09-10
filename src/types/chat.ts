@@ -1,7 +1,9 @@
 export type ChatRole = 'user' | 'assistant'
 
-export interface ChatMessage {
+export type ChatMessage = {
   id: string
   role: ChatRole
   content: string
+  /** The request failed; rendered in the error style. */
+  failed?: boolean
 }
