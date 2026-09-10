@@ -82,6 +82,13 @@ export const STATUS_CHIP: Record<Status, string> = {
   done: 'border-emerald-600/30 bg-emerald-600/10 text-emerald-700 dark:text-emerald-400',
 }
 
+/** The status circle in a task row, which is also the control that cycles it. */
+export const STATUS_TOGGLE: Record<Status, string> = {
+  todo: 'border-input hover:border-ring',
+  doing: 'border-blue-500 hover:bg-blue-500/10',
+  done: 'border-emerald-600 bg-emerald-600 text-white hover:bg-emerald-700 hover:text-white',
+}
+
 export const PRIORITY_LABEL: Record<Priority, string> = {
   low: 'Low',
   mid: 'Medium',
