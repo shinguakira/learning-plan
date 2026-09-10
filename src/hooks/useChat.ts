@@ -25,15 +25,16 @@ export function useChat(): ChatApi {
       const text = raw.trim()
       if (text === '' || pending) return
 
-      const history = [
-        ...messages,
-        { id: crypto.randomUUID(), role: 'user' as const, content: text },
-      ]
-      setMessages(history)
+      const next = [...messages, { id: crypto.randomUUID(), role: 'user' as const, content: text }]
+      setMessages(next)
       setPending(true)
 
       const controller = new AbortController()
       request.current = controller
+
+      // A failed reply stays on screen but is our error text, not something the
+      // model said, so it is kept out of the history the request carries.
+      const history = next.filter((message) => message.failed !== true)
 
       void fetchChatReply(history, controller.signal)
         .then((content) => {
