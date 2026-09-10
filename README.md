@@ -68,35 +68,42 @@ The one place raw palette colours are deliberate is the task category palette in
 
 Every script defined in [`package.json`](package.json), and nothing else:
 
-| Script                 | What it does                      |
-| ---------------------- | --------------------------------- |
-| `npm run dev`          | Dev server with HMR               |
-| `npm run build`        | Type-check, then build to `dist/` |
-| `npm run preview`      | Serve the production build        |
-| `npm run lint`         | ESLint                            |
-| `npm run format`       | Prettier, writing changes         |
-| `npm run format:check` | Prettier, check only              |
-| `npm run test:e2e`     | Playwright end-to-end tests       |
-| `npm run test:e2e:ui`  | Playwright in watch/inspect mode  |
+| Script                    | What it does                      |
+| ------------------------- | --------------------------------- |
+| `npm run dev`             | Dev server with HMR               |
+| `npm run build`           | Type-check, then build to `dist/` |
+| `npm run preview`         | Serve the production build        |
+| `npm run lint`            | ESLint                            |
+| `npm run format`          | Prettier, writing changes         |
+| `npm run format:check`    | Prettier, check only              |
+| `npm run test:unit`       | Vitest unit tests                 |
+| `npm run test:unit:watch` | Vitest in watch mode              |
+| `npm run test:e2e`        | Playwright end-to-end tests       |
+| `npm run test:e2e:ui`     | Playwright in watch/inspect mode  |
 
 `dist/` is a plain static bundle — host it anywhere that serves files.
 
 ## Folder structure
 
 ```
+test/unit/                 Vitest specs for the search logic
 test/e2e/                  Playwright specs: tasks, chat, navigation
 playwright.config.ts       starts the dev server, runs Chromium
-src/pages/tasks/           components only: TasksPage, TaskForm, TaskListView,
-                           TimelineView, TaskStats, EmptyState
-src/pages/chat/            components only: ChatPage, Markdown
+src/pages/tasks/           components only: TasksPage, TaskStats, StatTile, TaskForm,
+                           FormField, TaskFilters, SegmentedButton, TaskListView,
+                           TaskRow, StatusToggle, TimelineView, TimelineHeader,
+                           TimelineBar, TimelineLegend, EmptyState
+src/pages/chat/            components only: ChatPage, ChatBubble, ThinkingBubble,
+                           ChatEmpty, ChatComposer, AssistantAvatar, Markdown
 src/components/ui/         shadcn components, owned by this repo
 src/components/layout/     AppLayout - the shell both routes render inside
 src/components/buttons/    empty for now (.gitkeep)
 src/api/chat.ts            the completions request - the only network call
-src/hooks/                 useChat, useTasks
-src/types/                 app, chat, date, task
+src/hooks/                 useTasks, useChat, useTaskFilters, useTaskDraft,
+                           useTimeline, useLocalStorageState, useAutoScroll
+src/types/                 app, chat, date, task, timeline
 src/constants/             app, chat, date, seedTasks, task, timeline
-src/utils/                 date, task, seed, taskStorage - this project's helpers
+src/utils/                 date, task, timeline, seed, taskStorage - this project's helpers
 src/lib/utils.ts           cn - generic, reusable in any project
 components.json            shadcn CLI config
 eslint.config.js           ESLint flat config
@@ -107,17 +114,28 @@ eslint.config.js           ESLint flat config
 
 - `src/pages/**` holds components and nothing else. Types live in `src/types/`,
   constants in `src/constants/`, hooks in `src/hooks/`.
+- Components stay one concern each, and anything stateful or derived is a hook:
+  `useTaskFilters` owns the filter controls and the visible list, `useTaskDraft` owns
+  the add-task form and its validation, `useTimeline` derives everything the Gantt
+  needs. `useLocalStorageState` and `useAutoScroll` are generic and reusable.
+  Pure derivations — `summarizeTasks`, `computeDomain`, `monthSegments` — are plain
+  functions in `src/utils/` rather than hooks, since there is no state to own.
 - `src/api/` holds the one thing that talks to the outside world. Task persistence
   is `localStorage`, so it sits in `src/utils/taskStorage.ts` rather than pretending
   to be an API. `src/lib/` is only for code that would drop into another project
   unchanged.
 - There is no offline fallback: if the endpoint is unset or fails, the chat says so
   instead of inventing an answer.
-- End-to-end tests are the check that matters here; there are no unit tests. Each
+- End-to-end tests are the main check. Each
   Playwright test gets a fresh browser context, so `localStorage` starts empty and
   the seed data is re-created - no per-test cleanup. The chat specs stub the endpoint
   with `page.route`, and the test server points at an unresolvable host so a spec that
   forgets to stub fails loudly instead of reaching a real provider.
+- Unit tests cover the pure search pipeline only - `filterTasks` and `sortTasks` in
+  `src/utils/task.ts`. They are worth having because that logic is where a subtle
+  bug hides silently; everything else is checked end to end. Vitest is configured in
+  `vite.config.ts` so it shares the `@/` alias, and its `include` is scoped to
+  `test/unit/` so it never picks up the Playwright specs.
 - shadcn's `Select` is a Radix listbox, not a native `<select>`, so the specs open the
   trigger and click an option rather than calling `selectOption`.
 - ESLint's `react-refresh/only-export-components` rule is switched off for

@@ -55,6 +55,7 @@ src/hooks/             hooks
 src/utils/             this project's own helpers
 src/lib/               generic, would drop into another project unchanged
 src/api/               only code that talks to something external
+test/unit/             Vitest specs for pure logic
 test/e2e/              Playwright specs
 ```
 
@@ -89,7 +90,15 @@ shadcn CLI's resolver).
 
 ## Tests
 
-End-to-end only, Playwright, under `test/e2e/`. There are no unit tests.
+Two layers, both under `test/`:
+
+- **`test/e2e/`** — Playwright. The main check; this is where behaviour is verified.
+- **`test/unit/`** — Vitest. Only for pure logic worth pinning down on its own, such
+  as the search pipeline in `src/utils/task.ts`. If a function is not pure it does
+  not belong here — extract it until it is, or cover it end to end.
+
+Vitest is configured inside `vite.config.ts` (so it shares the `@/` alias) with
+`include` scoped to `test/unit/`, so it never picks up the Playwright specs.
 
 - Select by role and accessible name. Do not add test ids to the app.
 - Assert invariants and relative changes, not numbers baked into the seed data.
@@ -97,12 +106,13 @@ End-to-end only, Playwright, under `test/e2e/`. There are no unit tests.
 
 ## Verification
 
-Before calling work done, all four must pass:
+Before calling work done, all five must pass:
 
 ```bash
 npm run build        # includes the type check
 npm run lint
 npm run format:check
+npm run test:unit
 npm run test:e2e
 ```
 
