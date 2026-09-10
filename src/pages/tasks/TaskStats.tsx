@@ -2,66 +2,12 @@ import { CircleCheck, CircleDashed, Clock, LoaderCircle, TriangleAlert } from 'l
 import { Card, CardContent } from '@/components/ui/card'
 import { Progress } from '@/components/ui/progress'
 import { Separator } from '@/components/ui/separator'
-import { cn } from '@/lib/utils'
-import { today } from '@/utils/date'
-import type { LucideIcon } from 'lucide-react'
-import type { Task, TaskSummary } from '@/types/task'
-
-function summarize(tasks: readonly Task[]): TaskSummary {
-  const now = today()
-  const summary: TaskSummary = {
-    total: tasks.length,
-    todo: 0,
-    doing: 0,
-    done: 0,
-    overdue: 0,
-    hours: 0,
-    rate: 0,
-  }
-  for (const task of tasks) {
-    summary[task.status] += 1
-    summary.hours += task.estimatedHours
-    if (task.status !== 'done' && task.dueDate < now) summary.overdue += 1
-  }
-  summary.rate = summary.total === 0 ? 0 : Math.round((summary.done / summary.total) * 100)
-  return summary
-}
-
-/**
- * Label plus value. The value deliberately avoids tabular-nums: fixed-width
- * digits look loose at this size and only earn their keep in aligned columns.
- */
-function StatTile({
-  label,
-  value,
-  unit,
-  icon: Icon,
-  iconClass,
-  alert = false,
-}: {
-  label: string
-  value: number
-  unit?: string
-  icon: LucideIcon
-  iconClass?: string
-  alert?: boolean
-}) {
-  return (
-    <div className="min-w-[76px]">
-      <div className="flex items-center gap-1.5">
-        <Icon className={cn('size-3.5', iconClass ?? 'text-muted-foreground')} />
-        <span className="text-muted-foreground text-[11px]">{label}</span>
-      </div>
-      <p className={cn('mt-0.5 text-xl font-semibold', alert && value > 0 && 'text-destructive')}>
-        {value}
-        {unit && <span className="text-muted-foreground ml-0.5 text-xs font-medium">{unit}</span>}
-      </p>
-    </div>
-  )
-}
+import { summarizeTasks } from '@/utils/task'
+import { StatTile } from '@/pages/tasks/StatTile'
+import type { Task } from '@/types/task'
 
 export function TaskStats({ tasks }: { tasks: readonly Task[] }) {
-  const summary = summarize(tasks)
+  const summary = summarizeTasks(tasks)
 
   return (
     <Card>

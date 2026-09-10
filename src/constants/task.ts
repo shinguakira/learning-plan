@@ -11,6 +11,8 @@ export const CATEGORIES = [
 
 export const STATUSES = ['todo', 'doing', 'done'] as const
 
+export const VIEW_MODES = ['list', 'timeline'] as const
+
 export const PRIORITIES = ['low', 'mid', 'high'] as const
 
 /**

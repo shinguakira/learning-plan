@@ -1,4 +1,4 @@
-import type { CATEGORIES, PRIORITIES, STATUSES } from '@/constants/task'
+import type { CATEGORIES, PRIORITIES, STATUSES, VIEW_MODES } from '@/constants/task'
 import type { ISODate } from '@/types/date'
 
 export type Category = (typeof CATEGORIES)[number]
@@ -40,10 +40,18 @@ export type DueDescription = {
   tone: DueTone
 }
 
-export type ViewMode = 'list' | 'timeline'
+export type ViewMode = (typeof VIEW_MODES)[number]
 export type StatusFilter = Status | 'all'
 export type CategoryFilter = Category | 'all'
 export type SortKey = 'due' | 'start' | 'priority' | 'created'
+
+/** What the filter row narrows the task list by. */
+export type TaskFilterCriteria = {
+  status: StatusFilter
+  category: CategoryFilter
+  /** Free text; matched against title and note, trimmed and case-insensitive. */
+  query: string
+}
 
 /**
  * A seed entry carries day offsets instead of dates; the real ISODates are
