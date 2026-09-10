@@ -67,8 +67,7 @@ rather than in the README, which stays stack, setup and structure only.
 - `src/pages/**` holds components and nothing else.
 - No `src/features/` folder.
 - No vague filenames. One file per thing, named for the thing.
-- `src/api/` only exists when there is real external communication. `localStorage`
-  is not an API.
+- `src/api/` only exists when there is real external communication.
 
 ## Imports
 

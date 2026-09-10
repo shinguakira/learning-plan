@@ -61,7 +61,8 @@ you are the one deciding what to learn. It does not supply a curriculum, and it 
 not a course.
 
 It is single-user by design. Nothing is shared, nothing is submitted, nobody else
-sees it. Your plan stays on your own machine.
+sees it. Nothing is stored either: the plan lives only for as long as the page is
+open, so this is somewhere to think a plan through rather than somewhere to keep it.
 
 ## What it deliberately is not
 

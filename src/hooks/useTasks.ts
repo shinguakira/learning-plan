@@ -1,5 +1,4 @@
-import { useEffect, useState } from 'react'
-import { readTasks, writeTasks } from '@/utils/taskStorage'
+import { useState } from 'react'
 import { createSeedTasks } from '@/utils/seed'
 import type { Task, TaskDraft } from '@/types/task'
 
@@ -12,12 +11,9 @@ export type TasksApi = {
   clearAll: () => void
 }
 
+/** The task list, in memory only. Nothing is written anywhere. */
 export function useTasks(): TasksApi {
-  const [tasks, setTasks] = useState<Task[]>(readTasks)
-
-  useEffect(() => {
-    writeTasks(tasks)
-  }, [tasks])
+  const [tasks, setTasks] = useState<Task[]>(createSeedTasks)
 
   return {
     tasks,

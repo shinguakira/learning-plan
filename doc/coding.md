@@ -11,9 +11,16 @@ project's helpers in `src/utils/`, and `src/lib/` only for code that would drop 
 another project unchanged.
 
 `src/api/` holds the one thing that talks to the outside world — the chat request.
-Task persistence is `localStorage`, so it lives in `src/utils/taskStorage.ts` rather
-than pretending to be an API. A folder called `api` that never leaves the machine is
-a lie the next reader has to unlearn.
+Nothing else belongs there. A folder called `api` whose contents never leave the
+machine is a lie the next reader has to unlearn.
+
+## Persistence
+
+There is none. The task list lives in `useTasks` for the life of the page and is
+re-seeded on every load. An earlier version wrote it to `localStorage`, which bought
+a per-browser copy nobody had asked for and brought a storage key to version, a
+validation guard for whatever was already in there, and two tests that only proved
+the storage worked.
 
 ## Components and hooks
 
@@ -22,7 +29,7 @@ Each component is one concern. Anything stateful or derived is a hook:
 - `useTaskFilters` owns the filter controls and the list they narrow.
 - `useTaskDraft` owns the add-task form and its validation.
 - `useTimeline` derives everything the Gantt needs from the task list.
-- `useLocalStorageState` and `useAutoScroll` are generic and reusable.
+- `useAutoScroll` is generic and reusable.
 
 Pure derivations are **not** hooks. `summarizeTasks`, `filterTasks`, `sortTasks`,
 `computeDomain` and `monthSegments` are plain functions in `src/utils/`, because
@@ -92,9 +99,8 @@ a fallback, which meant a broken configuration looked like a working product.
 
 ## Tests
 
-End-to-end tests are the main check. Each Playwright test gets a fresh browser
-context, so `localStorage` starts empty and the seed data is re-created — no
-per-test cleanup. The chat specs stub the endpoint with `page.route`, and the test
+End-to-end tests are the main check. Nothing is persisted, so every test starts from
+the same sample plan with no cleanup step. The chat specs stub the endpoint with `page.route`, and the test
 server points at an unresolvable host so a spec that forgets to stub fails loudly
 instead of reaching a real provider.
 

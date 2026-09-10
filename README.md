@@ -9,8 +9,9 @@ you want the why rather than the how.
 - **AI chat** — a standalone chatbot, unrelated to the task page. It POSTs to the
   endpoint you configure in `.env`.
 
-Frontend only. There is no backend: tasks live in `localStorage` and the chat page
-calls a completions endpoint straight from the browser.
+Frontend only. There is no backend and nothing is persisted: the task list lives in
+memory for the session, and the chat page calls a completions endpoint straight from
+the browser.
 
 ## Tech stack
 
@@ -47,8 +48,8 @@ To run the app:
 npm run dev
 ```
 
-Open http://localhost:5173. Tasks are stored in `localStorage`, and sample data is
-seeded on first run (`Reload sample data` restores it, `Delete all` clears it).
+Open http://localhost:5173. The sample plan loads on every visit and edits last only
+until you reload (`Reload sample data` restores it, `Delete all` empties the list).
 
 To run the end-to-end tests, download the browser once first:
 
@@ -131,10 +132,10 @@ src/components/layout/     AppLayout - the shell both routes render inside
 src/components/buttons/    empty for now (.gitkeep)
 src/api/chat.ts            the completions request - the only network call
 src/hooks/                 useTasks, useChat, useTaskFilters, useTaskDraft,
-                           useTimeline, useLocalStorageState, useAutoScroll
+                           useTimeline, useAutoScroll
 src/types/                 app, chat, date, task, timeline
 src/constants/             app, chat, date, seedTasks, task, timeline
-src/utils/                 date, task, timeline, seed, taskStorage - this project's helpers
+src/utils/                 date, task, timeline, seed - this project's helpers
 src/lib/utils.ts           cn - generic, reusable in any project
 components.json            shadcn CLI config
 eslint.config.js           ESLint flat config

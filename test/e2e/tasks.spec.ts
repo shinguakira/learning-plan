@@ -16,15 +16,14 @@ async function shownCount(page: Page): Promise<number> {
 }
 
 /**
- * Every test starts in a fresh browser context, so localStorage is empty and the
- * seed data is re-created.
+ * Nothing is persisted, so every visit starts from the same sample plan.
  */
 test.beforeEach(async ({ page }) => {
   await page.goto('/tasks')
   await expect(page.getByRole('heading', { name: 'Learning tasks' })).toBeVisible()
 })
 
-test('seeds the sample plan on a first visit', async ({ page }) => {
+test('starts from the sample plan', async ({ page }) => {
   expect(await shownCount(page)).toBe(SEED_COUNT)
   await expect(page.getByText(new RegExp(`^\\d+ of ${SEED_COUNT} done$`))).toBeVisible()
 })
@@ -122,24 +121,15 @@ test('switches to the timeline view', async ({ page }) => {
   await expect(page.getByRole('combobox', { name: 'Sort order' })).toBeDisabled()
 })
 
-test('persists tasks across a reload', async ({ page }) => {
-  await page.getByLabel('Title').fill('Persisted task')
+test('starts fresh on a reload - nothing is persisted', async ({ page }) => {
+  await page.getByLabel('Title').fill('Not persisted')
   await page.getByRole('button', { name: 'Add task' }).click()
-  await expect(page.getByText('Persisted task')).toBeVisible()
+  await expect(page.getByText('Not persisted')).toBeVisible()
 
   await page.reload()
 
-  await expect(page.getByText('Persisted task')).toBeVisible()
-  expect(await shownCount(page)).toBe(SEED_COUNT + 1)
-})
-
-test('remembers the chosen view across a reload', async ({ page }) => {
-  await page.getByRole('button', { name: 'Timeline' }).click()
-  await expect(page.getByText('Today')).toBeVisible()
-
-  await page.reload()
-
-  await expect(page.getByText('Today')).toBeVisible()
+  await expect(page.getByText('Not persisted')).toHaveCount(0)
+  expect(await shownCount(page)).toBe(SEED_COUNT)
 })
 
 test('clears every task and restores the samples', async ({ page }) => {

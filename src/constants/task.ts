@@ -106,6 +106,3 @@ export const DUE_TONE: Record<DueTone, string> = {
   soon: 'text-amber-600 dark:text-amber-400',
   calm: 'text-muted-foreground',
 }
-
-export const TASKS_STORAGE_KEY = 'learning-plan:tasks:v2'
-export const VIEW_STORAGE_KEY = 'learning-plan:view:v1'
