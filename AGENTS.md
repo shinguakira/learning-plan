@@ -57,7 +57,12 @@ src/lib/               generic, would drop into another project unchanged
 src/api/               only code that talks to something external
 test/unit/             Vitest specs for pure logic
 test/e2e/              Playwright specs
+doc/                   product documentation, no implementation detail
 ```
+
+`doc/product.md` describes what the product is for and who for — keep technology out
+of it. `doc/coding.md` records why the code is arranged as it is; put reasoning there
+rather than in the README, which stays stack, setup and structure only.
 
 - `src/pages/**` holds components and nothing else.
 - No `src/features/` folder.
