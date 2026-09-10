@@ -8,10 +8,11 @@
   },
   "scripts": {
     "dev": "vite",
-    "type-check": "tsc -b",
-    "lint": "eslint .",
     "format": "prettier --write .",
     "format-check": "prettier --check .",
+    "lint": "eslint .",
+    "lint-fix": "eslint . --fix",
+    "type-check": "tsc -b",
     "test-unit": "vitest run",
     "test-unit-watch": "vitest",
     "test-e2e": "playwright test",

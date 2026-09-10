@@ -100,10 +100,11 @@ Every script defined in [`package.json`](package.json), and nothing else:
 | Script                    | What it does                     |
 | ------------------------- | -------------------------------- |
 | `npm run dev`             | Dev server with HMR              |
-| `npm run type-check`      | TypeScript                       |
-| `npm run lint`            | ESLint                           |
 | `npm run format`          | Prettier, writing changes        |
 | `npm run format-check`    | Prettier, check only             |
+| `npm run lint`            | ESLint                           |
+| `npm run lint-fix`        | ESLint, applying fixable rules   |
+| `npm run type-check`      | TypeScript                       |
 | `npm run test-unit`       | Vitest unit tests                |
 | `npm run test-unit-watch` | Vitest in watch mode             |
 | `npm run test-e2e`        | Playwright end-to-end tests      |

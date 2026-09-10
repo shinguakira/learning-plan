@@ -115,9 +115,9 @@ Vitest is configured inside `vite.config.ts` (so it shares the `@/` alias) with
 Before calling work done, all five must pass:
 
 ```bash
-npm run type-check
-npm run lint
 npm run format-check
+npm run lint
+npm run type-check
 npm run test-unit
 npm run test-e2e
 ```
