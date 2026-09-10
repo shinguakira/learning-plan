@@ -46,7 +46,10 @@ function StatTile({
         <span className="text-[11px] text-slate-500">{label}</span>
       </div>
       <p
-        className={cn('mt-0.5 text-xl font-semibold', alert && value > 0 ? 'text-rose-600' : 'text-slate-800')}
+        className={cn(
+          'mt-0.5 text-xl font-semibold',
+          alert && value > 0 ? 'text-rose-600' : 'text-slate-800',
+        )}
       >
         {value}
         {unit && <span className="ml-0.5 text-xs font-medium text-slate-400">{unit}</span>}

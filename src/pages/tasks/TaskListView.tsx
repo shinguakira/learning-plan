@@ -16,8 +16,7 @@ import { EmptyState } from '@/pages/tasks/EmptyState'
 import type { Status, Task, TaskDraft } from '@/types/task'
 
 function StatusToggle({ status, onClick }: { status: Status; onClick: () => void }) {
-  const shared =
-    'flex size-6 shrink-0 items-center justify-center rounded-full border-2 transition'
+  const shared = 'flex size-6 shrink-0 items-center justify-center rounded-full border-2 transition'
   if (status === 'done') {
     return (
       <button
@@ -27,7 +26,13 @@ function StatusToggle({ status, onClick }: { status: Status; onClick: () => void
         aria-label="Cycle status (currently: Done)"
         className={`${shared} border-emerald-500 bg-emerald-500 text-white hover:bg-emerald-600`}
       >
-        <svg viewBox="0 0 16 16" className="size-3.5" fill="none" stroke="currentColor" strokeWidth={2.5}>
+        <svg
+          viewBox="0 0 16 16"
+          className="size-3.5"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth={2.5}
+        >
           <path d="M3 8.5 6.5 12 13 4.5" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
       </button>
@@ -94,7 +99,9 @@ function TaskRow({
             {task.category}
           </Chip>
           <Chip className={STATUS_CHIP[task.status]}>{STATUS_LABEL[task.status]}</Chip>
-          <Chip className={PRIORITY_CHIP[task.priority]}>{PRIORITY_LABEL[task.priority]} priority</Chip>
+          <Chip className={PRIORITY_CHIP[task.priority]}>
+            {PRIORITY_LABEL[task.priority]} priority
+          </Chip>
           <span className="ml-1 text-[11px] text-slate-400">
             {formatShort(task.startDate)} → {formatShort(task.dueDate)}
           </span>
@@ -114,12 +121,16 @@ function TaskRow({
               type="button"
               onClick={onRemove}
               className="rounded-md bg-rose-600 px-2 py-1 text-[11px] font-semibold text-white transition hover:bg-rose-500"
-            >Delete</button>
+            >
+              Delete
+            </button>
             <button
               type="button"
               onClick={() => setConfirming(false)}
               className="rounded-md px-2 py-1 text-[11px] font-medium text-slate-500 transition hover:bg-slate-100"
-            >Cancel</button>
+            >
+              Cancel
+            </button>
           </span>
         ) : (
           <button
@@ -128,7 +139,13 @@ function TaskRow({
             aria-label={`Delete "${task.title}"`}
             className="rounded-md p-1.5 text-slate-300 opacity-0 transition group-hover:opacity-100 hover:bg-rose-50 hover:text-rose-600 focus-visible:opacity-100"
           >
-            <svg viewBox="0 0 16 16" className="size-4" fill="none" stroke="currentColor" strokeWidth={1.5}>
+            <svg
+              viewBox="0 0 16 16"
+              className="size-4"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth={1.5}
+            >
               <path
                 d="M2.5 4h11M6 4V2.5h4V4M4 4l.6 9a1 1 0 0 0 1 1h4.8a1 1 0 0 0 1-1L12 4"
                 strokeLinecap="round"

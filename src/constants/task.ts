@@ -1,11 +1,4 @@
-import type {
-  Category,
-  CategoryTheme,
-  DueTone,
-  Priority,
-  SortKey,
-  Status,
-} from '@/types/task'
+import type { Category, CategoryTheme, DueTone, Priority, SortKey, Status } from '@/types/task'
 
 export const CATEGORIES = [
   'Frontend',
@@ -36,12 +29,12 @@ export const PRIORITIES = ['low', 'mid', 'high'] as const
  * used as a category. Keep class names as literals: Tailwind scans source text.
  */
 export const CATEGORY_THEME: Record<Category, CategoryTheme> = {
-  'Frontend': {
+  Frontend: {
     bar: 'bg-sky-600',
     dot: 'bg-sky-600',
     chip: 'bg-sky-50 text-sky-700 ring-sky-200',
   },
-  'Backend': {
+  Backend: {
     bar: 'bg-amber-600',
     dot: 'bg-amber-600',
     chip: 'bg-amber-50 text-amber-700 ring-amber-200',
@@ -51,7 +44,7 @@ export const CATEGORY_THEME: Record<Category, CategoryTheme> = {
     dot: 'bg-emerald-600',
     chip: 'bg-emerald-50 text-emerald-700 ring-emerald-200',
   },
-  'Database': {
+  Database: {
     bar: 'bg-rose-600',
     dot: 'bg-rose-600',
     chip: 'bg-rose-50 text-rose-700 ring-rose-200',
@@ -61,7 +54,7 @@ export const CATEGORY_THEME: Record<Category, CategoryTheme> = {
     dot: 'bg-violet-600',
     chip: 'bg-violet-50 text-violet-700 ring-violet-200',
   },
-  'Certification': {
+  Certification: {
     bar: 'bg-teal-600',
     dot: 'bg-teal-600',
     chip: 'bg-teal-50 text-teal-700 ring-teal-200',

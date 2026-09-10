@@ -24,7 +24,8 @@ export function TaskForm({ onSubmit }: { onSubmit: (draft: TaskDraft) => void })
   const [touched, setTouched] = useState(false)
 
   const titleError = draft.title.trim() === '' ? 'Enter a title' : null
-  const dateError = draft.dueDate < draft.startDate ? 'Due date must not precede the start date' : null
+  const dateError =
+    draft.dueDate < draft.startDate ? 'Due date must not precede the start date' : null
   const invalid = titleError !== null || dateError !== null
 
   const patch = (next: Partial<TaskDraft>) => setDraft((prev) => ({ ...prev, ...next }))
@@ -139,7 +140,9 @@ export function TaskForm({ onSubmit }: { onSubmit: (draft: TaskDraft) => void })
             className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-800 shadow-xs outline-none transition placeholder:text-slate-400 focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 disabled:bg-slate-50"
             value={draft.dueDate}
             min={draft.startDate}
-            onChange={(event) => patch({ dueDate: (event.target.value as ISODate) || draft.startDate })}
+            onChange={(event) =>
+              patch({ dueDate: (event.target.value as ISODate) || draft.startDate })
+            }
           />
           {touched && dateError && <p className="mt-1 text-xs text-rose-600">{dateError}</p>}
         </Field>

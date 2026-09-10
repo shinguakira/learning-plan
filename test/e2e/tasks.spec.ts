@@ -59,7 +59,9 @@ test('filters by search text', async ({ page }) => {
   await page.getByLabel('Search tasks').fill('docker')
 
   await expect(page.getByText('1 shown of 7')).toBeVisible()
-  await expect(page.getByText('Build a local environment with Docker and docker compose')).toBeVisible()
+  await expect(
+    page.getByText('Build a local environment with Docker and docker compose'),
+  ).toBeVisible()
 })
 
 test('filters by status', async ({ page }) => {

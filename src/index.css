@@ -2,8 +2,8 @@
 
 @theme {
   --font-sans:
-    'Inter', ui-sans-serif, system-ui, 'Segoe UI', 'Hiragino Sans',
-    'Noto Sans JP', 'Yu Gothic UI', sans-serif;
+    'Inter', ui-sans-serif, system-ui, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', 'Yu Gothic UI',
+    sans-serif;
   --font-mono: ui-monospace, 'SFMono-Regular', Consolas, 'Noto Sans Mono', monospace;
 }
 

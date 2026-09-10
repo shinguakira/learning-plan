@@ -25,7 +25,10 @@ export function useChat(): ChatApi {
       const text = raw.trim()
       if (text === '' || pending) return
 
-      const history = [...messages, { id: crypto.randomUUID(), role: 'user' as const, content: text }]
+      const history = [
+        ...messages,
+        { id: crypto.randomUUID(), role: 'user' as const, content: text },
+      ]
       setMessages(history)
       setPending(true)
 

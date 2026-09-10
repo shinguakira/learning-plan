@@ -69,11 +69,7 @@ function TimelineBar({ task, domainStart }: { task: Task; domainStart: ISODate }
   const width = spanDays * DAY_W - 6
 
   const tone =
-    task.status === 'done'
-      ? 'opacity-45'
-      : task.status === 'doing'
-        ? 'bar-striped'
-        : 'opacity-80'
+    task.status === 'done' ? 'opacity-45' : task.status === 'doing' ? 'bar-striped' : 'opacity-80'
 
   const tooltip = [
     task.title,
@@ -194,7 +190,10 @@ export function TimelineView({ tasks }: { tasks: readonly Task[] }) {
                 <div
                   key={day}
                   style={{ width: DAY_W }}
-                  className={cn('shrink-0 border-r border-slate-100', isWeekend(day) && 'bg-slate-50/70')}
+                  className={cn(
+                    'shrink-0 border-r border-slate-100',
+                    isWeekend(day) && 'bg-slate-50/70',
+                  )}
                 />
               ))}
             </div>

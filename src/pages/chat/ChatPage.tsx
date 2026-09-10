@@ -165,8 +165,18 @@ export function ChatPage() {
             aria-label="Send"
             title="Send"
           >
-            <svg viewBox="0 0 16 16" className="size-4" fill="none" stroke="currentColor" strokeWidth={1.8}>
-              <path d="M8 13V3M8 3 3.5 7.5M8 3l4.5 4.5" strokeLinecap="round" strokeLinejoin="round" />
+            <svg
+              viewBox="0 0 16 16"
+              className="size-4"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth={1.8}
+            >
+              <path
+                d="M8 13V3M8 3 3.5 7.5M8 3l4.5 4.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
             </svg>
           </button>
         </form>

@@ -1,14 +1,12 @@
 import type { ReactNode } from 'react'
 
 /**
- * A tiny renderer covering only what the bot actually emits:
- * fenced code blocks, `inline code`, **bold**, and line breaks.
+ * A tiny renderer covering the markdown a chat reply usually contains: fenced
+ * code blocks, `inline code`, **bold**, and line breaks.
  * Swap in a real markdown library the moment more than that is needed.
  */
 
-type Block =
-  | { kind: 'code'; lang: string; code: string }
-  | { kind: 'text'; text: string }
+type Block = { kind: 'code'; lang: string; code: string } | { kind: 'text'; text: string }
 
 function parseBlocks(source: string): Block[] {
   const blocks: Block[] = []
