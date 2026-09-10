@@ -32,32 +32,32 @@ export const CATEGORY_THEME: Record<Category, CategoryTheme> = {
   Frontend: {
     bar: 'bg-sky-600',
     dot: 'bg-sky-600',
-    chip: 'bg-sky-50 text-sky-700 ring-sky-200',
+    chip: 'border-sky-600/30 bg-sky-600/10 text-sky-700 dark:text-sky-400',
   },
   Backend: {
     bar: 'bg-amber-600',
     dot: 'bg-amber-600',
-    chip: 'bg-amber-50 text-amber-700 ring-amber-200',
+    chip: 'border-amber-600/30 bg-amber-600/10 text-amber-700 dark:text-amber-400',
   },
   'Infra / Cloud': {
     bar: 'bg-emerald-600',
     dot: 'bg-emerald-600',
-    chip: 'bg-emerald-50 text-emerald-700 ring-emerald-200',
+    chip: 'border-emerald-600/30 bg-emerald-600/10 text-emerald-700 dark:text-emerald-400',
   },
   Database: {
     bar: 'bg-rose-600',
     dot: 'bg-rose-600',
-    chip: 'bg-rose-50 text-rose-700 ring-rose-200',
+    chip: 'border-rose-600/30 bg-rose-600/10 text-rose-700 dark:text-rose-400',
   },
   'CS Fundamentals': {
     bar: 'bg-violet-600',
     dot: 'bg-violet-600',
-    chip: 'bg-violet-50 text-violet-700 ring-violet-200',
+    chip: 'border-violet-600/30 bg-violet-600/10 text-violet-700 dark:text-violet-400',
   },
   Certification: {
     bar: 'bg-teal-600',
     dot: 'bg-teal-600',
-    chip: 'bg-teal-50 text-teal-700 ring-teal-200',
+    chip: 'border-teal-600/30 bg-teal-600/10 text-teal-700 dark:text-teal-400',
   },
 }
 
@@ -75,9 +75,9 @@ export const STATUS_LABEL: Record<Status, string> = {
 }
 
 export const STATUS_CHIP: Record<Status, string> = {
-  todo: 'bg-slate-100 text-slate-600 ring-slate-200',
-  doing: 'bg-blue-50 text-blue-700 ring-blue-200',
-  done: 'bg-emerald-50 text-emerald-700 ring-emerald-200',
+  todo: 'text-muted-foreground',
+  doing: 'border-blue-500/30 bg-blue-500/10 text-blue-700 dark:text-blue-400',
+  done: 'border-emerald-600/30 bg-emerald-600/10 text-emerald-700 dark:text-emerald-400',
 }
 
 export const PRIORITY_LABEL: Record<Priority, string> = {
@@ -87,9 +87,9 @@ export const PRIORITY_LABEL: Record<Priority, string> = {
 }
 
 export const PRIORITY_CHIP: Record<Priority, string> = {
-  low: 'bg-slate-100 text-slate-500 ring-slate-200',
-  mid: 'bg-amber-50 text-amber-700 ring-amber-200',
-  high: 'bg-rose-50 text-rose-700 ring-rose-200',
+  low: 'text-muted-foreground',
+  mid: 'border-amber-600/30 bg-amber-600/10 text-amber-700 dark:text-amber-400',
+  high: 'border-destructive/30 bg-destructive/10 text-destructive',
 }
 
 export const SORT_LABEL: Record<SortKey, string> = {
@@ -100,9 +100,9 @@ export const SORT_LABEL: Record<SortKey, string> = {
 }
 
 export const DUE_TONE: Record<DueTone, string> = {
-  over: 'text-rose-600',
-  soon: 'text-amber-600',
-  calm: 'text-slate-400',
+  over: 'text-destructive',
+  soon: 'text-amber-600 dark:text-amber-400',
+  calm: 'text-muted-foreground',
 }
 
 export const TASKS_STORAGE_KEY = 'learning-plan:tasks:v2'

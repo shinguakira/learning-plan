@@ -32,17 +32,14 @@ function renderInline(text: string, keyPrefix: string): ReactNode[] {
     const key = `${keyPrefix}-${index}`
     if (part.startsWith('**') && part.endsWith('**') && part.length > 4) {
       return (
-        <strong key={key} className="font-semibold text-slate-900">
+        <strong key={key} className="text-foreground font-semibold">
           {part.slice(2, -2)}
         </strong>
       )
     }
     if (part.startsWith('`') && part.endsWith('`') && part.length > 2) {
       return (
-        <code
-          key={key}
-          className="rounded bg-slate-100 px-1 py-0.5 font-mono text-[0.85em] text-slate-700"
-        >
+        <code key={key} className="bg-muted rounded px-1 py-0.5 font-mono text-[0.85em]">
           {part.slice(1, -1)}
         </code>
       )
@@ -58,7 +55,7 @@ export function Markdown({ text }: { text: string }) {
         block.kind === 'code' ? (
           <pre
             key={blockIndex}
-            className="scrollbar-slim my-2 overflow-x-auto rounded-lg bg-slate-900 px-3 py-2.5 text-[12px] leading-relaxed text-slate-100"
+            className="scrollbar-slim bg-muted my-2 overflow-x-auto rounded-lg px-3 py-2.5 text-[12px] leading-relaxed"
           >
             <code>{block.code}</code>
           </pre>

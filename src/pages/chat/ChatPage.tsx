@@ -1,14 +1,17 @@
-import { useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { useLayoutEffect, useRef, useState } from 'react'
+import { ArrowUp, Bot, MessageSquarePlus } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { Textarea } from '@/components/ui/textarea'
 import { SUGGESTIONS } from '@/constants/chat'
-import { cn } from '@/lib/cn'
 import { useChat } from '@/hooks/useChat'
+import { cn } from '@/lib/utils'
 import { Markdown } from '@/pages/chat/Markdown'
 import type { ChatMessage } from '@/types/chat'
 
 function AssistantAvatar() {
   return (
-    <div className="mt-0.5 flex size-7 shrink-0 items-center justify-center rounded-full bg-slate-900 text-[11px] font-semibold text-white">
-      AI
+    <div className="bg-primary text-primary-foreground mt-0.5 flex size-7 shrink-0 items-center justify-center rounded-full text-[11px] font-semibold">
+      <Bot className="size-4" />
     </div>
   )
 }
@@ -17,7 +20,7 @@ function Bubble({ message }: { message: ChatMessage }) {
   if (message.role === 'user') {
     return (
       <div className="animate-fade-rise flex justify-end">
-        <div className="max-w-[80%] rounded-2xl rounded-br-md bg-indigo-600 px-4 py-2.5 text-sm whitespace-pre-wrap text-white shadow-sm">
+        <div className="bg-primary text-primary-foreground max-w-[80%] rounded-2xl rounded-br-md px-4 py-2.5 text-sm whitespace-pre-wrap">
           {message.content}
         </div>
       </div>
@@ -29,10 +32,10 @@ function Bubble({ message }: { message: ChatMessage }) {
       <AssistantAvatar />
       <div
         className={cn(
-          'max-w-[80%] space-y-1 rounded-2xl rounded-tl-md px-4 py-2.5 text-sm leading-relaxed shadow-sm ring-1 ring-inset',
+          'max-w-[80%] space-y-1 rounded-2xl rounded-tl-md border px-4 py-2.5 text-sm leading-relaxed',
           message.failed
-            ? 'bg-rose-50 text-rose-700 ring-rose-200'
-            : 'bg-white text-slate-700 ring-slate-200',
+            ? 'border-destructive/30 bg-destructive/10 text-destructive'
+            : 'bg-card text-card-foreground',
         )}
       >
         <Markdown text={message.content} />
@@ -45,11 +48,11 @@ function ThinkingBubble() {
   return (
     <div className="animate-fade-rise flex gap-3">
       <AssistantAvatar />
-      <div className="flex items-center gap-1 rounded-2xl rounded-tl-md bg-white px-4 py-3.5 shadow-sm ring-1 ring-slate-200 ring-inset">
+      <div className="bg-card flex items-center gap-1 rounded-2xl rounded-tl-md border px-4 py-3.5">
         {[0, 1, 2].map((dot) => (
           <span
             key={dot}
-            className="size-1.5 animate-bounce rounded-full bg-slate-300"
+            className="bg-muted-foreground/40 size-1.5 animate-bounce rounded-full"
             style={{ animationDelay: `${dot * 0.12}s` }}
           />
         ))}
@@ -62,21 +65,12 @@ export function ChatPage() {
   const { messages, pending, send, reset } = useChat()
   const [draft, setDraft] = useState('')
   const scrollRef = useRef<HTMLDivElement>(null)
-  const textareaRef = useRef<HTMLTextAreaElement>(null)
 
   // Stick to the bottom whenever the conversation grows.
   useLayoutEffect(() => {
     const node = scrollRef.current
     if (node) node.scrollTop = node.scrollHeight
   }, [messages, pending])
-
-  // Grow the textarea with its content, up to about eight lines.
-  useEffect(() => {
-    const node = textareaRef.current
-    if (!node) return
-    node.style.height = 'auto'
-    node.style.height = `${Math.min(node.scrollHeight, 176)}px`
-  }, [draft])
 
   const submit = () => {
     if (draft.trim() === '' || pending) return
@@ -88,40 +82,44 @@ export function ChatPage() {
     <div className="mx-auto flex h-full max-w-3xl flex-col px-4 sm:px-6">
       <div className="flex items-center justify-between gap-3 py-4">
         <div>
-          <h1 className="text-lg font-semibold text-slate-900">AI chat</h1>
-          <p className="mt-0.5 text-xs text-slate-500">
+          <h1 className="text-lg font-semibold">AI chat</h1>
+          <p className="text-muted-foreground mt-0.5 text-xs">
             A standalone chatbot, independent of your tasks.
           </p>
         </div>
-        <button
+        <Button
           type="button"
+          variant="outline"
+          size="sm"
           onClick={reset}
           disabled={messages.length === 0}
-          className="rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-600 transition hover:bg-slate-50 disabled:opacity-40 disabled:hover:bg-white"
         >
+          <MessageSquarePlus />
           New chat
-        </button>
+        </Button>
       </div>
 
       <div ref={scrollRef} className="scrollbar-slim min-h-0 flex-1 space-y-4 overflow-y-auto pb-4">
         {messages.length === 0 && !pending ? (
           <div className="flex h-full flex-col items-center justify-center gap-5 text-center">
             <div>
-              <p className="text-sm font-medium text-slate-600">What do you want to work out?</p>
-              <p className="mt-1 text-xs text-slate-400">
+              <p className="text-sm font-medium">What do you want to work out?</p>
+              <p className="text-muted-foreground mt-1 text-xs">
                 Ask about learning software engineering, or start from a prompt below.
               </p>
             </div>
             <div className="flex flex-wrap justify-center gap-2">
               {SUGGESTIONS.map((suggestion) => (
-                <button
+                <Button
                   key={suggestion}
                   type="button"
+                  variant="outline"
+                  size="sm"
+                  className="rounded-full"
                   onClick={() => send(suggestion)}
-                  className="rounded-full border border-slate-200 bg-white px-3.5 py-1.5 text-xs text-slate-600 shadow-xs transition hover:border-indigo-300 hover:text-indigo-700"
                 >
                   {suggestion}
-                </button>
+                </Button>
               ))}
             </div>
           </div>
@@ -141,10 +139,9 @@ export function ChatPage() {
             event.preventDefault()
             submit()
           }}
-          className="flex items-end gap-2 rounded-2xl border border-slate-200 bg-white p-2 shadow-sm focus-within:border-indigo-300 focus-within:ring-2 focus-within:ring-indigo-100"
+          className="bg-card focus-within:border-ring focus-within:ring-ring/50 flex items-end gap-2 rounded-2xl border p-2 transition focus-within:ring-3"
         >
-          <textarea
-            ref={textareaRef}
+          <Textarea
             rows={1}
             value={draft}
             onChange={(event) => setDraft(event.target.value)}
@@ -156,29 +153,20 @@ export function ChatPage() {
             }}
             placeholder="Send a message (Enter to send, Shift + Enter for a new line)"
             aria-label="Message"
-            className="max-h-44 flex-1 resize-none bg-transparent px-2 py-2 text-sm text-slate-800 outline-none placeholder:text-slate-400"
+            // field-sizing-content on the shadcn Textarea grows it natively, so there is
+            // no manual height effect here - only a floor and a ceiling.
+            className="max-h-44 min-h-9 resize-none border-0 bg-transparent shadow-none focus-visible:ring-0"
           />
-          <button
+          <Button
             type="submit"
+            size="icon"
             disabled={draft.trim() === '' || pending}
-            className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-indigo-600 text-white transition hover:bg-indigo-500 disabled:bg-slate-200 disabled:text-slate-400"
             aria-label="Send"
             title="Send"
+            className="rounded-xl"
           >
-            <svg
-              viewBox="0 0 16 16"
-              className="size-4"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth={1.8}
-            >
-              <path
-                d="M8 13V3M8 3 3.5 7.5M8 3l4.5 4.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          </button>
+            <ArrowUp />
+          </Button>
         </form>
       </div>
     </div>

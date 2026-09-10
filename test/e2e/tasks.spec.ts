@@ -3,6 +3,12 @@ import type { Page } from '@playwright/test'
 
 const SEED_COUNT = 300
 
+/** shadcn's Select is a Radix listbox, not a native <select>. */
+async function chooseOption(page: Page, selectLabel: string, option: string) {
+  await page.getByRole('combobox', { name: selectLabel }).click()
+  await page.getByRole('option', { name: option, exact: true }).click()
+}
+
 /** The filter row reads "300 shown" or "12 shown of 300". */
 async function shownCount(page: Page): Promise<number> {
   const text = await page.getByText(/^\d+ shown/).innerText()
@@ -100,7 +106,7 @@ test('the category filters partition the whole list', async ({ page }) => {
   ]
   let sum = 0
   for (const category of categories) {
-    await page.getByLabel('Filter by category').selectOption(category)
+    await chooseOption(page, 'Filter by category', category)
     sum += await shownCount(page)
   }
   expect(sum).toBe(SEED_COUNT)
@@ -113,7 +119,7 @@ test('switches to the timeline view', async ({ page }) => {
   await expect(page.getByText('Today')).toBeVisible()
   await expect(page.getByTitle('Sit the CKAD exam').first()).toBeVisible()
   // Sorting is fixed to start date on the timeline, so the control is disabled.
-  await expect(page.getByLabel('Sort order')).toBeDisabled()
+  await expect(page.getByRole('combobox', { name: 'Sort order' })).toBeDisabled()
 })
 
 test('persists tasks across a reload', async ({ page }) => {

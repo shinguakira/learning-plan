@@ -21,6 +21,13 @@ export default tseslint.config(
     languageOptions: { globals: globals.browser },
   },
   {
+    // shadcn components export their cva variants alongside the component by
+    // design, which the react-refresh rule cannot allow for. These files are
+    // vendored library source, so the rule is off for them and them only.
+    files: ['src/components/ui/**/*.tsx'],
+    rules: { 'react-refresh/only-export-components': 'off' },
+  },
+  {
     files: ['vite.config.ts', 'playwright.config.ts', 'test/**/*.ts'],
     extends: [js.configs.recommended, tseslint.configs.recommended],
     languageOptions: { globals: globals.node },

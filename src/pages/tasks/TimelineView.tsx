@@ -18,8 +18,9 @@ import {
   today,
   weekdayInitial,
 } from '@/utils/date'
+import { Card } from '@/components/ui/card'
 import { EmptyState } from '@/pages/tasks/EmptyState'
-import { cn } from '@/lib/cn'
+import { cn } from '@/lib/utils'
 import type { ISODate } from '@/types/date'
 import type { Category, Task } from '@/types/task'
 
@@ -117,13 +118,13 @@ export function TimelineView({ tasks }: { tasks: readonly Task[] }) {
   )
 
   return (
-    <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+    <Card className="overflow-hidden py-0">
       <div className="overflow-x-auto scrollbar-slim">
         <div style={{ minWidth: LABEL_W + gridWidth }}>
           {/* Header row 1: months */}
-          <div className="flex border-b border-slate-100 bg-slate-50/80">
+          <div className="bg-muted/50 flex border-b">
             <div
-              className="sticky left-0 z-20 shrink-0 border-r border-slate-200 bg-slate-50 px-4 py-2 text-xs font-semibold text-slate-500"
+              className="sticky left-0 z-20 shrink-0 border-r px-4 py-2 text-xs font-semibold"
               style={{ width: LABEL_W }}
             >
               Task
@@ -132,7 +133,7 @@ export function TimelineView({ tasks }: { tasks: readonly Task[] }) {
               {months.map((month) => (
                 <div
                   key={month.key}
-                  className="shrink-0 border-r border-slate-200 py-2 pl-2 text-xs font-semibold text-slate-500"
+                  className="shrink-0 border-r py-2 pl-2 text-xs font-semibold"
                   style={{ width: month.span * DAY_W }}
                 >
                   {month.label}
@@ -142,9 +143,9 @@ export function TimelineView({ tasks }: { tasks: readonly Task[] }) {
           </div>
 
           {/* Header row 2: days */}
-          <div className="flex border-b border-slate-200 bg-white">
+          <div className="flex border-b">
             <div
-              className="sticky left-0 z-20 shrink-0 border-r border-slate-200 bg-white"
+              className="sticky left-0 z-20 shrink-0 border-r bg-card"
               style={{ width: LABEL_W }}
             />
             <div className="flex" style={{ width: gridWidth }}>
@@ -157,21 +158,19 @@ export function TimelineView({ tasks }: { tasks: readonly Task[] }) {
                     style={{ width: DAY_W }}
                     className={cn(
                       'flex shrink-0 flex-col items-center gap-0.5 py-1.5 text-[10px] leading-none',
-                      weekend && 'bg-slate-50',
+                      weekend && 'bg-muted/40',
                     )}
                   >
                     <span
                       className={
                         isToday
-                          ? 'rounded-full bg-indigo-600 px-1.5 py-0.5 font-bold text-white'
-                          : `font-semibold ${weekend ? 'text-slate-400' : 'text-slate-600'}`
+                          ? 'bg-primary text-primary-foreground rounded-full px-1.5 py-0.5 font-bold'
+                          : cn('font-semibold', weekend && 'text-muted-foreground')
                       }
                     >
                       {parseDate(day).getDate()}
                     </span>
-                    <span className={weekend ? 'text-rose-300' : 'text-slate-300'}>
-                      {weekdayInitial(day)}
-                    </span>
+                    <span className="text-muted-foreground/70">{weekdayInitial(day)}</span>
                   </div>
                 )
               })}
@@ -190,16 +189,13 @@ export function TimelineView({ tasks }: { tasks: readonly Task[] }) {
                 <div
                   key={day}
                   style={{ width: DAY_W }}
-                  className={cn(
-                    'shrink-0 border-r border-slate-100',
-                    isWeekend(day) && 'bg-slate-50/70',
-                  )}
+                  className={cn('shrink-0 border-r', isWeekend(day) && 'bg-muted/40')}
                 />
               ))}
             </div>
             {todayOffset >= 0 && todayOffset < domain.days.length && (
               <div
-                className="pointer-events-none absolute inset-y-0 z-10 w-px bg-indigo-400/70"
+                className="pointer-events-none absolute inset-y-0 z-10 w-px bg-primary/70"
                 style={{ left: LABEL_W + todayOffset * DAY_W + DAY_W / 2 }}
                 aria-hidden
               />
@@ -210,18 +206,18 @@ export function TimelineView({ tasks }: { tasks: readonly Task[] }) {
               return (
                 <div
                   key={task.id}
-                  className="relative flex border-b border-slate-100 last:border-b-0"
+                  className="relative flex border-b last:border-b-0"
                   style={{ height: ROW_H }}
                 >
                   <div
-                    className="sticky left-0 z-20 flex shrink-0 items-center gap-2 border-r border-slate-200 bg-white px-4"
+                    className="sticky left-0 z-20 flex shrink-0 items-center gap-2 border-r bg-card px-4"
                     style={{ width: LABEL_W }}
                   >
                     <span className={`size-2 shrink-0 rounded-full ${theme.dot}`} />
                     <span
                       className={cn(
                         'truncate text-xs',
-                        task.status === 'done' ? 'text-slate-400 line-through' : 'text-slate-700',
+                        task.status === 'done' && 'text-muted-foreground line-through',
                       )}
                       title={task.title}
                     >
@@ -239,7 +235,7 @@ export function TimelineView({ tasks }: { tasks: readonly Task[] }) {
       </div>
 
       {/* Legend */}
-      <div className="flex flex-wrap items-center gap-x-4 gap-y-2 border-t border-slate-100 bg-slate-50/60 px-4 py-2.5 text-[11px] text-slate-500">
+      <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-muted-foreground bg-muted/40 border-t px-4 py-2.5 text-[11px]">
         {usedCategories.map((category: Category) => (
           <span key={category} className="flex items-center gap-1.5">
             <span className={`size-2 rounded-full ${CATEGORY_THEME[category].dot}`} />
@@ -248,19 +244,19 @@ export function TimelineView({ tasks }: { tasks: readonly Task[] }) {
         ))}
         <span className="ml-auto flex items-center gap-3">
           <span className="flex items-center gap-1.5">
-            <span className="bar-striped size-2.5 rounded-xs bg-slate-400" />
+            <span className="bar-striped bg-muted-foreground size-2.5 rounded-xs" />
             In progress
           </span>
           <span className="flex items-center gap-1.5">
-            <span className="size-2.5 rounded-xs bg-slate-400 opacity-45" />
+            <span className="bg-muted-foreground size-2.5 rounded-xs opacity-45" />
             Done
           </span>
           <span className="flex items-center gap-1.5">
-            <span className="h-3 w-px bg-indigo-400" />
+            <span className="bg-primary h-3 w-px" />
             Today
           </span>
         </span>
       </div>
-    </div>
+    </Card>
   )
 }

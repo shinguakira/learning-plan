@@ -1,5 +1,10 @@
+import { CircleCheck, CircleDashed, Clock, LoaderCircle, TriangleAlert } from 'lucide-react'
+import { Card, CardContent } from '@/components/ui/card'
+import { Progress } from '@/components/ui/progress'
+import { Separator } from '@/components/ui/separator'
+import { cn } from '@/lib/utils'
 import { today } from '@/utils/date'
-import { cn } from '@/lib/cn'
+import type { LucideIcon } from 'lucide-react'
 import type { Task, TaskSummary } from '@/types/task'
 
 function summarize(tasks: readonly Task[]): TaskSummary {
@@ -30,29 +35,26 @@ function StatTile({
   label,
   value,
   unit,
-  dot,
+  icon: Icon,
+  iconClass,
   alert = false,
 }: {
   label: string
   value: number
   unit?: string
-  dot?: string
+  icon: LucideIcon
+  iconClass?: string
   alert?: boolean
 }) {
   return (
     <div className="min-w-[76px]">
       <div className="flex items-center gap-1.5">
-        {dot && <span className={`size-1.5 rounded-full ${dot}`} />}
-        <span className="text-[11px] text-slate-500">{label}</span>
+        <Icon className={cn('size-3.5', iconClass ?? 'text-muted-foreground')} />
+        <span className="text-muted-foreground text-[11px]">{label}</span>
       </div>
-      <p
-        className={cn(
-          'mt-0.5 text-xl font-semibold',
-          alert && value > 0 ? 'text-rose-600' : 'text-slate-800',
-        )}
-      >
+      <p className={cn('mt-0.5 text-xl font-semibold', alert && value > 0 && 'text-destructive')}>
         {value}
-        {unit && <span className="ml-0.5 text-xs font-medium text-slate-400">{unit}</span>}
+        {unit && <span className="text-muted-foreground ml-0.5 text-xs font-medium">{unit}</span>}
       </p>
     </div>
   )
@@ -62,44 +64,51 @@ export function TaskStats({ tasks }: { tasks: readonly Task[] }) {
   const summary = summarize(tasks)
 
   return (
-    <section className="flex flex-wrap items-center gap-x-8 gap-y-5 rounded-2xl border border-slate-200 bg-white px-5 py-4 shadow-sm">
-      {/* The one number this view leads with. */}
-      <div className="flex items-center gap-4">
-        <div>
-          <p className="text-[11px] text-slate-500">Progress</p>
-          <p className="text-5xl leading-none font-semibold text-slate-900">
-            {summary.rate}
-            <span className="ml-0.5 text-xl font-medium text-slate-400">%</span>
-          </p>
-        </div>
-        <div className="w-40">
-          {/* Meter: accent fill on a lighter step of the same ramp for the track. */}
-          <div
-            className="h-2 w-full overflow-hidden rounded-full bg-indigo-100"
-            role="progressbar"
-            aria-valuenow={summary.rate}
-            aria-valuemin={0}
-            aria-valuemax={100}
-            aria-label="Share of tasks completed"
-          >
-            <div
-              className="h-full rounded-full bg-indigo-600 transition-[width] duration-300"
-              style={{ width: `${summary.rate}%` }}
-            />
+    <Card>
+      <CardContent className="flex flex-wrap items-center gap-x-8 gap-y-5">
+        {/* The one number this view leads with. */}
+        <div className="flex items-center gap-4">
+          <div>
+            <p className="text-muted-foreground text-[11px]">Progress</p>
+            <p className="text-5xl leading-none font-semibold">
+              {summary.rate}
+              <span className="text-muted-foreground ml-0.5 text-xl font-medium">%</span>
+            </p>
           </div>
-          <p className="mt-1.5 text-[11px] text-slate-400">
-            {summary.done} of {summary.total} done
-          </p>
+          <div className="w-40">
+            <Progress value={summary.rate} aria-label="Share of tasks completed" />
+            <p className="text-muted-foreground mt-1.5 text-[11px]">
+              {summary.done} of {summary.total} done
+            </p>
+          </div>
         </div>
-      </div>
 
-      <div className="flex flex-wrap items-start gap-x-7 gap-y-4">
-        <StatTile label="To do" value={summary.todo} dot="bg-slate-300" />
-        <StatTile label="In progress" value={summary.doing} dot="bg-blue-500" />
-        <StatTile label="Done" value={summary.done} dot="bg-emerald-600" />
-        <StatTile label="Overdue" value={summary.overdue} alert />
-        <StatTile label="Estimated" value={summary.hours} unit="h" />
-      </div>
-    </section>
+        <Separator orientation="vertical" className="hidden h-12 sm:block" />
+
+        <div className="flex flex-wrap items-start gap-x-7 gap-y-4">
+          <StatTile label="To do" value={summary.todo} icon={CircleDashed} />
+          <StatTile
+            label="In progress"
+            value={summary.doing}
+            icon={LoaderCircle}
+            iconClass="text-blue-500"
+          />
+          <StatTile
+            label="Done"
+            value={summary.done}
+            icon={CircleCheck}
+            iconClass="text-emerald-600"
+          />
+          <StatTile
+            label="Overdue"
+            value={summary.overdue}
+            icon={TriangleAlert}
+            iconClass={summary.overdue > 0 ? 'text-destructive' : undefined}
+            alert
+          />
+          <StatTile label="Estimated" value={summary.hours} unit="h" icon={Clock} />
+        </div>
+      </CardContent>
+    </Card>
   )
 }

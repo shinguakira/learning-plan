@@ -1,8 +1,8 @@
 # Learning Plan
 
-An IT study-planning app built with React, Vite, TypeScript and Tailwind CSS v4.
-Frontend only — there is no backend; the chat page calls a completions endpoint
-straight from the browser.
+An IT study-planning app built with React, Vite, TypeScript, Tailwind CSS v4 and
+**[shadcn/ui](https://ui.shadcn.com)**. Frontend only — there is no backend; the chat
+page calls a completions endpoint straight from the browser.
 
 - **Tasks** — add, delete and browse study tasks, with a switch between a list view
   and a Gantt-style timeline.
@@ -32,6 +32,38 @@ local runtime that speaks it works — no vendor is baked in. `VITE_CHAT_API_KEY
 be left blank for a local runtime that does not need one. Note that Vite inlines
 `VITE_*` into the bundle, so a key you set here ships inside `dist/`.
 
+## shadcn/ui
+
+**Every control on both pages comes from shadcn/ui** — buttons, inputs, selects,
+labels, cards, badges, the separator and the progress meter. Add more with:
+
+```bash
+npx shadcn@latest add <component>
+```
+
+Components land in `src/components/ui/` and are **owned by this repo** — copied
+source, not a dependency, so editing them is expected and correct.
+[`components.json`](components.json) holds the CLI config; the `@/` alias is
+mirrored into the root [`tsconfig.json`](tsconfig.json) because that is where the
+CLI's resolver looks.
+
+Style through the theme tokens shadcn installs — `bg-background`, `text-foreground`,
+`text-muted-foreground`, `bg-primary`, `bg-card`, `border` — rather than raw palette
+classes, so changing one token restyles the whole app. `cn()` from
+[`src/lib/utils.ts`](src/lib/utils.ts) composes classes and resolves Tailwind
+conflicts through `tailwind-merge`, which is what lets a caller override a
+component's own variant classes.
+
+Icons are [lucide](https://lucide.dev), which is shadcn's configured icon library —
+`GraduationCap` for the mark, `ListTodo` / `MessageCircle` on the nav, `RotateCcw`,
+`Trash2`, `Search`, `List`, `CalendarRange`, `Plus` on the controls, `CircleDashed` /
+`LoaderCircle` / `CircleCheck` / `TriangleAlert` / `Clock` on the stat tiles, and
+`Bot` / `MessageSquarePlus` / `ArrowUp` on the chat. Dropped inside a `Button` they
+size themselves; elsewhere give them an explicit `size-*`.
+
+The one place raw palette colours are deliberate is the task category palette in
+[`src/constants/task.ts`](src/constants/task.ts) — those encode data, not chrome.
+
 ## Available scripts
 
 Every script defined in [`package.json`](package.json), and nothing else:
@@ -55,16 +87,18 @@ Every script defined in [`package.json`](package.json), and nothing else:
 test/e2e/                  Playwright specs: tasks, chat, navigation
 playwright.config.ts       starts the dev server, runs Chromium
 src/pages/tasks/           components only: TasksPage, TaskForm, TaskListView,
-                           TimelineView, TaskStats, Field, Chip, EmptyState
+                           TimelineView, TaskStats, EmptyState
 src/pages/chat/            components only: ChatPage, Markdown
+src/components/ui/         shadcn components, owned by this repo
 src/components/layout/     AppLayout - the shell both routes render inside
 src/components/buttons/    empty for now (.gitkeep)
 src/api/chat.ts            the completions request - the only network call
 src/hooks/                 useChat, useTasks
 src/types/                 app, chat, date, task
 src/constants/             app, chat, date, seedTasks, task, timeline
-src/utils/                 chat, date, task, seed, taskStorage - this project's helpers
-src/lib/                   cn - generic, reusable in any project
+src/utils/                 date, task, seed, taskStorage - this project's helpers
+src/lib/utils.ts           cn - generic, reusable in any project
+components.json            shadcn CLI config
 eslint.config.js           ESLint flat config
 .prettierrc.json           Prettier options
 ```
@@ -84,13 +118,17 @@ eslint.config.js           ESLint flat config
   the seed data is re-created - no per-test cleanup. The chat specs stub the endpoint
   with `page.route`, and the test server points at an unresolvable host so a spec that
   forgets to stub fails loudly instead of reaching a real provider.
+- shadcn's `Select` is a Radix listbox, not a native `<select>`, so the specs open the
+  trigger and click an option rather than calling `selectOption`.
+- ESLint's `react-refresh/only-export-components` rule is switched off for
+  `src/components/ui/**`: shadcn exports its cva variants alongside the component by
+  design. The rule stays on everywhere else.
 - Type checking happens inside `npm run build`, so a type error fails the build.
   ESLint is deliberately not type-aware, which keeps `npm run lint` and the build
   from overlapping.
 - Category colours are a categorical palette and were validated for lightness,
   chroma, colour-vision separation and surface contrast rather than picked by eye.
   The reasoning is recorded in [`src/constants/task.ts`](src/constants/task.ts).
-  Indigo is reserved for the accent and is never used for a category.
 - Dates are handled as local `'YYYY-MM-DD'` strings throughout. `new Date('2026-09-10')`
   parses as UTC and shifts the day in some timezones, so `src/utils/date.ts` parses
   and formats by hand.
