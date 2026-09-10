@@ -82,10 +82,14 @@ Classes are written on the element, never extracted into a named constant. The
 exception is a class chosen by runtime data — `CATEGORY_THEME[task.category]`,
 `STATUS_CHIP[task.status]` — where there is no single element to inline onto.
 
-Category colours are a categorical palette and were validated for lightness, chroma,
-colour-vision separation and surface contrast rather than picked by eye. The full
-reasoning is in [`src/constants/task.ts`](../src/constants/task.ts). They are the one
-place raw palette classes are correct, because they encode data rather than chrome.
+The colour maps in [`src/constants/task.ts`](../src/constants/task.ts) are where raw
+palette classes are correct, because there the colour is the data: which category,
+which status, how urgent. A token is still used wherever one carries the meaning —
+`text-muted-foreground` for the neutral end of every scale, `text-destructive` for
+overdue and high priority — and a palette class only for a state the theme has no
+token for, such as in-progress blue and done green. Category colours were validated
+for lightness, chroma, colour-vision separation and surface contrast rather than
+picked by eye; the reasoning is in the comment above them.
 
 ESLint's `react-refresh/only-export-components` is switched off for
 `src/components/ui/**`: shadcn exports its cva variants alongside the component by

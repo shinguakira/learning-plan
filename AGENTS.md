@@ -21,6 +21,8 @@ A request written in another language is not a request for output in it.
   `text-muted-foreground`, `bg-primary`, `border`, `bg-card`, …) rather than picking
   raw palette classes like `bg-slate-100`. Changing a token restyles the whole app.
 - `cn()` from `@/lib/utils` composes classes. Do not add a second helper for it.
+  The CLI writes `import { cn } from 'cn'` into components it generates — rewrite
+  that to `@/lib/utils` after adding one, so there is a single entry point.
 - Keep the `components.json` config in sync; the CLI reads it.
 
 **Icons come from [lucide](https://lucide.dev)** (`lucide-react`), which is what
@@ -29,9 +31,13 @@ buttons, stat tiles, empty states, nav items — rather than leaving controls as
 text. Inside a `Button` they size themselves; elsewhere pass an explicit `size-*`.
 Never introduce a second icon set.
 
-The one place raw palette colours are correct is the task category palette in
-`src/constants/task.ts`. Those encode data, not chrome, and were validated for
-colour-vision separation — see the comment in that file before touching them.
+Raw palette colours are correct only where the colour **is** the data — the category,
+status, priority and due-urgency maps in `src/constants/task.ts`, which say which
+thing this is rather than decorating it. Use a theme token wherever one carries the
+meaning (`text-muted-foreground`, `text-destructive`) and reach for a palette class
+only for a state the theme has no token for. Everything else — surfaces, borders,
+text, controls — is tokens. The category palette was validated for colour-vision
+separation; see the comment in that file before touching it.
 
 ## Tailwind
 
