@@ -55,7 +55,7 @@ To run the end-to-end tests, download the browser once first:
 
 ```bash
 npx playwright install chromium
-npm run test:e2e
+npm run test-e2e
 ```
 
 ### Chat endpoint
@@ -70,8 +70,7 @@ VITE_CHAT_MODEL=
 
 The request body is the OpenAI-style `/chat/completions` shape, so any provider or
 local runtime that speaks it works — no vendor is baked in. `VITE_CHAT_API_KEY` can
-be left blank for a local runtime that does not need one. Note that Vite inlines
-`VITE_*` into the bundle, so a key you set here ships inside `dist/`.
+be left blank for a local runtime that does not need one.
 
 Without an endpoint the rest of the app works normally; only the chat page reports
 that it is unconfigured.
@@ -98,18 +97,19 @@ Styling conventions are in [`doc/coding.md`](doc/coding.md).
 
 Every script defined in [`package.json`](package.json), and nothing else:
 
-| Script                    | What it does                      |
-| ------------------------- | --------------------------------- |
-| `npm run dev`             | Dev server with HMR               |
-| `npm run build`           | Type-check, then build to `dist/` |
-| `npm run preview`         | Serve the production build        |
-| `npm run lint`            | ESLint                            |
-| `npm run format`          | Prettier, writing changes         |
-| `npm run format:check`    | Prettier, check only              |
-| `npm run test:unit`       | Vitest unit tests                 |
-| `npm run test:unit:watch` | Vitest in watch mode              |
-| `npm run test:e2e`        | Playwright end-to-end tests       |
-| `npm run test:e2e:ui`     | Playwright in watch/inspect mode  |
+| Script                    | What it does                     |
+| ------------------------- | -------------------------------- |
+| `npm run dev`             | Dev server with HMR              |
+| `npm run type-check`      | TypeScript                       |
+| `npm run lint`            | ESLint                           |
+| `npm run format`          | Prettier, writing changes        |
+| `npm run format-check`    | Prettier, check only             |
+| `npm run test-unit`       | Vitest unit tests                |
+| `npm run test-unit-watch` | Vitest in watch mode             |
+| `npm run test-e2e`        | Playwright end-to-end tests      |
+| `npm run test-e2e-ui`     | Playwright in watch/inspect mode |
+| `npm run preview`         | Serve the production build       |
+| `npm run build`           | Build to `dist/`                 |
 
 `dist/` is a plain static bundle — host it anywhere that serves files.
 
@@ -117,6 +117,7 @@ Every script defined in [`package.json`](package.json), and nothing else:
 
 ```
 doc/product.md             what the product is for, no tech
+doc/getting-started.md     a tour of the codebase for a first read
 doc/coding.md              why the code is arranged the way it is
 test/unit/                 Vitest specs for the search logic
 test/e2e/                  Playwright specs: tasks, chat, navigation

@@ -63,6 +63,8 @@ doc/                   product documentation, no implementation detail
 `doc/product.md` describes what the product is for and who for — keep technology out
 of it. `doc/coding.md` records why the code is arranged as it is; put reasoning there
 rather than in the README, which stays stack, setup and structure only.
+`doc/getting-started.md` walks the codebase for a first read — keep its file paths
+and snippets in step with the code when you move things.
 
 - `src/pages/**` holds components and nothing else.
 - No `src/features/` folder.
@@ -83,8 +85,8 @@ shadcn CLI's resolver).
   (`src/types/date.ts`), minted only by `src/utils/date.ts`.
 - `noUncheckedIndexedAccess` is on. Fix what it reports structurally; do not
   silence it with `!`.
-- Type checking is `tsc`, run inside `npm run build`. ESLint is deliberately
-  **not** type-aware so the two do not overlap.
+- Type checking is `npm run type-check`. `npm run build` only builds, and ESLint is
+  deliberately **not** type-aware, so no two tools overlap.
 
 ## React
 
@@ -113,11 +115,11 @@ Vitest is configured inside `vite.config.ts` (so it shares the `@/` alias) with
 Before calling work done, all five must pass:
 
 ```bash
-npm run build        # includes the type check
+npm run type-check
 npm run lint
-npm run format:check
-npm run test:unit
-npm run test:e2e
+npm run format-check
+npm run test-unit
+npm run test-e2e
 ```
 
 Do not verify behaviour by taking browser screenshots — write or run a test.

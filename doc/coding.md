@@ -59,9 +59,9 @@ narrowed index types, an exhaustive `NEXT_STATUS` map, destructuring with defaul
 rather than silenced with `!`. The only `!` in `src/` is `getElementById('root')` in
 `main.tsx`.
 
-Type checking happens inside `npm run build`, so a type error fails the build.
-ESLint is deliberately not type-aware, which keeps `npm run lint` and the build from
-overlapping.
+Each check is its own script. `npm run type-check` is `tsc`; `npm run build` only
+builds; ESLint is deliberately not type-aware. No tool reports what another already
+reports.
 
 ## Styling
 
@@ -115,10 +115,3 @@ so it never picks up the Playwright specs.
 
 shadcn's `Select` is a Radix listbox, not a native `<select>`, so the specs open the
 trigger and click an option rather than calling `selectOption`.
-
-## Known environment friction
-
-`npm install -D vitest` crashes on npm 10.9.2 with
-`Cannot read properties of null (reading 'edgesOut')` — an arborist bug hit while
-walking vitest's optional peer dependencies. Installing with `--legacy-peer-deps`
-once was enough; a plain `npm install` works from the committed lockfile afterwards.
