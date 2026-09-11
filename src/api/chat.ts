@@ -24,8 +24,14 @@ export async function fetchChatReply(
   const headers: Record<string, string> = { 'Content-Type': 'application/json' }
   // A local runtime often needs no key at all.
   if (CHAT_API_KEY !== '') headers.Authorization = `Bearer ${CHAT_API_KEY}`
+  // api.anthropic.com refuses browser origins unless the request opts in by
+  // name. Sent only to that host, so every other endpoint sees the same
+  // request it saw before.
+  if (new URL(CHAT_API_URL).hostname === 'api.anthropic.com') {
+    headers['anthropic-dangerous-direct-browser-access'] = 'true'
+  }
 
-  const response = await fetch(CHAT_API_URL, {
+  const request = {
     method: 'POST',
     headers,
     body: JSON.stringify({
@@ -36,7 +42,21 @@ export async function fetchChatReply(
       ],
     }),
     signal,
-  })
+  }
+
+  // fetch only rejects when the request never reached the endpoint at all, and
+  // the browser gives the same opaque message whether the host is unreachable
+  // or it refused this origin. Say which failure it is rather than repeat it.
+  let response: Response
+  try {
+    response = await fetch(CHAT_API_URL, request)
+  } catch (error) {
+    if (signal.aborted) throw error
+    throw new Error(
+      `Could not reach ${new URL(CHAT_API_URL).origin}. The endpoint is unreachable, ` +
+        'or it does not accept requests from a browser.',
+    )
+  }
 
   const body = (await response.json().catch(() => null)) as ChatCompletion | null
 
