@@ -55,6 +55,7 @@ export async function fetchChatReply(
     throw new Error(
       `Could not reach ${new URL(CHAT_API_URL).origin}. The endpoint is unreachable, ` +
         'or it does not accept requests from a browser.',
+      { cause: error },
     )
   }
 
