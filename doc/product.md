@@ -53,6 +53,10 @@ what to learn first. It has no knowledge of your task list and does not try to
 manage your plan for you; it is there so that hitting a wall does not mean opening
 five browser tabs and losing the thread.
 
+**Keep a running list of what you can already do.** A profile page holds the
+technical skills you've picked up, each with a level from beginner to expert —
+a running draft of the list a resume or an interview answer would pull from.
+
 ## Who it is for
 
 Someone studying largely alone, over months rather than weeks, with real deadlines
