@@ -13,12 +13,16 @@ test('redirects an unknown path to the tasks page', async ({ page }) => {
   await expect(page).toHaveURL(/\/tasks$/)
 })
 
-test('moves between the two pages', async ({ page }) => {
+test('moves between the pages', async ({ page }) => {
   await page.goto('/tasks')
 
   await page.getByRole('link', { name: 'AI chat' }).click()
   await expect(page).toHaveURL(/\/chat$/)
   await expect(page.getByRole('heading', { name: 'AI chat' })).toBeVisible()
+
+  await page.getByRole('link', { name: 'Profile' }).click()
+  await expect(page).toHaveURL(/\/profile$/)
+  await expect(page.getByRole('heading', { name: 'Profile' })).toBeVisible()
 
   await page.getByRole('link', { name: 'Tasks' }).click()
   await expect(page).toHaveURL(/\/tasks$/)
