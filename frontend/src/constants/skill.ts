@@ -1,5 +1,8 @@
 import type { SkillLevel } from '@/types/skill'
 
+export const SKILLS_API_URL =
+  import.meta.env.VITE_SKILLS_API_URL ?? 'http://localhost:3001/api/skills'
+
 export const SKILL_LEVELS = ['beginner', 'intermediate', 'advanced', 'expert'] as const
 
 export const SKILL_LEVEL_LABEL: Record<SkillLevel, string> = {
