@@ -9,10 +9,12 @@ import { TaskListView } from '@/pages/tasks/TaskListView'
 import { TaskStats } from '@/pages/tasks/TaskStats'
 import { TimelineView } from '@/pages/tasks/TimelineView'
 import type { ViewMode } from '@/types/task'
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 
 export function TasksPage() {
   const { tasks, addTask, updateTask, removeTask, resetToSeed, clearAll } = useTasks()
   const [view, setView] = useState<ViewMode>('list')
+  const [isFormOpen, setIsFormOpen] = useState(false)
   const filters = useTaskFilters(tasks)
 
   return (
@@ -25,6 +27,16 @@ export function TasksPage() {
           </p>
         </div>
         <div className="flex items-center gap-2">
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={() => {
+              setIsFormOpen(!isFormOpen)
+            }}
+          >
+            Add a Task
+          </Button>
           <Button type="button" variant="outline" size="sm" onClick={resetToSeed}>
             <RotateCcw />
             Reload sample data
@@ -37,11 +49,30 @@ export function TasksPage() {
       </div>
 
       <TaskStats tasks={tasks} />
-      <TaskForm onSubmit={addTask} />
+
+      <Dialog open={isFormOpen} onOpenChange={setIsFormOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Add Task</DialogTitle>
+          </DialogHeader>
+          <TaskForm onSubmit={addTask} />
+        </DialogContent>
+      </Dialog>
+
       <TaskFilters filters={filters} total={tasks.length} view={view} onViewChange={setView} />
 
       {view === 'list' ? (
-        <TaskListView tasks={filters.visible} onUpdate={updateTask} onRemove={removeTask} />
+        <TaskListView
+          key={JSON.stringify([
+            filters.query,
+            filters.statusFilter,
+            filters.categoryFilter,
+            filters.sortKey,
+          ])}
+          tasks={filters.visible}
+          onUpdate={updateTask}
+          onRemove={removeTask}
+        />
       ) : (
         <TimelineView tasks={filters.visible} />
       )}

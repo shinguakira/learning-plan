@@ -130,10 +130,11 @@ Start at [`src/main.tsx`](../src/main.tsx). It does one thing: mount
 ```tsx
 <Route path={ROUTES.tasks} element={<TasksPage />} />
 <Route path={ROUTES.chat} element={<ChatPage />} />
+<Route path={ROUTES.profile} element={<ProfilePage />} />
 ```
 
-Two URLs, two pages. Everything either page needs sits beside it —
-`src/pages/tasks/` and `src/pages/chat/`. Open
+Three URLs, three pages. Everything each page needs sits beside it —
+`src/pages/tasks/`, `src/pages/chat/` and `src/pages/profile/`. Open
 [`TasksPage.tsx`](../src/pages/tasks/TasksPage.tsx) and you can read the entire
 screen in one go, because it is only composition:
 
@@ -198,6 +199,8 @@ The other hooks follow the same shape:
 | `useTimeline`    | the dates, columns and rows the Gantt view draws        |
 | `useChat`        | the conversation and the request in flight              |
 | `useAutoScroll`  | keeping the chat pinned to the newest message           |
+| `useSkills`      | the registered skill list and the ways to change it     |
+| `useSkillDraft`  | the add-skill form and whether it is valid              |
 
 A rule that holds throughout: **if it only calculates, it is not a hook.**
 `filterTasks`, `sortTasks` and `summarizeTasks` are plain functions in
