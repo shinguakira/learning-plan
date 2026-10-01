@@ -29,17 +29,22 @@ test('starts from the sample plan', async ({ page }) => {
 })
 
 test('adds a task', async ({ page }) => {
+  await page.getByRole('button', { name: 'Add a Task', exact: true }).click()
   await page.getByLabel('Title').fill('Read the Rust ownership chapter')
-  await page.getByRole('button', { name: 'Add task' }).click()
+  await page.getByRole('button', { name: 'Add task', exact: true }).click()
+
+  await expect(page.getByLabel('Title')).toHaveValue('')
+  await page.getByRole('button', { name: 'Close', exact: true }).click()
+  await page.getByLabel('Search tasks').fill('Read the Rust ownership chapter')
 
   await expect(page.getByText('Read the Rust ownership chapter')).toBeVisible()
+  await page.getByLabel('Search tasks').fill('')
   expect(await shownCount(page)).toBe(SEED_COUNT + 1)
-  // The form resets after a successful submit.
-  await expect(page.getByLabel('Title')).toHaveValue('')
 })
 
 test('refuses a task with no title', async ({ page }) => {
-  await page.getByRole('button', { name: 'Add task' }).click()
+  await page.getByRole('button', { name: 'Add a Task', exact: true }).click()
+  await page.getByRole('button', { name: 'Add task', exact: true }).click()
 
   await expect(page.getByText('Enter a title')).toBeVisible()
   expect(await shownCount(page)).toBe(SEED_COUNT)
@@ -122,14 +127,119 @@ test('switches to the timeline view', async ({ page }) => {
 })
 
 test('starts fresh on a reload - nothing is persisted', async ({ page }) => {
+  await page.getByRole('button', { name: 'Add a Task', exact: true }).click()
   await page.getByLabel('Title').fill('Not persisted')
-  await page.getByRole('button', { name: 'Add task' }).click()
+  await page.getByRole('button', { name: 'Add task', exact: true }).click()
+  await page.getByRole('button', { name: 'Close', exact: true }).click()
+  await page.getByLabel('Search tasks').fill('Not persisted')
   await expect(page.getByText('Not persisted')).toBeVisible()
 
   await page.reload()
 
   await expect(page.getByText('Not persisted')).toHaveCount(0)
   expect(await shownCount(page)).toBe(SEED_COUNT)
+})
+
+test('paginates every matching task without duplicates or omissions', async ({ page }) => {
+  const total = await shownCount(page)
+  const tasks = page.getByRole('list', { name: 'Tasks', exact: true })
+  const pagination = page.getByRole('navigation', { name: 'Task pagination' })
+  const previous = pagination.getByRole('link', { name: 'Go to previous page' })
+  const next = pagination.getByRole('link', { name: 'Go to next page' })
+  const firstNames = await tasks
+    .getByRole('button', { name: /^Delete "/ })
+    .evaluateAll((buttons) => buttons.map((button) => button.getAttribute('aria-label')))
+  const pageSize = firstNames.length
+  expect(pageSize).toBeGreaterThan(0)
+  expect(pageSize).toBeLessThan(total)
+  await expect(previous).toBeDisabled()
+  await previous.click({ force: true })
+  await expect(pagination.getByRole('link', { name: 'Go to page 1', exact: true })).toHaveAttribute(
+    'aria-current',
+    'page',
+  )
+
+  const seen = new Set<string | null>()
+  let currentPage = 1
+  while (true) {
+    const names = await tasks
+      .getByRole('button', { name: /^Delete "/ })
+      .evaluateAll((buttons) => buttons.map((button) => button.getAttribute('aria-label')))
+    expect(names.length).toBeLessThanOrEqual(pageSize)
+    for (const name of names) {
+      expect(seen.has(name)).toBe(false)
+      seen.add(name)
+    }
+    await expect(
+      pagination.getByRole('link', { name: `Go to page ${currentPage}`, exact: true }),
+    ).toHaveAttribute('aria-current', 'page')
+    if ((await next.getAttribute('aria-disabled')) === 'true') break
+    await next.click()
+    currentPage += 1
+  }
+  expect(seen.size).toBe(total)
+  await expect(next).toBeDisabled()
+  await next.click({ force: true })
+  await expect(
+    pagination.getByRole('link', { name: `Go to page ${currentPage}`, exact: true }),
+  ).toHaveAttribute('aria-current', 'page')
+  await previous.click()
+  await expect(
+    pagination.getByRole('link', { name: `Go to page ${currentPage - 1}`, exact: true }),
+  ).toHaveAttribute('aria-current', 'page')
+  await next.click()
+  await expect(
+    pagination.getByRole('link', { name: `Go to page ${currentPage}`, exact: true }),
+  ).toHaveAttribute('aria-current', 'page')
+  await pagination.getByRole('link', { name: 'Go to page 1', exact: true }).click()
+  expect(
+    await tasks
+      .getByRole('button', { name: /^Delete "/ })
+      .evaluateAll((buttons) => buttons.map((button) => button.getAttribute('aria-label'))),
+  ).toEqual(firstNames)
+})
+
+test('resets pagination when filters or sorting change', async ({ page }) => {
+  const pagination = page.getByRole('navigation', { name: 'Task pagination' })
+  const first = pagination.getByRole('link', { name: 'Go to page 1', exact: true })
+  await pagination.getByRole('link', { name: 'Go to next page' }).click()
+  await chooseOption(page, 'Sort order', 'Recently added')
+  await expect(first).toHaveAttribute('aria-current', 'page')
+  await pagination.getByRole('link', { name: 'Go to next page' }).click()
+  await page.getByRole('button', { name: 'To do', exact: true }).click()
+  await expect(first).toHaveAttribute('aria-current', 'page')
+  await page.getByRole('button', { name: 'All', exact: true }).click()
+  await pagination.getByRole('link', { name: 'Go to next page' }).click()
+  await chooseOption(page, 'Filter by category', 'Frontend')
+  await expect(first).toHaveAttribute('aria-current', 'page')
+  await pagination.getByRole('link', { name: 'Go to next page' }).click()
+  await page.getByLabel('Search tasks').fill('no matching pagination task')
+  await expect(page.getByText('No tasks to show')).toBeVisible()
+  await expect(pagination).toHaveCount(0)
+  await page.getByLabel('Search tasks').fill('')
+  await expect(first).toHaveAttribute('aria-current', 'page')
+})
+
+test('returns to the previous page when the final page is deleted', async ({ page }) => {
+  const total = await shownCount(page)
+  const tasks = page.getByRole('list', { name: 'Tasks', exact: true })
+  const pageSize = await tasks.getByRole('listitem').count()
+  const lastPage = Math.ceil(total / pageSize)
+  const pagination = page.getByRole('navigation', { name: 'Task pagination' })
+  await pagination.getByRole('link', { name: `Go to page ${lastPage}`, exact: true }).click()
+  const remaining = await tasks.getByRole('listitem').count()
+  for (let index = 0; index < remaining; index += 1) {
+    await tasks
+      .getByRole('button', { name: /^Delete "/ })
+      .first()
+      .click()
+    await tasks.getByRole('button', { name: 'Delete', exact: true }).click()
+  }
+  await expect(
+    pagination.getByRole('link', { name: `Go to page ${lastPage - 1}`, exact: true }),
+  ).toHaveAttribute('aria-current', 'page')
+  await expect(tasks.getByRole('listitem')).toHaveCount(pageSize)
+  expect(await shownCount(page)).toBe(total - remaining)
 })
 
 test('clears every task and restores the samples', async ({ page }) => {
