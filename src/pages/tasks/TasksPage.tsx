@@ -17,10 +17,6 @@ export function TasksPage() {
   const [isFormOpen, setIsFormOpen] = useState(false)
   const filters = useTaskFilters(tasks)
 
-  // const toggleSwitch = (arg) => ({
-  //   setIsFormOpen(!isFormOpen)
-  // })
-
   return (
     <div className="scrollbar-slim mx-auto h-full max-w-6xl space-y-5 overflow-y-auto px-4 py-6 sm:px-6">
       <div className="flex flex-wrap items-end justify-between gap-3">
@@ -31,7 +27,14 @@ export function TasksPage() {
           </p>
         </div>
         <div className="flex items-center gap-2">
-          <Button type="button" variant="outline" size="sm" onClick={() => {setIsFormOpen(!isFormOpen)}}>
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={() => {
+              setIsFormOpen(!isFormOpen)
+            }}
+          >
             Add a Task
           </Button>
           <Button type="button" variant="outline" size="sm" onClick={resetToSeed}>
