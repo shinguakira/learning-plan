@@ -62,7 +62,17 @@ export function TasksPage() {
       <TaskFilters filters={filters} total={tasks.length} view={view} onViewChange={setView} />
 
       {view === 'list' ? (
-        <TaskListView tasks={filters.visible} onUpdate={updateTask} onRemove={removeTask} />
+        <TaskListView
+          key={JSON.stringify([
+            filters.query,
+            filters.statusFilter,
+            filters.categoryFilter,
+            filters.sortKey,
+          ])}
+          tasks={filters.visible}
+          onUpdate={updateTask}
+          onRemove={removeTask}
+        />
       ) : (
         <TimelineView tasks={filters.visible} />
       )}
