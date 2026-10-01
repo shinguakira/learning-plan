@@ -10,7 +10,9 @@ export function ProfilePage() {
       <div>
         <h1 className="text-lg font-semibold">Profile</h1>
         <p className="text-muted-foreground mt-0.5 text-xs">
-          Technical skills for your resume. Nothing is saved.
+          {skills.length === 0
+            ? 'Technical skills for your resume. Nothing is saved.'
+            : `${skills.length} technical skill${skills.length === 1 ? '' : 's'} for your resume. Nothing is saved.`}
         </p>
       </div>
 
