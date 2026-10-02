@@ -9,9 +9,10 @@ you want the why rather than the how.
 - **AI chat** — a standalone chatbot, unrelated to the task page. It POSTs to the
   endpoint you configure in `.env`.
 
-Frontend only. There is no backend and nothing is persisted: the task list lives in
-memory for the session, and the chat page calls a completions endpoint straight from
-the browser.
+There is a small backend (`../backend`) that only serves the seed skill list
+(`GET /api/skills`). Nothing else is persisted anywhere: the task list lives in memory
+for the session, and the chat page calls a completions endpoint straight from the
+browser.
 
 ## Tech stack
 
