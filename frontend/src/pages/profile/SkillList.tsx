@@ -48,23 +48,20 @@ export function SkillList({
 
               <ul className="flex min-w-0 flex-1 flex-wrap gap-1.5">
                 {group.skills.map((skill) => (
-                  <li key={skill.id} className="group/skill">
-                    <Badge
-                      variant="outline"
-                      className={cn('h-7 gap-1 pr-1', SKILL_LEVEL_CHIP[group.level])}
-                    >
+                  <li key={skill.id} className="group/skill relative">
+                    <Badge variant="outline" className={cn('h-7', SKILL_LEVEL_CHIP[group.level])}>
                       {skill.name}
-                      <Button
-                        type="button"
-                        variant="ghost"
-                        size="icon-xs"
-                        className="opacity-0 transition group-hover/skill:opacity-100 focus-visible:opacity-100"
-                        aria-label={`Remove ${skill.name}`}
-                        onClick={() => onRemove(skill.id)}
-                      >
-                        <X />
-                      </Button>
                     </Badge>
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="icon-xs"
+                      className="absolute top-1/2 right-0.5 -translate-y-1/2 opacity-0 transition group-hover/skill:opacity-100 focus-visible:opacity-100"
+                      aria-label={`Remove ${skill.name}`}
+                      onClick={() => onRemove(skill.id)}
+                    >
+                      <X />
+                    </Button>
                   </li>
                 ))}
               </ul>
