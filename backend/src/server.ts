@@ -1,24 +1,19 @@
-import { createServer } from 'node:http'
-import { skillController } from './controllers/skillController.js'
+import path from 'node:path'
+import { fileURLToPath } from 'node:url'
+import Fastify from 'fastify'
+import autoload from '@fastify/autoload'
+import cors from '@fastify/cors'
 
 const ALLOWED_ORIGIN = process.env.ALLOWED_ORIGIN ?? 'http://localhost:5173'
 
-/** Routes a request to its controller; CORS and 404s are handled here, once. */
-export const server = createServer((req, res) => {
-  res.setHeader('Access-Control-Allow-Origin', ALLOWED_ORIGIN)
-  res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS')
+export const app = Fastify()
 
-  if (req.method === 'OPTIONS') {
-    res.writeHead(204)
-    res.end()
-    return
-  }
+app.register(cors, {
+  origin: ALLOWED_ORIGIN,
+  methods: ['GET', 'OPTIONS'],
+})
 
-  if (req.url === '/api/skills' && req.method === 'GET') {
-    skillController.getSkills(req, res)
-    return
-  }
-
-  res.writeHead(404, { 'Content-Type': 'application/json' })
-  res.end(JSON.stringify({ error: 'Not found' }))
+/** Every file here registers its own route; adding a controller never touches this file. */
+app.register(autoload, {
+  dir: path.join(path.dirname(fileURLToPath(import.meta.url)), 'controllers'),
 })

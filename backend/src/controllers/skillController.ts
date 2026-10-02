@@ -1,11 +1,7 @@
-import type { IncomingMessage, ServerResponse } from 'node:http'
+import type { FastifyInstance } from 'fastify'
 import { skillService } from '../services/skillService.js'
 
-/** Translates the HTTP layer into calls on skillService and writes the response. */
-export const skillController = {
-  getSkills(_req: IncomingMessage, res: ServerResponse): void {
-    const skills = skillService.getSkills()
-    res.writeHead(200, { 'Content-Type': 'application/json' })
-    res.end(JSON.stringify(skills))
-  },
+/** Owns /api/skills: declares its own route and translates HTTP to skillService. */
+export default async function skillController(app: FastifyInstance): Promise<void> {
+  app.get('/api/skills', async () => skillService.getSkills())
 }
