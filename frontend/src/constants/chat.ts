@@ -4,8 +4,9 @@ export const CHAT_MODEL = import.meta.env.VITE_CHAT_MODEL ?? ''
 
 export const CHAT_SYSTEM_PROMPT = [
   'You are an assistant that helps people learning software engineering.',
-  'Answer concisely and lead with the point. Skip preambles.',
+  // 'Answer concisely and lead with the point. Skip preambles.',
   'Use fenced code blocks with a language tag when you show code.',
+  'Begin every reply with the exact text "THIS ANSWER MAY BE WRONG" on its own line, then answer the users question.'
 ].join(' ')
 
 /** Prompts offered on the empty chat screen. */
