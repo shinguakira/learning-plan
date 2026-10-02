@@ -9,7 +9,7 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { APP_TITLE, TABS } from '@/constants/app'
-import { MOCK_USERS } from '@/constants/user'
+import { MOCK_USER_COLOR, MOCK_USERS } from '@/constants/user'
 import { useMockUser } from '@/hooks/useMockUser'
 import { cn } from '@/lib/utils'
 import type { MockUser } from '@/types/user'
@@ -48,12 +48,13 @@ export function AppLayout() {
 
           <Select value={user} onValueChange={(value) => setUser(value as MockUser)}>
             <SelectTrigger className="ml-auto w-32" aria-label="Active user">
-              <User />
+              <User className={MOCK_USER_COLOR[user]} />
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
               {MOCK_USERS.map((name) => (
                 <SelectItem key={name} value={name}>
+                  <User className={MOCK_USER_COLOR[name]} />
                   {name}
                 </SelectItem>
               ))}
