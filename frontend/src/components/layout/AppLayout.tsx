@@ -1,10 +1,22 @@
 import { NavLink, Outlet } from 'react-router-dom'
-import { GraduationCap } from 'lucide-react'
+import { GraduationCap, User } from 'lucide-react'
 import { buttonVariants } from '@/components/ui/button'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
 import { APP_TITLE, TABS } from '@/constants/app'
+import { MOCK_USERS } from '@/constants/user'
+import { useMockUser } from '@/hooks/useMockUser'
 import { cn } from '@/lib/utils'
+import type { MockUser } from '@/types/user'
 
 export function AppLayout() {
+  const { user, setUser } = useMockUser()
+
   return (
     <div className="flex h-screen flex-col overflow-hidden">
       <header className="bg-background/95 supports-[backdrop-filter]:bg-background/80 shrink-0 border-b backdrop-blur">
@@ -33,6 +45,20 @@ export function AppLayout() {
               </NavLink>
             ))}
           </nav>
+
+          <Select value={user} onValueChange={(value) => setUser(value as MockUser)}>
+            <SelectTrigger className="ml-auto w-32" aria-label="Active user">
+              <User />
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {MOCK_USERS.map((name) => (
+                <SelectItem key={name} value={name}>
+                  {name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
       </header>
 
