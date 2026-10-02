@@ -35,7 +35,7 @@ export function SkillList({
             <CardContent className="flex flex-wrap items-start gap-3">
               <div
                 className={cn(
-                  'flex w-28 shrink-0 items-center gap-1.5 pt-1 text-xs font-semibold tracking-wide uppercase',
+                  'flex shrink-0 items-center gap-1.5 pt-1 text-xs font-semibold tracking-wide uppercase',
                   SKILL_LEVEL_TEXT[group.level],
                 )}
               >
