@@ -63,15 +63,16 @@ src/lib/               generic, would drop into another project unchanged
 src/api/               only code that talks to something external
 test/unit/             Vitest specs for pure logic
 test/e2e/              Playwright specs
-doc/                   product documentation, no implementation detail
+doc/                   why this code is arranged as it is
+../doc/                repository and product documentation
 ```
 
-`doc/product.md` describes what the product is for and who for — keep technology out
-of it. `doc/coding.md` records why the code is arranged as it is; put reasoning there
+`../doc/product.md` describes what the product is for and who for — keep technology
+out of it. `doc/coding.md` records why the code is arranged as it is; put reasoning there
 rather than in the README, which stays stack, setup and structure only.
 `doc/getting-started.md` walks the codebase for a first read — keep its file paths
-and snippets in step with the code when you move things. `doc/branch-naming.md` is
-the branching rule.
+and snippets in step with the code when you move things. `../doc/branch-naming.md`
+is the branching rule, and it covers the whole repository.
 
 - `src/pages/**` holds components and nothing else.
 - No `src/features/` folder.
@@ -135,7 +136,7 @@ Do not verify behaviour by taking browser screenshots — write or run a test.
 
 Never commit or push to `develop` or `main`. Branch from `develop`, name it
 `<type>/<what the task is>#<issue>`, and merge through a pull request into
-`develop`. The full rule and examples are in [`doc/branch-naming.md`](doc/branch-naming.md).
+`develop`. The full rule and examples are in [`doc/branch-naming.md`](../doc/branch-naming.md).
 
 ## Deleting
 
