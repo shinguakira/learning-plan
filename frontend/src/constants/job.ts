@@ -20,42 +20,44 @@ export const EMPLOYMENT_TYPE_CHIP: Record<EmploymentType, string> = {
   internship: 'text-muted-foreground',
 }
 
-/** The sample work history, loaded on every visit. Nothing here is saved. */
+/**
+ * The sample work history, loaded on every visit. Nothing here is saved.
+ *
+ * Every company and role below is invented, and the names are plain English so
+ * they read as names to anyone. Sample data must never be drawn from anything
+ * real - not the author's own projects, not another repository.
+ */
 export const SEED_JOBS: readonly SeedJob[] = [
   {
-    company: 'Brighty',
+    company: 'Marlow Retail',
     title: 'Senior Frontend Engineer',
     employmentType: 'full-time',
     from: '2024-04',
     to: null,
-    summary:
-      'Own the coaching search experience in React and TypeScript. Replaced the client-side filter pipeline and introduced the end-to-end suite the team now gates releases on.',
+    summary: 'Online shop. Build the product and checkout pages in React.',
   },
   {
-    company: 'Kaizen Logistics',
+    company: 'Northgate Logistics',
     title: 'Full Stack Engineer',
     employmentType: 'full-time',
     from: '2021-07',
     to: '2024-03',
-    summary:
-      'Built the shipment tracking dashboard and the Go services behind it. Moved the nightly batch to an event-driven pipeline and took the daily reconciliation window from four hours to under twenty minutes.',
+    summary: 'Freight company. Built the shipment tracking dashboard and the API behind it.',
   },
   {
-    company: 'Studio Yotsuba',
+    company: 'Riverbend Studio',
     title: 'Web Developer',
     employmentType: 'contract',
     from: '2020-02',
     to: '2021-06',
-    summary:
-      'Delivered marketing sites for six clients on a shared Next.js foundation. Set up the component library and the deploy previews that removed the manual staging step.',
+    summary: 'Web agency. Built marketing sites for clients.',
   },
   {
-    company: 'Nakamura Systems',
+    company: 'Oakfield Systems',
     title: 'Software Engineer Intern',
     employmentType: 'internship',
     from: '2019-06',
     to: '2019-09',
-    summary:
-      'Wrote internal tooling for the QA team in Python, including the report generator they still run before each release.',
+    summary: 'Software vendor. Wrote internal tools for the test team.',
   },
 ]
