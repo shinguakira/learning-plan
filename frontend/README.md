@@ -6,13 +6,13 @@ is for** if you want the why rather than the how.
 
 - **Tasks** — add, delete and browse study tasks, with a switch between a list view
   and a Gantt-style timeline.
-- **Profile** — technical skills and job history for a resume.
+- **Profile** — technical skills for a resume.
 - **AI chat** — a standalone chatbot, unrelated to the other pages. It POSTs to the
   endpoint you configure in `.env`.
 
 Only the Profile page's skill list needs the backend (`../backend`,
-`GET /api/skills`). Nothing is persisted anywhere: tasks and job history are seeded
-here and live in memory for the session, and the chat page calls a completions
+`GET /api/skills`). Nothing is persisted anywhere: tasks are seeded here
+and live in memory for the session, and the chat page calls a completions
 endpoint straight from the browser.
 
 ## Tech stack

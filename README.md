@@ -6,7 +6,7 @@ you want the why rather than the how.
 
 - **Tasks** — add, delete and browse study tasks, with a switch between a list view
   and a Gantt-style timeline.
-- **Profile** — technical skills and job history for a resume.
+- **Profile** — technical skills for a resume.
 - **AI chat** — a standalone chatbot, unrelated to the other pages.
 
 ## The app
@@ -21,9 +21,9 @@ date actually show up.
 
 ![The same tasks as a Gantt-style timeline across January and February](doc/images/tasks-timeline.png)
 
-**Profile** — skills grouped by level, and the roles behind them.
+**Profile** — skills grouped by level.
 
-![The profile page, with skills grouped by level above a job history](doc/images/profile.png)
+![The profile page, with skills grouped by level](doc/images/profile.png)
 
 **AI chat** — a chatbot that knows nothing about your tasks, on purpose.
 
@@ -40,8 +40,8 @@ doc/        documentation about the repo and the product, plus the README images
 vercel.json routes the deployment to frontend/
 ```
 
-Nothing is persisted. Tasks and job history are seeded in the frontend and live in
-memory for the session; skills are seeded once from the backend and edited in memory
+Nothing is persisted. Tasks are seeded in the frontend and live in memory for the
+session; skills are seeded once from the backend and edited in memory
 after that; the chat page calls a completions endpoint straight from the browser.
 
 ## Running it
