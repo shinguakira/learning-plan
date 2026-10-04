@@ -1,13 +1,9 @@
-import { useJobs } from '@/hooks/useJobs'
 import { useSkills } from '@/hooks/useSkills'
-import { JobForm } from '@/pages/profile/JobForm'
-import { JobList } from '@/pages/profile/JobList'
 import { SkillForm } from '@/pages/profile/SkillForm'
 import { SkillList } from '@/pages/profile/SkillList'
 
 export function ProfilePage() {
   const { skills, loading, error, addSkill, removeSkill } = useSkills()
-  const { jobs, addJob, removeJob } = useJobs()
 
   return (
     <div className="mx-auto max-w-6xl space-y-6 px-4 py-6 sm:px-6">
@@ -39,22 +35,6 @@ export function ProfilePage() {
         ) : (
           <SkillList skills={skills} onRemove={removeSkill} />
         )}
-      </section>
-
-      <section aria-labelledby="jobs-heading" className="space-y-5">
-        <div>
-          <h2 id="jobs-heading" className="text-base font-semibold">
-            Job history
-          </h2>
-          <p className="text-muted-foreground mt-0.5 text-xs">
-            {jobs.length === 0
-              ? 'Where you have worked.'
-              : `${jobs.length} role${jobs.length === 1 ? '' : 's'}, most recent first.`}
-          </p>
-        </div>
-
-        <JobForm onSubmit={addJob} />
-        <JobList jobs={jobs} onRemove={removeJob} />
       </section>
     </div>
   )
