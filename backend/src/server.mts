@@ -1,6 +1,6 @@
 import Fastify from 'fastify'
 import cors from '@fastify/cors'
-import skillController from './controllers/skillController.js'
+import skillController from './controllers/skillController.mjs'
 
 const ALLOWED_ORIGIN = process.env.ALLOWED_ORIGIN ?? 'http://localhost:5173'
 const PORT = Number(process.env.PORT) || 3001

@@ -1,4 +1,4 @@
-import type { Skill } from '../types/skill.js'
+import type { Skill } from '../types/skill.mjs'
 
 export const seedSkills: Skill[] = [
   { id: '1', name: 'TypeScript', level: 'expert', createdAt: '2026-01-01T00:00:00.000Z' },
