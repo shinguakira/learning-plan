@@ -2,7 +2,7 @@ import type { ReactNode } from 'react'
 import { Label } from '@/components/ui/label'
 import { cn } from '@/lib/utils'
 
-/** A labelled slot in the add-task form, with room for a validation message. */
+/** A labelled slot in a form, with room for a validation message. Shared by every page. */
 export function FormField({
   label,
   htmlFor,

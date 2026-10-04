@@ -13,7 +13,7 @@ import {
 import { CATEGORIES, PRIORITIES, PRIORITY_LABEL, STATUSES, STATUS_LABEL } from '@/constants/task'
 import { useTaskDraft } from '@/hooks/useTaskDraft'
 import { today } from '@/utils/date'
-import { FormField } from '@/pages/tasks/FormField'
+import { FormField } from '@/components/form/FormField'
 import type { ISODate } from '@/types/date'
 import type { Category, Priority, Status, TaskDraft } from '@/types/task'
 

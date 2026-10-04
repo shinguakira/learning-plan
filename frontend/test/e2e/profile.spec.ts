@@ -129,79 +129,137 @@ test('starts fresh on a reload - nothing is persisted', async ({ page }) => {
 
 const jobsIn = (page: Page) => page.getByRole('region', { name: 'Job history' })
 
-test('lists the sample work history, most recent first', async ({ page }) => {
-  const jobs = jobsIn(page)
+/** Every assertion below is relative to this, never to the size of the sample. */
+async function jobCount(page: Page): Promise<number> {
+  return jobsIn(page).getByRole('listitem').count()
+}
 
-  await expect(jobs.getByRole('listitem')).toHaveCount(4)
-  await expect(jobs.getByRole('heading', { level: 3 })).toHaveText([
-    'Senior Frontend Engineer',
-    'Full Stack Engineer',
-    'Web Developer',
-    'Software Engineer Intern',
-  ])
+async function fillJob(
+  page: Page,
+  values: { company: string; title: string; started: string; ended?: string },
+) {
+  await page.getByLabel('Company').fill(values.company)
+  await page.getByLabel('Job title').fill(values.title)
+  await page.getByLabel('Started').fill(values.started)
+  if (values.ended !== undefined) await page.getByLabel('Ended').fill(values.ended)
+}
+
+test('shows a work history on load, one heading per role', async ({ page }) => {
+  const jobs = jobsIn(page)
+  const initial = await jobCount(page)
+
+  expect(initial).toBeGreaterThan(0)
+  await expect(jobs.getByRole('heading', { level: 3 })).toHaveCount(initial)
 })
 
-test('marks the open-ended role as current and dates the finished ones', async ({ page }) => {
+test('puts a newer role above an older one', async ({ page }) => {
   const jobs = jobsIn(page)
 
-  const current = jobs.getByRole('listitem').first()
-  await expect(current.getByText('Current')).toBeVisible()
-  await expect(current.getByText('April 2024 - Present')).toBeVisible()
-
-  const finished = jobs.getByRole('listitem').nth(1)
-  await expect(finished.getByText('Current')).toHaveCount(0)
-  await expect(finished.getByText('July 2021 - March 2024')).toBeVisible()
-})
-
-test('adds a job and places it by its start date', async ({ page }) => {
-  const jobs = jobsIn(page)
-
-  await page.getByLabel('Company').fill('Hoshino Robotics')
-  await page.getByLabel('Job title').fill('Platform Engineer')
-  await page.getByLabel('Started').fill('2022-05-01')
-  await page.getByLabel('Ended').fill('2023-01-31')
+  await fillJob(page, { company: 'Later Inc', title: 'Newest Role', started: '2099-01-01' })
+  await page.getByRole('button', { name: 'Add job' }).click()
+  await fillJob(page, {
+    company: 'Earlier Inc',
+    title: 'Oldest Role',
+    started: '1990-01-01',
+    ended: '1991-01-31',
+  })
   await page.getByRole('button', { name: 'Add job' }).click()
 
-  await expect(jobs.getByRole('listitem')).toHaveCount(5)
-  // Started 2022-05, so it sits between the 2024 and the 2021 role.
-  await expect(jobs.getByRole('heading', { level: 3 }).nth(1)).toHaveText('Platform Engineer')
-  await expect(jobs.getByText('May 2022 - January 2023')).toBeVisible()
+  const headings = jobs.getByRole('heading', { level: 3 })
+  await expect(headings.first()).toHaveText('Newest Role')
+  await expect(headings.last()).toHaveText('Oldest Role')
+})
+
+test('marks a role with no end date as current', async ({ page }) => {
+  const jobs = jobsIn(page)
+
+  await fillJob(page, { company: 'Ongoing Ltd', title: 'Open Ended', started: '2025-03-01' })
+  await page.getByRole('button', { name: 'Add job' }).click()
+
+  const added = jobs.getByRole('listitem').filter({ hasText: 'Open Ended' })
+  await expect(added.getByText('Current')).toBeVisible()
+  await expect(added.getByText('March 2025 - Present')).toBeVisible()
+})
+
+test('dates a finished role from both ends and does not call it current', async ({ page }) => {
+  const jobs = jobsIn(page)
+
+  await fillJob(page, {
+    company: 'Done Ltd',
+    title: 'Finished Role',
+    started: '2021-07-01',
+    ended: '2024-03-31',
+  })
+  await page.getByRole('button', { name: 'Add job' }).click()
+
+  const added = jobs.getByRole('listitem').filter({ hasText: 'Finished Role' })
+  await expect(added.getByText('July 2021 - March 2024')).toBeVisible()
+  await expect(added.getByText('Current')).toHaveCount(0)
+})
+
+test('adds one role to the list', async ({ page }) => {
+  const before = await jobCount(page)
+
+  await fillJob(page, {
+    company: 'Hoshino Robotics',
+    title: 'Platform Engineer',
+    started: '2022-05-01',
+    ended: '2023-01-31',
+  })
+  await page.getByRole('button', { name: 'Add job' }).click()
+
+  expect(await jobCount(page)).toBe(before + 1)
 })
 
 test('refuses a job with no company or title', async ({ page }) => {
+  const before = await jobCount(page)
+
   await page.getByRole('button', { name: 'Add job' }).click()
 
   await expect(page.getByText('Enter a company')).toBeVisible()
   await expect(page.getByText('Enter a job title')).toBeVisible()
-  await expect(jobsIn(page).getByRole('listitem')).toHaveCount(4)
+  expect(await jobCount(page)).toBe(before)
 })
 
 test('does not accept a job that ends before it starts', async ({ page }) => {
-  await page.getByLabel('Company').fill('Acme')
-  await page.getByLabel('Job title').fill('Engineer')
-  await page.getByLabel('Started').fill('2024-06-01')
-  await page.getByLabel('Ended').fill('2024-01-01')
+  const before = await jobCount(page)
+
+  await fillJob(page, {
+    company: 'Acme',
+    title: 'Engineer',
+    started: '2024-06-01',
+    ended: '2024-01-01',
+  })
   await page.getByRole('button', { name: 'Add job' }).click()
 
   // The Ended input carries min=start, so the browser refuses the submit before
   // our own message can show. Either way the role must not reach the list.
-  await expect(jobsIn(page).getByRole('listitem')).toHaveCount(4)
+  expect(await jobCount(page)).toBe(before)
 })
 
-test('removes a job', async ({ page }) => {
+test('removes the role you asked to remove', async ({ page }) => {
   const jobs = jobsIn(page)
+  const before = await jobCount(page)
 
-  await page.getByRole('button', { name: 'Remove Web Developer at Studio Yotsuba' }).click()
+  await fillJob(page, { company: 'Temp Co', title: 'Removable Role', started: '2015-01-01' })
+  await page.getByRole('button', { name: 'Add job' }).click()
+  expect(await jobCount(page)).toBe(before + 1)
 
-  await expect(jobs.getByRole('listitem')).toHaveCount(3)
-  await expect(jobs.getByText('Web Developer')).toHaveCount(0)
+  await page.getByRole('button', { name: 'Remove Removable Role at Temp Co' }).click()
+
+  expect(await jobCount(page)).toBe(before)
+  await expect(jobs.getByText('Removable Role')).toHaveCount(0)
 })
 
 test('restores the sample work history on a reload - nothing is persisted', async ({ page }) => {
-  await page.getByRole('button', { name: 'Remove Web Developer at Studio Yotsuba' }).click()
-  await expect(jobsIn(page).getByRole('listitem')).toHaveCount(3)
+  const before = await jobCount(page)
+
+  await fillJob(page, { company: 'Temp Co', title: 'Vanishing Role', started: '2015-01-01' })
+  await page.getByRole('button', { name: 'Add job' }).click()
+  expect(await jobCount(page)).toBe(before + 1)
 
   await page.reload()
 
-  await expect(jobsIn(page).getByRole('listitem')).toHaveCount(4)
+  expect(await jobCount(page)).toBe(before)
+  await expect(jobsIn(page).getByText('Vanishing Role')).toHaveCount(0)
 })

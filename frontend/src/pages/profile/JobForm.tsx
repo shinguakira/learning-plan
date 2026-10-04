@@ -13,7 +13,7 @@ import {
 import { Textarea } from '@/components/ui/textarea'
 import { EMPLOYMENT_TYPES, EMPLOYMENT_TYPE_LABEL } from '@/constants/job'
 import { useJobDraft } from '@/hooks/useJobDraft'
-import { FormField } from '@/pages/tasks/FormField'
+import { FormField } from '@/components/form/FormField'
 import type { ISODate } from '@/types/date'
 import type { EmploymentType, JobDraft } from '@/types/job'
 
