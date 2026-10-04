@@ -41,7 +41,12 @@ the long-stable builder, not the Beta one.
 ```
 api/skills.ts      GET /api/skills, deployed
 backend/           the same data behind Fastify, for local development
+package.json       declares "type": "module" for the repository root
 ```
+
+The root `package.json` exists only for that one field. Without it the function
+compiles as CommonJS while `backend/` is ESM, and the import across them fails with
+`ERR_REQUIRE_ESM`. It declares no dependencies and nothing installs from it.
 
 What makes this safe is that the layers underneath the route have **no external
 dependencies**: `skillService` → `seedSkills` → `types/skill` are plain TypeScript.
