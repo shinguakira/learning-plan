@@ -7,7 +7,7 @@
     },
     "backend": {
       "root": "backend/",
-      "entrypoint": "src/index.mts"
+      "entrypoint": "dist/index.mjs"
     }
   },
   "rewrites": [
