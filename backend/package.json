@@ -7,9 +7,9 @@
     "node": ">=20"
   },
   "scripts": {
-    "dev": "tsx watch src/index.mts",
+    "dev": "tsx watch src/server.ts",
     "build": "tsc",
-    "start": "node dist/index.mjs",
+    "start": "node dist/server.js",
     "type-check": "tsc --noEmit"
   },
   "devDependencies": {
