@@ -134,7 +134,7 @@ Do not verify behaviour by taking browser screenshots — write or run a test.
 ## Branches
 
 Never commit or push to `develop` or `main`. Branch from `develop`, name it
-`<type>/<issue>-<what the task is>`, and merge through a pull request into
+`<type>/<what the task is>#<issue>`, and merge through a pull request into
 `develop`. The full rule and examples are in [`doc/branch-naming.md`](doc/branch-naming.md).
 
 ## Deleting
