@@ -36,6 +36,42 @@ test('shows the app title from the environment', async ({ page }) => {
   await expect(page.getByText('Learning Plan')).toBeVisible()
 })
 
+test.describe('phone layout', () => {
+  test.use({ viewport: { width: 375, height: 812 } })
+
+  test('collapses the nav behind the menu button', async ({ page }) => {
+    await page.goto('/tasks')
+
+    // The tab row is gone; the one button stands in for it.
+    await expect(page.getByRole('link', { name: 'AI chat' })).toBeHidden()
+    const menu = page.getByRole('button', { name: 'Menu' })
+    await expect(menu).toBeVisible()
+
+    await menu.click()
+    const drawer = page.getByRole('dialog')
+    await expect(drawer).toBeVisible()
+    await expect(drawer.getByRole('link')).toHaveText(['Tasks', 'AI chat', 'Profile'])
+  })
+
+  test('navigates from the menu and closes it behind you', async ({ page }) => {
+    await page.goto('/tasks')
+
+    await page.getByRole('button', { name: 'Menu' }).click()
+    await page.getByRole('dialog').getByRole('link', { name: 'Profile' }).click()
+
+    await expect(page).toHaveURL(/\/profile$/)
+    await expect(page.getByRole('heading', { name: 'Profile' })).toBeVisible()
+    await expect(page.getByRole('dialog')).toBeHidden()
+  })
+})
+
+test('shows the nav inline and no menu button on a wide screen', async ({ page }) => {
+  await page.goto('/tasks')
+
+  await expect(page.getByRole('link', { name: 'AI chat' })).toBeVisible()
+  await expect(page.getByRole('button', { name: 'Menu' })).toBeHidden()
+})
+
 test('defaults the header user to the first mock person and can switch', async ({ page }) => {
   await page.goto('/tasks')
 
@@ -49,4 +85,18 @@ test('defaults the header user to the first mock person and can switch', async (
   // Survives moving between pages - it belongs to the shared header, not one page.
   await page.getByRole('link', { name: 'Profile' }).click()
   await expect(userSelect).toHaveText('Mike')
+})
+
+test('closes the drawer when the screen grows past the phone layout', async ({ page }) => {
+  await page.setViewportSize({ width: 375, height: 812 })
+  await page.goto('/tasks')
+
+  await page.getByRole('button', { name: 'Menu' }).click()
+  await expect(page.getByRole('dialog')).toBeVisible()
+
+  // A phone turned to landscape crosses the breakpoint with the drawer open.
+  await page.setViewportSize({ width: 1100, height: 760 })
+
+  await expect(page.getByRole('dialog')).toBeHidden()
+  await expect(page.getByRole('link', { name: 'AI chat' })).toBeVisible()
 })
