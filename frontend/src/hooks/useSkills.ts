@@ -35,8 +35,10 @@ export function useSkills(): SkillsApi {
     fetchSkills()
       .then((seed) => {
         if (!active) return
-        setSkills(seed.skills)
-        setJobs(seed.jobs)
+        // The forms work while this is in flight, so anything already added stays
+        // and the seed goes after it. Replacing outright would discard it.
+        setSkills((prev) => [...prev, ...seed.skills])
+        setJobs((prev) => [...prev, ...seed.jobs])
       })
       .catch((caught: unknown) => {
         if (active) setError(caught instanceof Error ? caught.message : 'Failed to load profile.')

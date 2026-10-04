@@ -213,3 +213,70 @@ test('starts fresh on a reload - job edits are not persisted', async ({ page }) 
 
   await expect(jobsIn(page).getByRole('listitem')).toHaveCount(0)
 })
+
+/**
+ * The forms are usable while the seed request is still in flight, so the seed has
+ * to merge with whatever is already on screen. These stub the endpoint with a
+ * delay to open that window deliberately; the rest of the file runs without a
+ * backend, where the request simply fails.
+ */
+async function seedSlowly(page: Page) {
+  await page.route('**/api/skills', async (route) => {
+    await new Promise((resolve) => setTimeout(resolve, 1500))
+    await route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: JSON.stringify({
+        skills: [
+          {
+            id: 's1',
+            name: 'Seeded Skill',
+            level: 'expert',
+            createdAt: '2026-01-01T00:00:00.000Z',
+          },
+        ],
+        jobs: [
+          {
+            id: 'j1',
+            company: 'Seeded Co',
+            title: 'Seeded Role',
+            employmentType: 'full-time',
+            startDate: '2020-01-01',
+            endDate: '2021-01-31',
+            summary: 'Seeded.',
+            createdAt: '2026-01-01T00:00:00.000Z',
+          },
+        ],
+      }),
+    })
+  })
+}
+
+test('keeps a job added while the seed request is still loading', async ({ page }) => {
+  await seedSlowly(page)
+  await page.goto('/profile')
+
+  await addJob(page, { company: 'Typed Co', title: 'Typed Role', started: '2023-01-01' })
+  await expect(jobsIn(page).getByText('Typed Role')).toBeVisible()
+
+  // The seed lands after it; both must be there.
+  await expect(jobsIn(page).getByText('Seeded Role')).toBeVisible()
+  await expect(jobsIn(page).getByText('Typed Role')).toBeVisible()
+  await expect(jobsIn(page).getByRole('listitem')).toHaveCount(2)
+})
+
+test('keeps a skill added while the seed request is still loading', async ({ page }) => {
+  await seedSlowly(page)
+  await page.goto('/profile')
+
+  await chooseOption(page, 'Skill', 'Rust')
+  await page.getByRole('button', { name: 'Add skill' }).click()
+
+  // The seed lands after it; both must be there, each under its own level.
+  await expect(
+    page.getByRole('region', { name: 'Beginner skills' }).getByText('Rust'),
+  ).toBeVisible()
+  await expect(
+    page.getByRole('region', { name: 'Expert skills' }).getByText('Seeded Skill'),
+  ).toBeVisible()
+})
