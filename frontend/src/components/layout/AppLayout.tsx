@@ -1,6 +1,7 @@
 import { NavLink, Outlet } from 'react-router-dom'
 import { GraduationCap, User } from 'lucide-react'
 import { buttonVariants } from '@/components/ui/button'
+import { MobileNav } from '@/components/layout/MobileNav'
 import {
   Select,
   SelectContent,
@@ -20,15 +21,17 @@ export function AppLayout() {
   return (
     <div className="flex h-screen flex-col overflow-hidden">
       <header className="bg-background/95 supports-[backdrop-filter]:bg-background/80 shrink-0 border-b backdrop-blur">
-        <div className="mx-auto flex h-14 w-full max-w-6xl items-center gap-6 px-4 sm:px-6">
+        <div className="mx-auto flex h-14 w-full max-w-6xl items-center gap-3 px-4 sm:gap-6 sm:px-6">
+          <MobileNav />
+
           <div className="flex items-center gap-2">
             <span className="bg-primary text-primary-foreground flex size-7 items-center justify-center rounded-lg">
               <GraduationCap className="size-4" />
             </span>
-            <span className="text-sm font-semibold">{APP_TITLE}</span>
+            <span className="text-sm font-semibold whitespace-nowrap">{APP_TITLE}</span>
           </div>
 
-          <nav className="flex gap-1">
+          <nav className="hidden gap-1 sm:flex">
             {TABS.map((tab) => (
               <NavLink
                 key={tab.to}
