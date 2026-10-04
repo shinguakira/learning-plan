@@ -1,7 +1,11 @@
 import type { SkillLevel } from '@/types/skill'
 
-export const SKILLS_API_URL =
-  import.meta.env.VITE_SKILLS_API_URL ?? 'http://localhost:3001/api/skills'
+/**
+ * Same origin as the app, both deployed and in development - the dev server
+ * proxies /api to the backend (see `vite.config.ts`). Override it only to point
+ * at a backend somewhere else.
+ */
+export const SKILLS_API_URL = import.meta.env.VITE_SKILLS_API_URL ?? '/api/skills'
 
 export const SKILL_LEVELS = ['beginner', 'intermediate', 'advanced', 'expert'] as const
 
