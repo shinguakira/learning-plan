@@ -12,7 +12,8 @@
     },
     "backend": {
       "root": "backend/",
-      "entrypoint": "src/server.ts"
+      "entrypoint": "src/server.ts",
+      "outputDirectory": "."
     }
   },
   "rewrites": [
