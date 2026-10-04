@@ -15,6 +15,14 @@ test.beforeEach(async ({ page }) => {
 /** The page holds two lists, so a bare listitem query would span both. */
 const skillsIn = (page: Page) => page.getByRole('region', { name: 'Skills' })
 
+/**
+ * The skill specs below start from an empty list on purpose: `useSkills` seeds
+ * from the backend, and these run without one, so the page falls back to empty
+ * and every skill on screen is one the test added. Start the backend on :3001
+ * and they will fail - that is expected, not a regression. The job specs are
+ * unaffected: job history is seeded in the frontend and never fetches anything.
+ */
+
 test('starts with no skills registered', async ({ page }) => {
   await expect(page.getByText('No skills registered yet')).toBeVisible()
   await expect(skillsIn(page).getByRole('listitem')).toHaveCount(0)
