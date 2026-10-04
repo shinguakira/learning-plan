@@ -9,6 +9,26 @@ you want the why rather than the how.
 - **Profile** — technical skills and job history for a resume.
 - **AI chat** — a standalone chatbot, unrelated to the other pages.
 
+## The app
+
+**Tasks** — the plan as a list: progress, filters, search and a page of tasks at a
+time.
+
+![The task list, showing the progress summary, filters and the first page of tasks](doc/images/tasks-list.png)
+
+The same tasks as a timeline, which is where overlapping work and a slipping due
+date actually show up.
+
+![The same tasks as a Gantt-style timeline across January and February](doc/images/tasks-timeline.png)
+
+**Profile** — skills grouped by level, and the roles behind them.
+
+![The profile page, with skills grouped by level above a job history](doc/images/profile.png)
+
+**AI chat** — a chatbot that knows nothing about your tasks, on purpose.
+
+![The chat page before any message, offering four starting prompts](doc/images/chat.png)
+
 ## Layout
 
 Two packages, each with its own `package.json` and its own dependencies.
@@ -16,7 +36,7 @@ Two packages, each with its own `package.json` and its own dependencies.
 ```
 frontend/   the app: React, Vite, Tailwind, shadcn/ui
 backend/    Fastify. Serves the seed skill list and nothing else
-doc/        documentation about the repo and the product
+doc/        documentation about the repo and the product, plus the README images
 vercel.json routes the deployment to frontend/
 ```
 
