@@ -23,10 +23,10 @@ SyntaxError: Cannot use import statement outside a module
 
 Every way around it is blocked by another face of the same bug:
 
-| Attempt                                   | Result                                                                      |
-| ----------------------------------------- | --------------------------------------------------------------------------- |
-| Force ESM by extension (`.mts` → `.mjs`)  | Module loads, dependency paths no longer line up: `Cannot find package 'fastify'` |
-| `entrypoint: "dist/server.js"`            | Rejected at validation, before the build runs — `dist/` is not committed      |
+| Attempt                                            | Result                                                                                                      |
+| -------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| Force ESM by extension (`.mts` → `.mjs`)           | Module loads, dependency paths no longer line up: `Cannot find package 'fastify'`                           |
+| `entrypoint: "dist/server.js"`                     | Rejected at validation, before the build runs — `dist/` is not committed                                    |
 | `outputDirectory: "."` (the documented workaround) | Builds and loads, but globs all of `backend/` and the function cannot be invoked at all, with no log output |
 
 This is upstream: [vercel/vercel#17651](https://github.com/vercel/vercel/issues/17651).

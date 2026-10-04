@@ -1,4 +1,4 @@
-import { skillService } from '../backend/src/services/skillService.js'
+import { skillService } from "../backend/src/services/skillService.js";
 
 /**
  * GET /api/skills, as deployed. The Fastify route in `backend/` serves the same
@@ -8,5 +8,5 @@ import { skillService } from '../backend/src/services/skillService.js'
  * `doc/deployment.md` for the builder bug that rules the obvious approach out.
  */
 export function GET(): Response {
-  return Response.json(skillService.getSkills())
+  return Response.json(skillService.getSkills());
 }

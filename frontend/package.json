@@ -8,8 +8,8 @@
   },
   "scripts": {
     "dev": "vite",
-    "format": "prettier --write . ../README.md ../doc",
-    "format-check": "prettier --check . ../README.md ../doc",
+    "format": "prettier --write . ../README.md ../doc ../api",
+    "format-check": "prettier --check . ../README.md ../doc ../api",
     "lint": "eslint .",
     "lint-fix": "eslint . --fix",
     "type-check": "tsc -b",
