@@ -86,3 +86,17 @@ test('defaults the header user to the first mock person and can switch', async (
   await page.getByRole('link', { name: 'Profile' }).click()
   await expect(userSelect).toHaveText('Mike')
 })
+
+test('closes the drawer when the screen grows past the phone layout', async ({ page }) => {
+  await page.setViewportSize({ width: 375, height: 812 })
+  await page.goto('/tasks')
+
+  await page.getByRole('button', { name: 'Menu' }).click()
+  await expect(page.getByRole('dialog')).toBeVisible()
+
+  // A phone turned to landscape crosses the breakpoint with the drawer open.
+  await page.setViewportSize({ width: 1100, height: 760 })
+
+  await expect(page.getByRole('dialog')).toBeHidden()
+  await expect(page.getByRole('link', { name: 'AI chat' })).toBeVisible()
+})

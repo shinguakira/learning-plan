@@ -7,8 +7,9 @@ import { TABS } from '@/constants/app'
 import { cn } from '@/lib/utils'
 
 /**
- * The same destinations as the header tab row, behind one button. Shown only
- * where the row does not fit, so a screen that can show the tabs never shows both.
+ * The same destinations as the header tab row, behind one button. The caller
+ * mounts this only while the row does not fit, so the drawer cannot be left open
+ * over a tab row that has just appeared - a phone turned to landscape does that.
  */
 export function MobileNav() {
   const [open, setOpen] = useState(false)
@@ -16,13 +17,7 @@ export function MobileNav() {
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
-        <Button
-          type="button"
-          variant="ghost"
-          size="icon-sm"
-          aria-label="Menu"
-          className="sm:hidden"
-        >
+        <Button type="button" variant="ghost" size="icon-sm" aria-label="Menu">
           <Menu />
         </Button>
       </SheetTrigger>

@@ -14,3 +14,9 @@ export const TABS: readonly NavTab[] = [
   { to: ROUTES.chat, label: 'AI chat', icon: MessageCircle },
   { to: ROUTES.profile, label: 'Profile', icon: User },
 ]
+
+/**
+ * Tailwind's `sm`. The header swaps between the tab row and the drawer here, so
+ * the one place that needs it in JS reads it from the same number the classes use.
+ */
+export const TAB_ROW_FITS = '(min-width: 40rem)'
