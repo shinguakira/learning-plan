@@ -10,7 +10,7 @@ export function ProfilePage() {
   const { jobs, addJob, removeJob } = useJobs()
 
   return (
-    <div className="scrollbar-slim mx-auto h-full max-w-6xl space-y-6 overflow-y-auto px-4 py-6 sm:px-6">
+    <div className="mx-auto max-w-6xl space-y-6 px-4 py-6 sm:px-6">
       <div>
         <h1 className="text-lg font-semibold">Profile</h1>
         <p className="text-muted-foreground mt-0.5 text-xs">

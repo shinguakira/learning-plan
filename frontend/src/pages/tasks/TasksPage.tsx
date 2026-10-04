@@ -18,7 +18,7 @@ export function TasksPage() {
   const filters = useTaskFilters(tasks)
 
   return (
-    <div className="scrollbar-slim mx-auto h-full max-w-6xl space-y-5 overflow-y-auto px-4 py-6 sm:px-6">
+    <div className="mx-auto max-w-6xl space-y-5 px-4 py-6 sm:px-6">
       <div className="flex flex-wrap items-end justify-between gap-3">
         <div>
           <h1 className="text-lg font-semibold">Learning tasks</h1>

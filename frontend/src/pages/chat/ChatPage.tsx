@@ -12,7 +12,7 @@ export function ChatPage() {
   const scrollRef = useAutoScroll<HTMLDivElement>([messages, pending])
 
   return (
-    <div className="mx-auto flex h-full max-w-3xl flex-col px-4 sm:px-6">
+    <div className="mx-auto flex h-[calc(100vh-3.5rem-1px)] max-w-3xl flex-col px-4 sm:px-6">
       <div className="flex items-center justify-between gap-3 py-4">
         <div>
           <h1 className="text-lg font-semibold">AI chat</h1>
