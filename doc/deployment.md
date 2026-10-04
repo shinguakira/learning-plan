@@ -53,6 +53,12 @@ dependencies**: `skillService` → `seedSkills` → `types/skill` are plain Type
 Nothing there imports Fastify, so there is nothing for the builder to trace and the
 failure above cannot happen.
 
+`backend/` itself is untouched by this arrangement, and is **not deployed**. It
+runs only in development, on a real filesystem, so `@fastify/autoload` discovering
+routes from the `controllers/` directory keeps working exactly as written. A traced
+serverless bundle would not have included that directory - but nothing traces this
+server, because nothing deploys it.
+
 The cost is that the HTTP layer exists twice — a Fastify route locally, a Web handler
 deployed. The data and the service layer are shared between them, so what is
 duplicated is the route definition and nothing else. **Business rules belong in
