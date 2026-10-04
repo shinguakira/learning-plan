@@ -1,7 +1,7 @@
 import type { SkillLevel } from '@/types/skill'
 
-export const SKILLS_API_URL =
-  import.meta.env.VITE_SKILLS_API_URL ?? 'http://localhost:3001/api/skills'
+/** Same origin as the app: the dev server proxies /api to the backend. */
+export const SKILLS_API_URL = '/api/skills'
 
 export const SKILL_LEVELS = ['beginner', 'intermediate', 'advanced', 'expert'] as const
 

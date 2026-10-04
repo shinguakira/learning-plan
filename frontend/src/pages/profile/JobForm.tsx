@@ -43,7 +43,7 @@ export function JobForm({ onSubmit }: { onSubmit: (draft: JobDraft) => void }) {
               <Input
                 id="job-company"
                 value={draft.company}
-                placeholder="e.g. Kaizen Logistics"
+                placeholder="e.g. Northgate Logistics"
                 onChange={(event) => patch({ company: event.target.value })}
               />
             </FormField>

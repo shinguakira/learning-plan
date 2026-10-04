@@ -23,8 +23,8 @@ export function AppLayout() {
   const tabRowFits = useMediaQuery(TAB_ROW_FITS)
 
   return (
-    <div className="flex h-screen flex-col overflow-hidden">
-      <header className="bg-background/95 supports-[backdrop-filter]:bg-background/80 shrink-0 border-b backdrop-blur">
+    <div className="flex min-h-screen flex-col">
+      <header className="bg-background/95 supports-[backdrop-filter]:bg-background/80 sticky top-0 z-40 shrink-0 border-b backdrop-blur">
         <div className="mx-auto flex h-14 w-full max-w-6xl items-center gap-3 px-4 sm:gap-6 sm:px-6">
           {!tabRowFits && <MobileNav />}
 
@@ -70,7 +70,7 @@ export function AppLayout() {
         </div>
       </header>
 
-      <main className="min-h-0 flex-1">
+      <main className="flex-1">
         <Outlet />
       </main>
     </div>

@@ -1,4 +1,3 @@
-import { useJobs } from '@/hooks/useJobs'
 import { useSkills } from '@/hooks/useSkills'
 import { JobForm } from '@/pages/profile/JobForm'
 import { JobList } from '@/pages/profile/JobList'
@@ -6,17 +5,18 @@ import { SkillForm } from '@/pages/profile/SkillForm'
 import { SkillList } from '@/pages/profile/SkillList'
 
 export function ProfilePage() {
-  const { skills, loading, error, addSkill, removeSkill } = useSkills()
-  const { jobs, addJob, removeJob } = useJobs()
+  const { skills, jobs, loading, error, addSkill, removeSkill, addJob, removeJob } = useSkills()
 
   return (
-    <div className="scrollbar-slim mx-auto h-full max-w-6xl space-y-6 overflow-y-auto px-4 py-6 sm:px-6">
+    <div className="mx-auto max-w-6xl space-y-6 px-4 py-6 sm:px-6">
       <div>
         <h1 className="text-lg font-semibold">Profile</h1>
         <p className="text-muted-foreground mt-0.5 text-xs">
           What goes on your resume. Edits here are not saved.
         </p>
       </div>
+
+      {error && <p className="text-destructive text-xs">{error}</p>}
 
       <section aria-labelledby="skills-heading" className="space-y-5">
         <div>
@@ -31,8 +31,6 @@ export function ProfilePage() {
         </div>
 
         <SkillForm existingNames={skills.map((skill) => skill.name)} onSubmit={addSkill} />
-
-        {error && <p className="text-destructive text-xs">{error}</p>}
 
         {loading ? (
           <p className="text-muted-foreground text-sm">Loading skills…</p>
@@ -54,7 +52,12 @@ export function ProfilePage() {
         </div>
 
         <JobForm onSubmit={addJob} />
-        <JobList jobs={jobs} onRemove={removeJob} />
+
+        {loading ? (
+          <p className="text-muted-foreground text-sm">Loading job history…</p>
+        ) : (
+          <JobList jobs={jobs} onRemove={removeJob} />
+        )}
       </section>
     </div>
   )

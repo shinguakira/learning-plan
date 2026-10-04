@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { createSeedJobs, formatDuration, formatPeriod, monthsBetween, sortJobs } from '@/utils/job'
+import { formatDuration, formatPeriod, monthsBetween, sortJobs } from '@/utils/job'
 import type { ISODate } from '@/types/date'
 import type { Job } from '@/types/job'
 
@@ -18,34 +18,6 @@ function job(overrides: Partial<Job> = {}): Job {
     ...overrides,
   }
 }
-
-describe('createSeedJobs', () => {
-  it('expands every seed entry', () => {
-    expect(createSeedJobs()).toHaveLength(4)
-  })
-
-  it('starts each role on the first of its month', () => {
-    for (const seeded of createSeedJobs()) {
-      expect(seeded.startDate.slice(8, 10)).toBe('01')
-    }
-  })
-
-  it('ends a finished role on the last day of its month, including February', () => {
-    const [, kaizen] = createSeedJobs()
-    // '2024-03' - March has 31 days.
-    expect(kaizen?.endDate).toBe('2024-03-31')
-  })
-
-  it('leaves the current role open-ended', () => {
-    const [current] = createSeedJobs()
-    expect(current?.endDate).toBeNull()
-  })
-
-  it('gives every role a distinct id', () => {
-    const ids = createSeedJobs().map((seeded) => seeded.id)
-    expect(new Set(ids).size).toBe(ids.length)
-  })
-})
 
 describe('sortJobs', () => {
   it('puts the most recent start first', () => {

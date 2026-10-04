@@ -1,34 +1,6 @@
-import { SEED_JOBS } from '@/constants/job'
-import { formatMonth, parseDate, toISODate } from '@/utils/date'
+import { formatMonth, parseDate } from '@/utils/date'
 import type { ISODate } from '@/types/date'
-import type { Job, SeedJob } from '@/types/job'
-
-/** 'YYYY-MM' to the first of that month. Fixed-width slices, as in `utils/date`. */
-function monthStart(month: string): ISODate {
-  return toISODate(new Date(Number(month.slice(0, 4)), Number(month.slice(5, 7)) - 1, 1))
-}
-
-/** 'YYYY-MM' to the last day of that month - day 0 of the next one. */
-function monthEnd(month: string): ISODate {
-  return toISODate(new Date(Number(month.slice(0, 4)), Number(month.slice(5, 7)), 0))
-}
-
-function expand(seed: SeedJob, index: number): Job {
-  return {
-    id: `seed-${index}`,
-    company: seed.company,
-    title: seed.title,
-    employmentType: seed.employmentType,
-    startDate: monthStart(seed.from),
-    endDate: seed.to === null ? null : monthEnd(seed.to),
-    summary: seed.summary,
-    createdAt: new Date(2026, 0, 1).toISOString(),
-  }
-}
-
-export function createSeedJobs(): Job[] {
-  return SEED_JOBS.map(expand)
-}
+import type { Job } from '@/types/job'
 
 /**
  * Most recent first, which is the order a work history is read in. The current

@@ -17,14 +17,3 @@ export type Job = {
 }
 
 export type JobDraft = Omit<Job, 'id' | 'createdAt'>
-
-/**
- * A seed entry carries whole months rather than dates, because that is the
- * granularity a work history is written in.
- */
-export type SeedJob = Omit<JobDraft, 'startDate' | 'endDate'> & {
-  /** 'YYYY-MM'. */
-  from: string
-  /** 'YYYY-MM', or null for the current role. */
-  to: string | null
-}
