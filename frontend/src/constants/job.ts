@@ -20,16 +20,21 @@ export const EMPLOYMENT_TYPE_CHIP: Record<EmploymentType, string> = {
   internship: 'text-muted-foreground',
 }
 
-/** The sample work history, loaded on every visit. Nothing here is saved. */
+/**
+ * The sample work history, loaded on every visit. Nothing here is saved.
+ *
+ * Every company and role below is invented. Sample data must never be drawn from
+ * anything real - not the author's own projects, not another repository.
+ */
 export const SEED_JOBS: readonly SeedJob[] = [
   {
-    company: 'Brighty',
+    company: 'Lumen Retail',
     title: 'Senior Frontend Engineer',
     employmentType: 'full-time',
     from: '2024-04',
     to: null,
     summary:
-      'Own the coaching search experience in React and TypeScript. Replaced the client-side filter pipeline and introduced the end-to-end suite the team now gates releases on.',
+      'Own the storefront in React and TypeScript. Rebuilt the checkout flow and introduced the end-to-end suite the team now gates releases on.',
   },
   {
     company: 'Kaizen Logistics',
