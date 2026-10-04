@@ -23,12 +23,13 @@ export const EMPLOYMENT_TYPE_CHIP: Record<EmploymentType, string> = {
 /**
  * The sample work history, loaded on every visit. Nothing here is saved.
  *
- * Every company and role below is invented. Sample data must never be drawn from
- * anything real - not the author's own projects, not another repository.
+ * Every company and role below is invented, and the names are plain English so
+ * they read as names to anyone. Sample data must never be drawn from anything
+ * real - not the author's own projects, not another repository.
  */
 export const SEED_JOBS: readonly SeedJob[] = [
   {
-    company: 'Lumen Retail',
+    company: 'Marlow Retail',
     title: 'Senior Frontend Engineer',
     employmentType: 'full-time',
     from: '2024-04',
@@ -37,7 +38,7 @@ export const SEED_JOBS: readonly SeedJob[] = [
       'Own the storefront in React and TypeScript. Rebuilt the checkout flow and introduced the end-to-end suite the team now gates releases on.',
   },
   {
-    company: 'Kaizen Logistics',
+    company: 'Northgate Logistics',
     title: 'Full Stack Engineer',
     employmentType: 'full-time',
     from: '2021-07',
@@ -46,7 +47,7 @@ export const SEED_JOBS: readonly SeedJob[] = [
       'Built the shipment tracking dashboard and the Go services behind it. Moved the nightly batch to an event-driven pipeline and took the daily reconciliation window from four hours to under twenty minutes.',
   },
   {
-    company: 'Studio Yotsuba',
+    company: 'Riverbend Studio',
     title: 'Web Developer',
     employmentType: 'contract',
     from: '2020-02',
@@ -55,7 +56,7 @@ export const SEED_JOBS: readonly SeedJob[] = [
       'Delivered marketing sites for six clients on a shared Next.js foundation. Set up the component library and the deploy previews that removed the manual staging step.',
   },
   {
-    company: 'Nakamura Systems',
+    company: 'Oakfield Systems',
     title: 'Software Engineer Intern',
     employmentType: 'internship',
     from: '2019-06',
