@@ -13,7 +13,7 @@ import {
 } from '@/components/ui/select'
 import { SKILL_LEVELS, SKILL_LEVEL_LABEL } from '@/constants/skill'
 import { useSkillDraft } from '@/hooks/useSkillDraft'
-import { FormField } from '@/pages/tasks/FormField'
+import { FormField } from '@/components/form/FormField'
 import type { SkillDraft, SkillLevel } from '@/types/skill'
 
 const SKILL_OPTIONS = [
