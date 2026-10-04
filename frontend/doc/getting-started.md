@@ -1,7 +1,7 @@
 # Finding your way around
 
 For anyone opening this project for the first time: how to get it running, what the
-tooling around it is doing, and where the code lives. The [README](../README.md) has
+tooling around it is doing, and where the code lives. The [frontend README](../README.md) has
 the same setup as a short reference; this is the version with the reasons attached.
 
 ## Getting it running
@@ -269,6 +269,6 @@ code consistent with what is already there.
 
 ## Where to go next
 
-- [`doc/product.md`](product.md) — what the app is for, and who for.
+- [`doc/product.md`](../../doc/product.md) — what the app is for, and who for.
 - [`doc/coding.md`](coding.md) — why the code is arranged this way.
 - [`AGENTS.md`](../AGENTS.md) — the same decisions as a short list of rules.

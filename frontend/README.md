@@ -1,18 +1,19 @@
-# Learning Plan
+# Learning Plan - frontend
 
-A study planner for someone teaching themselves software engineering.
-**[`doc/product.md`](doc/product.md) explains what it is for** — read that first if
-you want the why rather than the how.
+The app itself. The [repository README](../README.md) covers both packages and how
+they run together; **[`doc/product.md`](../doc/product.md) explains what the product
+is for** if you want the why rather than the how.
 
 - **Tasks** — add, delete and browse study tasks, with a switch between a list view
   and a Gantt-style timeline.
-- **AI chat** — a standalone chatbot, unrelated to the task page. It POSTs to the
+- **Profile** — technical skills and job history for a resume.
+- **AI chat** — a standalone chatbot, unrelated to the other pages. It POSTs to the
   endpoint you configure in `.env`.
 
-There is a small backend (`../backend`) that only serves the seed skill list
-(`GET /api/skills`). Nothing else is persisted anywhere: the task list lives in memory
-for the session, and the chat page calls a completions endpoint straight from the
-browser.
+Only the Profile page's skill list needs the backend (`../backend`,
+`GET /api/skills`). Nothing is persisted anywhere: tasks and job history are seeded
+here and live in memory for the session, and the chat page calls a completions
+endpoint straight from the browser.
 
 ## Tech stack
 
@@ -118,10 +119,8 @@ Every script defined in [`package.json`](package.json), and nothing else:
 ## Folder structure
 
 ```
-doc/product.md             what the product is for, no tech
-doc/getting-started.md     a tour of the codebase for a first read
+doc/getting-started.md     a tour of this codebase for a first read
 doc/coding.md              why the code is arranged the way it is
-doc/branch-naming.md       where branches start and what they are called
 test/unit/                 Vitest specs for the search logic
 test/e2e/                  Playwright specs: tasks, chat, navigation
 playwright.config.ts       starts the dev server, runs Chromium
