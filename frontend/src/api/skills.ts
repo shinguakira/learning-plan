@@ -7,9 +7,11 @@ export async function fetchSkills(): Promise<Skill[]> {
   try {
     response = await fetch(SKILLS_API_URL)
   } catch (error) {
-    throw new Error(`Could not reach ${new URL(SKILLS_API_URL).origin}. Is the backend running?`, {
-      cause: error,
-    })
+    // Deployed, the URL is same-origin and relative, which `new URL` rejects
+    // without a base - and this runs inside a catch, so throwing here would
+    // hide the failure it is meant to describe.
+    const where = new URL(SKILLS_API_URL, window.location.origin).origin
+    throw new Error(`Could not reach ${where}. Is the backend running?`, { cause: error })
   }
 
   if (!response.ok) {
