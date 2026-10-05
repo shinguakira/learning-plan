@@ -55,8 +55,8 @@ export function AppLayout() {
 
           <Select value={user} onValueChange={(value) => setUser(value as MockUser)}>
             <SelectTrigger className="ml-auto w-32" aria-label="Active user">
-              <User className={MOCK_USER_COLOR[user]} />
-              <SelectValue />
+              {/* <User className={MOCK_USER_COLOR[user]} /> */}
+              <SelectValue /> 
             </SelectTrigger>
             <SelectContent>
               {MOCK_USERS.map((name) => (
