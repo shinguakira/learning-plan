@@ -6,6 +6,7 @@ export type Skill = {
   id: string
   name: string
   level: SkillLevel
+  yearsOfExperience: number
   /** Full ISO timestamp, not an ISODate - only used for sorting. */
   createdAt: string
 }
