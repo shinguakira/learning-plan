@@ -4,5 +4,6 @@ export type Skill = {
   id: string
   name: string
   level: SkillLevel
+  yearsOfExperience: number
   createdAt: string
 }
