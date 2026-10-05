@@ -18,7 +18,11 @@ export function useSkillDraft(
   existingNames: readonly string[],
   defaultName: string,
 ): SkillDraftApi {
-  const emptyDraft = (): SkillDraft => ({ name: defaultName, level: SKILL_LEVELS[0] })
+  const emptyDraft = (): SkillDraft => ({
+    name: defaultName,
+    level: SKILL_LEVELS[0],
+    yearsOfExperience: 1,
+  })
 
   const [draft, setDraft] = useState<SkillDraft>(emptyDraft)
   const [touched, setTouched] = useState(false)

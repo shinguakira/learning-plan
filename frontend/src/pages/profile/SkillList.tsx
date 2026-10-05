@@ -50,7 +50,10 @@ export function SkillList({
                 {group.skills.map((skill) => (
                   <li key={skill.id} className="group/skill relative">
                     <Badge variant="outline" className={cn('h-7', SKILL_LEVEL_CHIP[group.level])}>
-                      {skill.name}
+                      <span>{skill.name}</span>
+                      <span className="text-muted-foreground/80 ml-1.5 font-normal">
+                        ({skill.yearsOfExperience} {skill.yearsOfExperience === 1 ? 'yr' : 'yrs'})
+                      </span>
                     </Badge>
                     <Button
                       type="button"

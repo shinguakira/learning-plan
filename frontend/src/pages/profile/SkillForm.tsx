@@ -11,7 +11,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { SKILL_LEVELS, SKILL_LEVEL_LABEL } from '@/constants/skill'
+import { SKILL_LEVELS, SKILL_LEVEL_LABEL, YEARS_OF_EXPERIENCE } from '@/constants/skill'
 import { useSkillDraft } from '@/hooks/useSkillDraft'
 import { FormField } from '@/components/form/FormField'
 import type { SkillDraft, SkillLevel } from '@/types/skill'
@@ -121,6 +121,24 @@ export function SkillForm({
                   {SKILL_LEVELS.map((level) => (
                     <SelectItem key={level} value={level}>
                       {SKILL_LEVEL_LABEL[level]}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </FormField>
+
+            <FormField label="Experience" htmlFor="skill-experience">
+              <Select
+                value={String(draft.yearsOfExperience)}
+                onValueChange={(value) => patch({ yearsOfExperience: Number(value) })}
+              >
+                <SelectTrigger id="skill-experience" aria-label="Experience" className="w-32">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {YEARS_OF_EXPERIENCE.map((years) => (
+                    <SelectItem key={years} value={String(years)}>
+                      {years} {years === 1 ? 'year' : 'years'}
                     </SelectItem>
                   ))}
                 </SelectContent>
