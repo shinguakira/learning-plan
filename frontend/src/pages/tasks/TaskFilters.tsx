@@ -1,4 +1,4 @@
-import { CalendarRange, List, Search } from 'lucide-react'
+import { CalendarRange, List, Search, X } from 'lucide-react'
 import { Card, CardContent } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import {
@@ -12,6 +12,7 @@ import { CATEGORIES, SORT_LABEL, STATUSES, STATUS_LABEL } from '@/constants/task
 import type { TaskFiltersApi } from '@/hooks/useTaskFilters'
 import { SegmentedButton } from '@/pages/tasks/SegmentedButton'
 import type { CategoryFilter, SortKey, ViewMode } from '@/types/task'
+import { useRef } from 'react'
 
 export function TaskFilters({
   filters,
@@ -26,7 +27,7 @@ export function TaskFilters({
 }) {
   const { statusFilter, setStatusFilter, categoryFilter, setCategoryFilter } = filters
   const { sortKey, setSortKey, query, setQuery, visible, filtering } = filters
-
+  const searchInputref = useRef<HTMLInputElement>(null)
   return (
     <Card>
       <CardContent className="flex flex-wrap items-center gap-2.5">
@@ -86,12 +87,26 @@ export function TaskFilters({
         <div className="relative">
           <Search className="text-muted-foreground pointer-events-none absolute top-1/2 left-2.5 size-3.5 -translate-y-1/2" />
           <Input
+            ref={searchInputref}
             aria-label="Search tasks"
             className="h-7 w-48 pl-7 text-xs"
             placeholder="Search title and notes"
             value={query}
             onChange={(event) => setQuery(event.target.value)}
           />
+          {query && (
+            <button
+              type="button"
+              aria-label="Clear search"
+              onClick={() => {
+                setQuery('')
+                searchInputref.current?.focus()
+              }}
+              className='text-muted-foreground hover:text-foreground absolute top-1/2 right-2 -translate-y-1/2 cursor-pointer p-0.5"'
+            >
+              <X className="size-3.5" />
+            </button>
+          )}
         </div>
 
         <span className="text-muted-foreground text-xs">

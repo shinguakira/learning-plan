@@ -90,6 +90,13 @@ test('filters by search text', async ({ page }) => {
   await expect(page.getByText(`${shown} shown of ${SEED_COUNT}`)).toBeVisible()
 })
 
+test('clear the search input', async ({ page }) => {
+  await page.getByLabel('Search tasks').fill('kubectl')
+  await page.getByRole('button', { name: 'Clear search' }).click()
+  await expect(page.getByLabel('Search tasks')).toHaveValue('')
+  await expect(page.getByLabel('Search tasks')).toBeFocused()
+})
+
 test('the status filters partition the whole list', async ({ page }) => {
   let sum = 0
   for (const label of ['To do', 'In progress', 'Done']) {
