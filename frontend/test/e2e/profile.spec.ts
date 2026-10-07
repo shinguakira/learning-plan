@@ -8,6 +8,7 @@ async function chooseOption(page: Page, selectLabel: string, option: string) {
 }
 
 test.beforeEach(async ({ page }) => {
+  await page.route('**/api/skills', (route) => route.abort('failed'))
   await page.goto('/profile')
   await expect(page.getByRole('heading', { name: 'Profile' })).toBeVisible()
 })
@@ -15,10 +16,9 @@ test.beforeEach(async ({ page }) => {
 const skillsIn = (page: Page) => page.getByRole('region', { name: 'Skills' })
 
 /**
- * Every spec below starts from an empty page on purpose: `useSkills` seeds both
- * lists from the backend, and these run without one, so the page falls back to
- * empty and everything on screen is something the test added. Start the backend
- * on :3001 and they will fail - that is expected, not a regression.
+ * Start with a failed seed request so every entry is added by the test.
+ * This exercises the forms' fallback behavior even with a local backend running.
+ * Loading tests override this route with a seed.
  */
 
 test('starts with no skills registered', async ({ page }) => {
@@ -217,8 +217,8 @@ test('starts fresh on a reload - job edits are not persisted', async ({ page }) 
 /**
  * The forms are usable while the seed request is still in flight, so the seed has
  * to merge with whatever is already on screen. These stub the endpoint with a
- * delay to open that window deliberately; the rest of the file runs without a
- * backend, where the request simply fails.
+ * delay to open that window deliberately; the rest of the file stubs a failed
+ * request to exercise the empty fallback.
  */
 async function seedSlowly(page: Page) {
   await page.route('**/api/skills', async (route) => {
@@ -235,6 +235,7 @@ async function seedSlowly(page: Page) {
             createdAt: '2026-01-01T00:00:00.000Z',
           },
         ],
+        certificates: [],
         jobs: [
           {
             id: 'j1',

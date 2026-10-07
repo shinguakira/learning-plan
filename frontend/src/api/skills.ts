@@ -3,7 +3,7 @@ import type { Certificate } from '@/types/certificate'
 import type { Job } from '@/types/job'
 import type { Skill } from '@/types/skill'
 
-/** Everything the profile page is seeded with. One request, two lists. */
+/** Everything the profile page is seeded with. One request, three lists. */
 export type ProfileSeed = {
   skills: Skill[]
   jobs: Job[]

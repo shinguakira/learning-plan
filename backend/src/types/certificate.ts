@@ -1,6 +1,7 @@
-
 export type Certificate = {
-    name: string,
-    issuer: string,
-    dateEarned: string
+  id: string
+  name: string
+  issuer: string
+  dateEarned: string
+  createdAt: string
 }
