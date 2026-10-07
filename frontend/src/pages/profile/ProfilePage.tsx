@@ -7,7 +7,8 @@ import { SkillList } from '@/pages/profile/SkillList'
 import { Card, CardContent } from '@/components/ui/card'
 
 export function ProfilePage() {
-  const { skills, jobs, certificates, loading, error, addSkill, removeSkill, addJob, removeJob } = useSkills()
+  const { skills, jobs, certificates, loading, error, addSkill, removeSkill, addJob, removeJob } =
+    useSkills()
 
   return (
     <div className="mx-auto max-w-6xl space-y-6 px-4 py-6 sm:px-6">
@@ -70,7 +71,6 @@ export function ProfilePage() {
         </div>
 
         {/* we need to make a form here */}
-        
 
         {loading ? (
           <p className="text-muted-foreground text-sm">Loading certificates…</p>
