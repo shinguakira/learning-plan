@@ -4,6 +4,7 @@ import { JobForm } from '@/pages/profile/JobForm'
 import { JobList } from '@/pages/profile/JobList'
 import { SkillForm } from '@/pages/profile/SkillForm'
 import { SkillList } from '@/pages/profile/SkillList'
+import CertificateForm from './CertificateForm'
 import { Card, CardContent } from '@/components/ui/card'
 
 export function ProfilePage() {
@@ -71,6 +72,7 @@ export function ProfilePage() {
         </div>
 
         {/* we need to make a form here */}
+        <CertificateForm />
 
         {loading ? (
           <p className="text-muted-foreground text-sm">Loading certificates…</p>
