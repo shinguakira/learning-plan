@@ -20,10 +20,10 @@ const CertificateForm = () => {
         <form onSubmit={handleSubmit}>
           <div className="flex gap-3">
             <FormField label="Title:" htmlFor="certificate-title" className="min-w-48 flex-1">
-              <Input className="" />
+              <Input />
             </FormField>
             <FormField label="Issued by:" htmlFor="certificate-title" className="min-w-48 flex-1">
-              <Input className="" />
+              <Input />
             </FormField>
             <FormField label="Date Earned:" htmlFor="certificate-title" className="min-w-48 flex-1">
               <Input type="date" />
