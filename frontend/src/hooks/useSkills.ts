@@ -2,10 +2,12 @@ import { useEffect, useState } from 'react'
 import { fetchSkills } from '@/api/skills'
 import type { Job, JobDraft } from '@/types/job'
 import type { Skill, SkillDraft } from '@/types/skill'
+import type { Certificate } from '@/types/certificate'
 
 export type SkillsApi = {
   skills: Skill[]
   jobs: Job[]
+  certificates: Certificate[]
   /** True only while the initial seed request from the backend is in flight. */
   loading: boolean
   /** Set if the initial seed request failed; both lists still work from empty. */
@@ -26,6 +28,7 @@ export type SkillsApi = {
 export function useSkills(): SkillsApi {
   const [skills, setSkills] = useState<Skill[]>([])
   const [jobs, setJobs] = useState<Job[]>([])
+  const [certificates, setCertificates] = useState<Certificate[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
@@ -39,6 +42,7 @@ export function useSkills(): SkillsApi {
         // and the seed goes after it. Replacing outright would discard it.
         setSkills((prev) => [...prev, ...seed.skills])
         setJobs((prev) => [...prev, ...seed.jobs])
+        setCertificates((prev) => [...prev, ...seed.certificates])
       })
       .catch((caught: unknown) => {
         if (active) setError(caught instanceof Error ? caught.message : 'Failed to load profile.')
@@ -55,6 +59,7 @@ export function useSkills(): SkillsApi {
   return {
     skills,
     jobs,
+    certificates,
     loading,
     error,
     addSkill: (draft) => {

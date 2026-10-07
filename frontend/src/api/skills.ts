@@ -1,4 +1,5 @@
 import { SKILLS_API_URL } from '@/constants/skill'
+import type { Certificate } from '@/types/certificate'
 import type { Job } from '@/types/job'
 import type { Skill } from '@/types/skill'
 
@@ -6,6 +7,7 @@ import type { Skill } from '@/types/skill'
 export type ProfileSeed = {
   skills: Skill[]
   jobs: Job[]
+  certificates: Certificate[]
 }
 
 /**
