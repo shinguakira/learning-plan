@@ -10,7 +10,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { CATEGORIES, PRIORITIES, PRIORITY_LABEL, STATUSES, STATUS_LABEL } from '@/constants/task'
+import {
+  CATEGORIES,
+  PRIORITIES,
+  PRIORITY_LABEL,
+  STATUSES,
+  STATUS_LABEL,
+  TASK_NOTE_MAX_LENGTH,
+} from '@/constants/task'
 import { useTaskDraft } from '@/hooks/useTaskDraft'
 import { today } from '@/utils/date'
 import { FormField } from '@/components/form/FormField'
@@ -142,10 +149,16 @@ export function TaskForm({ onSubmit }: { onSubmit: (draft: TaskDraft) => void })
               />
             </FormField>
 
-            <FormField label="Note" htmlFor="note" hint=" optional" className="col-span-2">
+            <FormField
+              label="Note"
+              htmlFor="note"
+              hint={` optional · ${draft.note.length}/${TASK_NOTE_MAX_LENGTH}`}
+              className="col-span-2"
+            >
               <Input
                 id="note"
                 value={draft.note}
+                maxLength={TASK_NOTE_MAX_LENGTH}
                 placeholder="Material, definition of done, ..."
                 onChange={(event) => patch({ note: event.target.value })}
               />
