@@ -5,6 +5,8 @@ export type Certificate = {
   name: string
   issuer: string
   dateEarned: ISODate
+  /** Optional issuer page where this credential can be viewed. */
+  credentialUrl?: string
   createdAt: string
 }
 
