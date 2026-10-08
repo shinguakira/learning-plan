@@ -50,6 +50,36 @@ test('refuses a task with no title', async ({ page }) => {
   expect(await shownCount(page)).toBe(SEED_COUNT)
 })
 
+test('counts note characters live and enforces the limit', async ({ page }) => {
+  await page.getByRole('button', { name: 'Add a Task', exact: true }).click()
+  const note = page.getByRole('textbox', { name: /^Note/ })
+  await expect(note).toHaveAccessibleName('Note optional · 0/280')
+
+  await note.pressSequentially('Read docs')
+  await expect(note).toHaveAccessibleName('Note optional · 9/280')
+  await note.press('Backspace')
+  await expect(note).toHaveAccessibleName('Note optional · 8/280')
+
+  // fill inserts text as a paste would, exercising the browser's length limit.
+  await note.fill('a'.repeat(281))
+  await expect(note).toHaveValue('a'.repeat(280))
+  await expect(note).toHaveAccessibleName('Note optional · 280/280')
+  await note.pressSequentially('b')
+  await expect(note).toHaveValue('a'.repeat(280))
+
+  await page.getByRole('button', { name: 'Clear', exact: true }).click()
+  await expect(note).toHaveValue('')
+  await expect(note).toHaveAccessibleName('Note optional · 0/280')
+
+  await page.getByLabel('Title').fill('Task with a full note')
+  await note.fill('a'.repeat(280))
+  await page.getByRole('button', { name: 'Add task', exact: true }).click()
+  await expect(note).toHaveAccessibleName('Note optional · 0/280')
+  await page.getByRole('button', { name: 'Close', exact: true }).click()
+  await page.getByLabel('Search tasks').fill('Task with a full note')
+  await expect(page.getByText('a'.repeat(280), { exact: true })).toBeVisible()
+})
+
 test('deletes a task behind a confirm step', async ({ page }) => {
   // Narrow to one row first, so the deletion target is unambiguous.
   const title = 'Sit the CKAD exam'
