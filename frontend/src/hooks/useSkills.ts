@@ -2,30 +2,35 @@ import { useEffect, useState } from 'react'
 import { fetchSkills } from '@/api/skills'
 import type { Job, JobDraft } from '@/types/job'
 import type { Skill, SkillDraft } from '@/types/skill'
+import type { Certificate, CertificateDraft } from '@/types/certificate'
 
 export type SkillsApi = {
   skills: Skill[]
   jobs: Job[]
+  certificates: Certificate[]
   /** True only while the initial seed request from the backend is in flight. */
   loading: boolean
-  /** Set if the initial seed request failed; both lists still work from empty. */
+  /** Set if the initial seed request failed; all lists still work from empty. */
   error: string | null
   addSkill: (draft: SkillDraft) => void
   removeSkill: (id: string) => void
   addJob: (draft: JobDraft) => void
   removeJob: (id: string) => void
+  addCertificate: (draft: CertificateDraft) => void
+  removeCertificate: (id: string) => void
 }
 
 /**
  * The whole profile, seeded once from the backend on mount. Every change after
  * that - adding, removing - stays in memory only and is never sent back.
  *
- * Skills and job history arrive in the same request, so they share one loading
+ * Skills, job history, and certificates arrive in the same request, so they share one loading
  * and one error state rather than racing each other.
  */
 export function useSkills(): SkillsApi {
   const [skills, setSkills] = useState<Skill[]>([])
   const [jobs, setJobs] = useState<Job[]>([])
+  const [certificates, setCertificates] = useState<Certificate[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
@@ -39,6 +44,7 @@ export function useSkills(): SkillsApi {
         // and the seed goes after it. Replacing outright would discard it.
         setSkills((prev) => [...prev, ...seed.skills])
         setJobs((prev) => [...prev, ...seed.jobs])
+        setCertificates((prev) => [...prev, ...seed.certificates])
       })
       .catch((caught: unknown) => {
         if (active) setError(caught instanceof Error ? caught.message : 'Failed to load profile.')
@@ -55,6 +61,7 @@ export function useSkills(): SkillsApi {
   return {
     skills,
     jobs,
+    certificates,
     loading,
     error,
     addSkill: (draft) => {
@@ -74,6 +81,17 @@ export function useSkills(): SkillsApi {
     },
     removeJob: (id) => {
       setJobs((prev) => prev.filter((job) => job.id !== id))
+    },
+    addCertificate: (draft) => {
+      const certificate = {
+        ...draft,
+        id: crypto.randomUUID(),
+        createdAt: new Date().toISOString(),
+      }
+      setCertificates((prev) => [certificate, ...prev])
+    },
+    removeCertificate: (id) => {
+      setCertificates((prev) => prev.filter((cert) => cert.id !== id))
     },
   }
 }

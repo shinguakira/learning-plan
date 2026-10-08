@@ -51,7 +51,7 @@ export function TasksPage() {
       <TaskStats tasks={tasks} />
 
       <Dialog open={isFormOpen} onOpenChange={setIsFormOpen}>
-        <DialogContent>
+        <DialogContent className="p-6 sm:max-w-3xl">
           <DialogHeader>
             <DialogTitle>Add Task</DialogTitle>
           </DialogHeader>

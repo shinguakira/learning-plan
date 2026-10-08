@@ -5,6 +5,8 @@ export const SKILLS_API_URL = '/api/skills'
 
 export const SKILL_LEVELS = ['beginner', 'intermediate', 'advanced', 'expert'] as const
 
+export const YEARS_OF_EXPERIENCE = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] as const
+
 export const SKILL_LEVEL_LABEL: Record<SkillLevel, string> = {
   beginner: 'Beginner',
   intermediate: 'Intermediate',

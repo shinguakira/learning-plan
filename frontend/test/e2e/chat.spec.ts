@@ -95,6 +95,52 @@ test('shows the provider error message when the request fails', async ({ page })
   await page.getByLabel('Message').press('Enter')
 
   await expect(page.getByText('Invalid API key')).toBeVisible()
+  await expect(page.getByRole('button', { name: 'Copy reply', exact: true })).toHaveCount(0)
+})
+
+test('copies raw assistant Markdown and resets the confirmation', async ({ page, context }) => {
+  await context.grantPermissions(['clipboard-read', 'clipboard-write'])
+  const reply = 'Try **this**:\n\n```ts\nconst value = 1\n```'
+  await stubReply(page, reply)
+  await page.getByLabel('Message').fill('Give me an example')
+  await page.getByLabel('Message').press('Enter')
+
+  const copy = page.getByRole('button', { name: 'Copy reply', exact: true })
+  await expect(copy).toHaveCount(1)
+  await copy.focus()
+  await expect(copy).toHaveCSS('opacity', '1')
+  await copy.press('Enter')
+  await expect(page.getByRole('status')).toHaveText('Copied')
+  expect(await page.evaluate(() => navigator.clipboard.readText())).toBe(reply)
+  await expect(page.getByRole('button', { name: 'Copied reply', exact: true })).toBeVisible()
+  await expect(copy).toHaveCount(1)
+  await expect(page.getByRole('status')).toHaveText('')
+})
+
+test('reports a denied copy and allows retrying', async ({ page }) => {
+  await page.evaluate(() => {
+    Object.defineProperty(navigator.clipboard, 'writeText', {
+      configurable: true,
+      value: () => Promise.reject(new DOMException('Denied', 'NotAllowedError')),
+    })
+  })
+  await stubReply(page, 'Copy this answer.')
+  await page.getByLabel('Message').fill('question')
+  await page.getByLabel('Message').press('Enter')
+  const copy = page.getByRole('button', { name: 'Copy reply', exact: true })
+  await copy.focus()
+  await copy.press('Enter')
+  await expect(page.getByRole('status')).toHaveText('Could not copy. Try again.')
+  await expect(page.getByRole('button', { name: 'Copied reply', exact: true })).toHaveCount(0)
+
+  await page.evaluate(() => {
+    Object.defineProperty(navigator.clipboard, 'writeText', {
+      configurable: true,
+      value: () => Promise.resolve(),
+    })
+  })
+  await copy.press('Enter')
+  await expect(page.getByRole('status')).toHaveText('Copied')
 })
 
 test('reports an empty reply rather than showing a blank bubble', async ({ page }) => {

@@ -27,6 +27,11 @@ a rough hour estimate, and a note saying what "finished" means — not "learn SQ
 but "read EXPLAIN output and tune three slow queries." A goal you cannot tell you
 have reached is a goal you will never close.
 
+Task notes are optional and limited to 280 characters to keep reminders and
+definitions of done easy to scan. A live count beside the Note label shows how
+much room remains; typing and pasting stop at the limit. Spaces count toward the
+limit, and some symbols, such as emoji, count as two characters.
+
 **Move things along as you go.** One click cycles an item between not started, in
 progress, and done. That is the whole ceremony; anything heavier and you stop
 doing it.

@@ -1,6 +1,7 @@
 import type { FastifyInstance } from 'fastify'
 import { jobService } from '../services/jobService.js'
 import { skillService } from '../services/skillService.js'
+import { certificateService } from '../services/certificateService.js'
 
 /**
  * Owns /api/skills, which carries the whole profile - skills and job history.
@@ -11,5 +12,6 @@ export default async function skillController(app: FastifyInstance): Promise<voi
   app.get('/api/skills', async () => ({
     skills: skillService.getSkills(),
     jobs: jobService.getJobs(),
+    certificates: certificateService.getCertificates()
   }))
 }

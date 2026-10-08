@@ -77,3 +77,17 @@ export function formatMonth(iso: ISODate): string {
   const date = parseDate(iso)
   return `${MONTH[monthIndex(date)]} ${date.getFullYear()}`
 }
+
+/** Validate an input value before treating it as a calendar date. */
+export function parseISODate(value: string): ISODate | null {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) return null
+  const date = new Date(0)
+  date.setFullYear(
+    Number(value.slice(0, 4)),
+    Number(value.slice(5, 7)) - 1,
+    Number(value.slice(8, 10)),
+  )
+  date.setHours(0, 0, 0, 0)
+  const iso = toISODate(date)
+  return iso === value ? iso : null
+}

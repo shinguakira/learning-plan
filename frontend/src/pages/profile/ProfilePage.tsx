@@ -3,9 +3,23 @@ import { JobForm } from '@/pages/profile/JobForm'
 import { JobList } from '@/pages/profile/JobList'
 import { SkillForm } from '@/pages/profile/SkillForm'
 import { SkillList } from '@/pages/profile/SkillList'
+import { CertificateForm } from '@/pages/profile/CertificateForm'
+import { CertificateList } from '@/pages/profile/CertificateList'
 
 export function ProfilePage() {
-  const { skills, jobs, loading, error, addSkill, removeSkill, addJob, removeJob } = useSkills()
+  const {
+    skills,
+    jobs,
+    certificates,
+    loading,
+    error,
+    addSkill,
+    removeSkill,
+    addJob,
+    removeJob,
+    addCertificate,
+    removeCertificate,
+  } = useSkills()
 
   return (
     <div className="mx-auto max-w-6xl space-y-6 px-4 py-6 sm:px-6">
@@ -57,6 +71,22 @@ export function ProfilePage() {
           <p className="text-muted-foreground text-sm">Loading job history…</p>
         ) : (
           <JobList jobs={jobs} onRemove={removeJob} />
+        )}
+      </section>
+
+      <section aria-labelledby="certificates-heading" className="space-y-5">
+        <div>
+          <h2 id="certificates-heading" className="text-base font-semibold">
+            Certificates
+          </h2>
+        </div>
+
+        <CertificateForm onSubmit={addCertificate} />
+
+        {loading ? (
+          <p className="text-muted-foreground text-sm">Loading certificates…</p>
+        ) : (
+          <CertificateList certificates={certificates} onRemove={removeCertificate} />
         )}
       </section>
     </div>
