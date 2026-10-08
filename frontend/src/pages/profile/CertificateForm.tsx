@@ -8,7 +8,8 @@ import { useCertificateDraft } from '@/hooks/useCertificateDraft'
 import type { CertificateDraft } from '@/types/certificate'
 
 export function CertificateForm({ onSubmit }: { onSubmit: (draft: CertificateDraft) => void }) {
-  const { draft, patch, touched, nameError, issuerError, dateError, submit } = useCertificateDraft()
+  const { draft, patch, touched, nameError, issuerError, dateError, urlError, submit } =
+    useCertificateDraft()
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     const ready = submit()
@@ -61,6 +62,24 @@ export function CertificateForm({ onSubmit }: { onSubmit: (draft: CertificateDra
               />
             </FormField>
           </div>
+          <FormField
+            label="Credential URL"
+            hint="optional"
+            htmlFor="certificate-url"
+            error={touched ? urlError : null}
+          >
+            <Input
+              id="certificate-url"
+              type="url"
+              placeholder="https://…"
+              value={draft.credentialUrl}
+              onChange={(event) => patch({ credentialUrl: event.target.value })}
+              aria-invalid={touched && urlError !== null}
+            />
+            <p className="text-muted-foreground mt-1 text-xs">
+              Link to your certificate on the issuer’s website.
+            </p>
+          </FormField>
           <div className="flex justify-end">
             <Button type="submit">
               <Plus />
