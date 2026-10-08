@@ -1,5 +1,8 @@
 import type { EmploymentType } from '@/types/job'
 
+/** Same origin as the app: the dev server proxies /api to the backend. */
+export const JOBS_API_URL = '/api/jobs'
+
 export const EMPLOYMENT_TYPES = ['full-time', 'contract', 'part-time', 'internship'] as const
 
 export const EMPLOYMENT_TYPE_LABEL: Record<EmploymentType, string> = {
