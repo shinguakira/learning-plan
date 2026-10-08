@@ -9,6 +9,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
+import { Textarea } from '@/components/ui/textarea'
 import {
   CATEGORIES,
   PRIORITIES,
@@ -149,7 +150,7 @@ export function TaskForm({ onSubmit }: { onSubmit: (draft: TaskDraft) => void })
           hint={` optional · ${draft.note.length}/${TASK_NOTE_MAX_LENGTH}`}
           className="col-span-2"
         >
-          <Input
+          <Textarea
             id="note"
             value={draft.note}
             maxLength={TASK_NOTE_MAX_LENGTH}
