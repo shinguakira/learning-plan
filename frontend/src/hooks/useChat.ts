@@ -27,14 +27,6 @@ export function useChat(): ChatApi {
 
       const next = [...messages, { id: crypto.randomUUID(), role: 'user' as const, content: text }]
       setMessages(next)
-      if (raw === "Good night") {
-        append({
-          id: crypto.randomUUID(),
-          role: "assistant",
-          content: "Good morning"
-        })
-        return
-      }
       setPending(true)
 
       const controller = new AbortController()
