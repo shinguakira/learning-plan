@@ -1,4 +1,3 @@
-import { useJobs } from '@/hooks/useJobs'
 import { useSkills } from '@/hooks/useSkills'
 import { JobForm } from '@/pages/profile/JobForm'
 import { JobList } from '@/pages/profile/JobList'
@@ -10,16 +9,17 @@ import { CertificateList } from '@/pages/profile/CertificateList'
 export function ProfilePage() {
   const {
     skills,
+    jobs,
     certificates,
     loading,
     error,
     addSkill,
     removeSkill,
+    addJob,
+    removeJob,
     addCertificate,
     removeCertificate,
   } = useSkills()
-  // Its own request, so it loads and fails independently of the skills above.
-  const { jobs, loading: jobsLoading, error: jobsError, addJob, removeJob } = useJobs()
 
   return (
     <div className="mx-auto max-w-6xl space-y-6 px-4 py-6 sm:px-6">
@@ -65,11 +65,9 @@ export function ProfilePage() {
           </p>
         </div>
 
-        {jobsError && <p className="text-destructive text-xs">{jobsError}</p>}
-
         <JobForm onSubmit={addJob} />
 
-        {jobsLoading ? (
+        {loading ? (
           <p className="text-muted-foreground text-sm">Loading job history…</p>
         ) : (
           <JobList jobs={jobs} onRemove={removeJob} />

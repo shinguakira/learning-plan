@@ -1,16 +1,19 @@
 import { SKILLS_API_URL } from '@/constants/skill'
 import type { Certificate } from '@/types/certificate'
+import type { Job } from '@/types/job'
 import type { Skill } from '@/types/skill'
 
-/** What /api/skills seeds: the skills and the certificates that back them up. */
+/** Everything the profile page is seeded with. One request, three lists. */
 export type ProfileSeed = {
   skills: Skill[]
+  jobs: Job[]
   certificates: Certificate[]
 }
 
 /**
- * The seed skills the backend returns on initial load. Plain fetch, no auth.
- * Job history is its own request - see `fetchJobs` in `@/api/jobs`.
+ * The seed profile the backend returns on initial load. Plain fetch, no auth.
+ * The route is still /api/skills though it carries job history too - see the
+ * note on the controller; it is not renamed just for having grown a list.
  */
 export async function fetchSkills(): Promise<ProfileSeed> {
   let response: Response
