@@ -35,19 +35,19 @@ Two packages, each with its own `package.json` and its own dependencies.
 
 ```
 frontend/   the app: React, Vite, Tailwind, shadcn/ui
-backend/    Fastify. Serves the seed skill list and nothing else
+backend/    Fastify. Serves sample task and profile data
 doc/        documentation about the repo and the product, plus the README images
 vercel.json routes the deployment to frontend/
 ```
 
-Nothing is persisted. Tasks are seeded in the frontend and live in memory for the
+Nothing is persisted. Tasks are seeded from the backend and live in memory for the
 session; skills are seeded once from the backend and edited in memory
 after that; the chat page calls a completions endpoint straight from the browser.
 
 ## Running it
 
-Each package installs separately. The frontend works on its own — only the Profile
-page's skill list needs the backend.
+Each package installs separately. Run both servers to load the sample tasks and
+profile data. If loading fails, the forms still work with an empty list.
 
 **Frontend**
 
@@ -63,7 +63,7 @@ Open http://localhost:5173.
 cd backend && npm install && npm run dev
 ```
 
-Serves `GET /api/skills` on http://localhost:3001.
+Serves `GET /api/tasks` and `GET /api/skills` on http://localhost:3001.
 
 Node 20.19+, 22.13+ or 24+. The frontend's `engines` field declares the range, so
 `npm install` warns if you are outside it.

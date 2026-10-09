@@ -12,7 +12,8 @@ import type { ViewMode } from '@/types/task'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 
 export function TasksPage() {
-  const { tasks, addTask, updateTask, removeTask, resetToSeed, clearAll } = useTasks()
+  const { tasks, loading, error, addTask, updateTask, removeTask, resetToSeed, clearAll } =
+    useTasks()
   const [view, setView] = useState<ViewMode>('list')
   const [isFormOpen, setIsFormOpen] = useState(false)
   const filters = useTaskFilters(tasks)
@@ -37,7 +38,13 @@ export function TasksPage() {
           >
             Add a Task
           </Button>
-          <Button type="button" variant="outline" size="sm" onClick={resetToSeed}>
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={resetToSeed}
+            disabled={loading}
+          >
             <RotateCcw />
             Reload sample data
           </Button>
@@ -47,6 +54,17 @@ export function TasksPage() {
           </Button>
         </div>
       </div>
+
+      {loading && (
+        <p role="status" className="text-muted-foreground text-sm">
+          Loading sample tasks…
+        </p>
+      )}
+      {error && (
+        <p role="alert" className="text-destructive text-sm">
+          {error} You can still add tasks, or retry with Reload sample data.
+        </p>
+      )}
 
       <TaskStats tasks={tasks} />
 
