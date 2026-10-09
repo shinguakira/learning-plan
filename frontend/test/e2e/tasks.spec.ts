@@ -21,6 +21,7 @@ async function shownCount(page: Page): Promise<number> {
 test.beforeEach(async ({ page }) => {
   await page.goto('/tasks')
   await expect(page.getByRole('heading', { name: 'Learning tasks' })).toBeVisible()
+  await expect(page.getByText('Loading sample tasks…')).toHaveCount(0)
 })
 
 test('starts from the sample plan', async ({ page }) => {

@@ -10,8 +10,8 @@ is for** if you want the why rather than the how.
 - **AI chat** — a standalone chatbot, unrelated to the other pages. It POSTs to the
   endpoint you configure in `.env`.
 
-Only the Profile page's skill list needs the backend (`../backend`,
-`GET /api/skills`). Nothing is persisted anywhere: tasks are seeded here
+Sample tasks and profile data come from the backend (`../backend`,
+`GET /api/tasks` and `GET /api/skills`). Nothing is persisted anywhere: tasks are seeded on mount
 and live in memory for the session, and the chat page calls a completions
 endpoint straight from the browser.
 
@@ -49,6 +49,9 @@ To run the app:
 ```bash
 npm run dev
 ```
+
+Run `npm --prefix ../backend install` once, then start
+`npm --prefix ../backend run dev` in another terminal.
 
 Open http://localhost:5173. The sample plan loads on every visit and edits last only
 until you reload (`Reload sample data` restores it, `Delete all` empties the list).
@@ -137,7 +140,7 @@ src/api/chat.ts            the completions request - the only network call
 src/hooks/                 useTasks, useChat, useTaskFilters, useTaskDraft,
                            useTimeline, useAutoScroll
 src/types/                 app, chat, date, task, timeline
-src/constants/             app, chat, date, seedTasks, task, timeline
+src/constants/             app, chat, date, task, timeline
 src/utils/                 date, task, timeline, seed - this project's helpers
 src/lib/utils.ts           cn - generic, reusable in any project
 components.json            shadcn CLI config
