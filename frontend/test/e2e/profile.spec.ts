@@ -8,7 +8,7 @@ async function chooseOption(page: Page, selectLabel: string, option: string) {
 }
 
 test.beforeEach(async ({ page }) => {
-  await page.route('**/api/skills', (route) => route.abort('failed'))
+  await page.route('**/api/profile', (route) => route.abort('failed'))
   await page.goto('/profile')
   await expect(page.getByRole('heading', { name: 'Profile' })).toBeVisible()
 })
@@ -221,7 +221,7 @@ test('starts fresh on a reload - job edits are not persisted', async ({ page }) 
  * request to exercise the empty fallback.
  */
 async function seedSlowly(page: Page) {
-  await page.route('**/api/skills', async (route) => {
+  await page.route('**/api/profile', async (route) => {
     await new Promise((resolve) => setTimeout(resolve, 1500))
     await route.fulfill({
       status: 200,

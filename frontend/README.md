@@ -11,7 +11,7 @@ is for** if you want the why rather than the how.
   endpoint you configure in `.env`.
 
 Only the Profile page's skill list needs the backend (`../backend`,
-`GET /api/skills`). Nothing is persisted anywhere: tasks are seeded here
+`GET /api/profile`). Nothing is persisted anywhere: tasks are seeded here
 and live in memory for the session, and the chat page calls a completions
 endpoint straight from the browser.
 

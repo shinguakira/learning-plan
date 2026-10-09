@@ -63,7 +63,7 @@ Open http://localhost:5173.
 cd backend && npm install && npm run dev
 ```
 
-Serves `GET /api/skills` on http://localhost:3001.
+Serves `GET /api/profile` on http://localhost:3001.
 
 Node 20.19+, 22.13+ or 24+. The frontend's `engines` field declares the range, so
 `npm install` warns if you are outside it.

@@ -199,7 +199,7 @@ The other hooks follow the same shape:
 | `useTimeline`    | the dates, columns and rows the Gantt view draws        |
 | `useChat`        | the conversation and the request in flight              |
 | `useAutoScroll`  | keeping the chat pinned to the newest message           |
-| `useSkills`      | the registered skill list and the ways to change it     |
+| `useProfile`     | the registered skill list and the ways to change it     |
 | `useSkillDraft`  | the add-skill form and whether it is valid              |
 
 A rule that holds throughout: **if it only calculates, it is not a hook.**

@@ -1,8 +1,5 @@
 import type { SkillLevel } from '@/types/skill'
 
-/** Same origin as the app: the dev server proxies /api to the backend. */
-export const SKILLS_API_URL = '/api/skills'
-
 export const SKILL_LEVELS = ['beginner', 'intermediate', 'advanced', 'expert'] as const
 
 export const YEARS_OF_EXPERIENCE = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] as const
