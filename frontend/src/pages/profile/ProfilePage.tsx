@@ -1,4 +1,4 @@
-import { useSkills } from '@/hooks/useSkills'
+import { useProfile } from '@/hooks/useProfile'
 import { JobForm } from '@/pages/profile/JobForm'
 import { JobList } from '@/pages/profile/JobList'
 import { SkillForm } from '@/pages/profile/SkillForm'
@@ -19,7 +19,7 @@ export function ProfilePage() {
     removeJob,
     addCertificate,
     removeCertificate,
-  } = useSkills()
+  } = useProfile()
 
   return (
     <div className="mx-auto max-w-6xl space-y-6 px-4 py-6 sm:px-6">

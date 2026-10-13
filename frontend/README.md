@@ -10,8 +10,8 @@ is for** if you want the why rather than the how.
 - **AI chat** — a standalone chatbot, unrelated to the other pages. It POSTs to the
   endpoint you configure in `.env`.
 
-Sample tasks and profile data come from the backend (`../backend`,
-`GET /api/tasks` and `GET /api/skills`). Nothing is persisted anywhere: tasks are seeded on mount
+Only the Profile page's skill list needs the backend (`../backend`,
+`GET /api/profile`). Nothing is persisted anywhere: tasks are seeded here
 and live in memory for the session, and the chat page calls a completions
 endpoint straight from the browser.
 

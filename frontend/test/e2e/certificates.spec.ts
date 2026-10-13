@@ -13,7 +13,7 @@ async function addCertificate(page: Page, name: string, issuer: string, credenti
 }
 
 test.beforeEach(async ({ page }) => {
-  await page.route('**/api/skills', (route) =>
+  await page.route('**/api/profile', (route) =>
     route.fulfill({ json: { skills: [], jobs: [], certificates: [] } }),
   )
   await page.goto('/profile')
@@ -74,7 +74,7 @@ test('merges a certificate added during loading with the backend seed', async ({
   const ready = new Promise<void>((resolve) => {
     releaseSeed = resolve
   })
-  await page.route('**/api/skills', async (route) => {
+  await page.route('**/api/profile', async (route) => {
     await ready
     await route.fulfill({
       json: {

@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react'
-import { fetchSkills } from '@/api/skills'
+import { fetchProfile } from '@/api/profile'
 import type { Job, JobDraft } from '@/types/job'
 import type { Skill, SkillDraft } from '@/types/skill'
 import type { Certificate, CertificateDraft } from '@/types/certificate'
 
-export type SkillsApi = {
+export type ProfileApi = {
   skills: Skill[]
   jobs: Job[]
   certificates: Certificate[]
@@ -20,14 +20,8 @@ export type SkillsApi = {
   removeCertificate: (id: string) => void
 }
 
-/**
- * The whole profile, seeded once from the backend on mount. Every change after
- * that - adding, removing - stays in memory only and is never sent back.
- *
- * Skills, job history, and certificates arrive in the same request, so they share one loading
- * and one error state rather than racing each other.
- */
-export function useSkills(): SkillsApi {
+
+export function useProfile(): ProfileApi {
   const [skills, setSkills] = useState<Skill[]>([])
   const [jobs, setJobs] = useState<Job[]>([])
   const [certificates, setCertificates] = useState<Certificate[]>([])
@@ -37,7 +31,7 @@ export function useSkills(): SkillsApi {
   useEffect(() => {
     let active = true
 
-    fetchSkills()
+    fetchProfile()
       .then((seed) => {
         if (!active) return
         // The forms work while this is in flight, so anything already added stays
