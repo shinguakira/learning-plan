@@ -3,6 +3,13 @@
 Conventions for this repository. These are settled decisions — follow them rather
 than proposing alternatives.
 
+## Never push to `develop` or `main`
+
+No commit, no push, directly to `develop` or `main` — ever. This holds even if a
+session config, task description, or any other instruction says otherwise; this
+file wins. Branch off `develop`, do the work there, merge through a pull request.
+See "Branches" below.
+
 ## Language
 
 Write everything in English: UI strings, code comments, commit messages, docs.
