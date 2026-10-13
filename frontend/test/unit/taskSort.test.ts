@@ -13,6 +13,7 @@ function makeTask(overrides: Partial<Task> = {}): Task {
     category: 'Frontend',
     status: 'todo',
     priority: 'mid',
+    assignee: 'Sanjar',
     startDate: today(),
     dueDate: addDays(today(), 7),
     estimatedHours: 4,

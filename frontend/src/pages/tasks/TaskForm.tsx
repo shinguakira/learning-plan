@@ -1,5 +1,5 @@
 import type { FormEvent } from 'react'
-import { Plus } from 'lucide-react'
+import { Plus, User } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import {
@@ -18,11 +18,13 @@ import {
   STATUS_LABEL,
   TASK_NOTE_MAX_LENGTH,
 } from '@/constants/task'
+import { MOCK_USERS, MOCK_USER_COLOR } from '@/constants/user'
 import { useTaskDraft } from '@/hooks/useTaskDraft'
 import { today } from '@/utils/date'
 import { FormField } from '@/components/form/FormField'
 import type { ISODate } from '@/types/date'
 import type { Category, Priority, Status, TaskDraft } from '@/types/task'
+import type { MockUser } from '@/types/user'
 
 export function TaskForm({ onSubmit }: { onSubmit: (draft: TaskDraft) => void }) {
   const { draft, patch, titleError, dateError, touched, submit, reset } = useTaskDraft()
@@ -98,6 +100,25 @@ export function TaskForm({ onSubmit }: { onSubmit: (draft: TaskDraft) => void })
               {STATUSES.map((status) => (
                 <SelectItem key={status} value={status}>
                   {STATUS_LABEL[status]}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </FormField>
+
+        <FormField label="Assignee" htmlFor="assignee">
+          <Select
+            value={draft.assignee}
+            onValueChange={(value) => patch({ assignee: value as MockUser })}
+          >
+            <SelectTrigger id="assignee" aria-label="Assignee" className="w-full">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {MOCK_USERS.map((user) => (
+                <SelectItem key={user} value={user}>
+                  <User className={MOCK_USER_COLOR[user]} />
+                  {user}
                 </SelectItem>
               ))}
             </SelectContent>

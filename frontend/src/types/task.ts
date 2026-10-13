@@ -1,5 +1,6 @@
 import type { CATEGORIES, PRIORITIES, STATUSES, VIEW_MODES } from '@/constants/task'
 import type { ISODate } from '@/types/date'
+import type { MockUser } from '@/types/user'
 
 export type Category = (typeof CATEGORIES)[number]
 export type Status = (typeof STATUSES)[number]
@@ -11,6 +12,8 @@ export type Task = {
   category: Category
   status: Status
   priority: Priority
+  /** One of the header's selectable users. */
+  assignee: MockUser
   startDate: ISODate
   /** Never earlier than startDate. */
   dueDate: ISODate
@@ -56,9 +59,11 @@ export type TaskFilterCriteria = {
 /**
  * A seed entry carries day offsets instead of dates; the real ISODates are
  * derived from today when the seed is expanded, so the two date fields are
- * deliberately absent rather than filled with placeholders.
+ * deliberately absent rather than filled with placeholders. The backend has
+ * no notion of the header's mock users either, so the assignee is rotated
+ * in when the seed is expanded, the same way the dates are derived.
  */
-export type SeedTask = Omit<TaskDraft, 'startDate' | 'dueDate'> & {
+export type SeedTask = Omit<TaskDraft, 'startDate' | 'dueDate' | 'assignee'> & {
   offsetStart: number
   span: number
 }
