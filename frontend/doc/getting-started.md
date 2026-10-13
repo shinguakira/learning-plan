@@ -19,7 +19,14 @@ npm run dev
 Then open http://localhost:5173. The sample plan loads on every visit; edits last
 until you reload.
 
-`npm install` is the only setup step. The task page works immediately. The chat page
+Install and start the backend too, in another terminal:
+
+```bash
+npm --prefix ../backend install
+npm --prefix ../backend run dev
+```
+
+The task page loads its sample plan from the backend. The chat page
 needs an endpoint — copy `.env.example` to `.env` and fill in the three values; the
 README's **Chat endpoint** section says what they are.
 
@@ -179,15 +186,17 @@ whose name starts with `use`. They all live in [`src/hooks/`](../src/hooks).
 
 ```ts
 export function useTasks(): TasksApi {
-  const [tasks, setTasks] = useState<Task[]>(createSeedTasks)
+  const [tasks, setTasks] = useState<Task[]>([])
   …
 }
 ```
 
 `useState` gives back the current value and a function to replace it. Calling
 `setTasks` tells React the data changed, and every component displaying it redraws.
-`useTasks` wraps that up and hands out `addTask`, `updateTask`, `removeTask` so no
-component has to know how the list is stored.
+`useTasks` fetches sample entries from `/api/tasks` on mount and expands their
+day offsets into calendar dates. Loading starts with an empty list; local tasks
+added during the request are preserved. It exposes `addTask`, `updateTask`, and
+`removeTask` so components do not need to know how the list is stored.
 
 The other hooks follow the same shape:
 
@@ -210,16 +219,16 @@ into them wherever it can go.
 
 ## The rest of the folders
 
-| Folder                   | What is in it                                              |
-| ------------------------ | ---------------------------------------------------------- |
-| `src/pages/`             | components, grouped by the page they belong to             |
-| `src/components/ui/`     | the shadcn controls: buttons, inputs, cards, badges        |
-| `src/components/layout/` | the header and shell both pages render inside              |
-| `src/hooks/`             | anything that holds state                                  |
-| `src/utils/`             | plain functions that calculate                             |
-| `src/types/`             | the shapes — what a `Task` is, what a `ChatMessage` is     |
-| `src/constants/`         | fixed values: categories, labels, colours, the sample plan |
-| `src/api/`               | the single network request                                 |
+| Folder                   | What is in it                                          |
+| ------------------------ | ------------------------------------------------------ |
+| `src/pages/`             | components, grouped by the page they belong to         |
+| `src/components/ui/`     | the shadcn controls: buttons, inputs, cards, badges    |
+| `src/components/layout/` | the header and shell both pages render inside          |
+| `src/hooks/`             | anything that holds state                              |
+| `src/utils/`             | plain functions that calculate                         |
+| `src/types/`             | the shapes — what a `Task` is, what a `ChatMessage` is |
+| `src/constants/`         | fixed values: categories, labels, colours              |
+| `src/api/`               | chat, task, and profile requests                       |
 
 Nothing appears in two places. If you are looking for the list of categories it is
 in `src/constants/`, and only there.

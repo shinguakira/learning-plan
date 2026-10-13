@@ -50,6 +50,9 @@ To run the app:
 npm run dev
 ```
 
+Run `npm --prefix ../backend install` once, then start
+`npm --prefix ../backend run dev` in another terminal.
+
 Open http://localhost:5173. The sample plan loads on every visit and edits last only
 until you reload (`Reload sample data` restores it, `Delete all` empties the list).
 
@@ -137,7 +140,7 @@ src/api/chat.ts            the completions request - the only network call
 src/hooks/                 useTasks, useChat, useTaskFilters, useTaskDraft,
                            useTimeline, useAutoScroll
 src/types/                 app, chat, date, task, timeline
-src/constants/             app, chat, date, seedTasks, task, timeline
+src/constants/             app, chat, date, task, timeline
 src/utils/                 date, task, timeline, seed - this project's helpers
 src/lib/utils.ts           cn - generic, reusable in any project
 components.json            shadcn CLI config

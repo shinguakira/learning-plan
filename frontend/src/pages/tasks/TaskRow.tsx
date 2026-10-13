@@ -46,7 +46,9 @@ export function TaskRow({
           {task.title}
         </p>
         {task.note && (
-          <p className="text-muted-foreground mt-0.5 text-xs break-words">{task.note}</p>
+          <p className="text-muted-foreground mt-0.5 text-xs break-words whitespace-pre-line">
+            {task.note}
+          </p>
         )}
 
         <div className="mt-2 flex flex-wrap items-center gap-1.5">

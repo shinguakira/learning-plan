@@ -3,11 +3,12 @@ import type { Page } from '@playwright/test'
 
 const certificatesIn = (page: Page) => page.getByRole('region', { name: 'Certificates' })
 
-async function addCertificate(page: Page, name: string, issuer: string) {
+async function addCertificate(page: Page, name: string, issuer: string, credentialUrl?: string) {
   const section = certificatesIn(page)
   await section.getByLabel('Title', { exact: true }).fill(name)
   await section.getByLabel('Issued by').fill(issuer)
   await section.getByLabel('Date earned').fill('2025-06-30')
+  if (credentialUrl !== undefined) await section.getByLabel('Credential URL').fill(credentialUrl)
   await section.getByRole('button', { name: 'Add certificate' }).click()
 }
 
@@ -27,6 +28,8 @@ test('adds trimmed values and resets the form', async ({ page }) => {
   await expect(item.getByRole('heading')).toHaveText('Data Science')
   await expect(item.getByText('Academy', { exact: true })).toBeVisible()
   await expect(item.getByText('2025-06-30')).toBeVisible()
+  await expect(section.getByLabel('Credential URL')).toHaveValue('')
+  await expect(section.getByRole('link')).toHaveCount(0)
   for (const label of ['Title', 'Issued by', 'Date earned']) {
     await expect(section.getByLabel(label, { exact: true })).toHaveValue('')
   }
@@ -122,4 +125,75 @@ test('certificate form fits a mobile viewport', async ({ page }) => {
   await expect(
     certificatesIn(page).getByRole('heading', { name: 'Mobile Certificate' }),
   ).toBeVisible()
+})
+
+test('shows a credential URL and opens it in a new tab', async ({ page }) => {
+  const url = 'https://example.org/certificates/cs50-demo'
+  await addCertificate(page, 'CS50x', 'Harvard University', `  ${url}  `)
+  const section = certificatesIn(page)
+  const link = section.getByRole('link', { name: 'View credential for CS50x' })
+  await expect(link).toHaveAttribute('href', url)
+  await expect(link).toHaveAttribute('target', '_blank')
+  await expect(link).toHaveAttribute('rel', 'noopener noreferrer')
+  await expect(section.getByLabel('Credential URL')).toHaveValue('')
+  await page
+    .context()
+    .route(url, (route) =>
+      route.fulfill({ contentType: 'text/html', body: '<h1>Demo credential</h1>' }),
+    )
+  const popupReady = page.waitForEvent('popup')
+  await link.click()
+  const popup = await popupReady
+  await expect(popup).toHaveURL(url)
+  await expect(popup.getByRole('heading', { name: 'Demo credential' })).toBeVisible()
+})
+
+test('URL is optional and invalid URLs block submission', async ({ page }) => {
+  const section = certificatesIn(page)
+  for (const url of ['not-a-url', 'javascript:alert(1)', 'ftp://example.org/certificate']) {
+    await addCertificate(page, 'CS50x', 'Harvard University', url)
+    await expect(section.getByText('Enter a valid http:// or https:// URL')).toBeVisible()
+    await expect(section.getByRole('listitem')).toHaveCount(0)
+  }
+  await section.getByLabel('Credential URL').fill('')
+  await section.getByRole('button', { name: 'Add certificate' }).click()
+  await expect(section.getByRole('listitem')).toHaveCount(1)
+  await expect(section.getByRole('link')).toHaveCount(0)
+})
+
+test('renders a seeded credential link and hides unsafe seed URLs', async ({ page }) => {
+  await page.route('**/api/skills', (route) =>
+    route.fulfill({
+      json: {
+        skills: [],
+        jobs: [],
+        certificates: [
+          {
+            id: 'cs50',
+            name: 'CS50x',
+            issuer: 'Harvard University',
+            dateEarned: '2025-06-30',
+            createdAt: '2025-06-30T00:00:00Z',
+            credentialUrl: 'https://example.org/cs50',
+          },
+          {
+            id: 'unsafe',
+            name: 'Unsafe Link',
+            issuer: 'Demo',
+            dateEarned: '2025-06-30',
+            createdAt: '2025-06-30T00:00:00Z',
+            credentialUrl: 'javascript:alert(1)',
+          },
+        ],
+      },
+    }),
+  )
+  await page.reload()
+  const section = certificatesIn(page)
+  await expect(section.getByRole('listitem')).toHaveCount(2)
+  await expect(section.getByRole('link', { name: 'View credential for CS50x' })).toHaveAttribute(
+    'href',
+    'https://example.org/cs50',
+  )
+  await expect(section.getByRole('link')).toHaveCount(1)
 })

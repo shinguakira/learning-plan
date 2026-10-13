@@ -10,14 +10,19 @@ types in `src/types/`, constants in `src/constants/`, hooks in `src/hooks/`, thi
 project's helpers in `src/utils/`, and `src/lib/` only for code that would drop into
 another project unchanged.
 
-`src/api/` holds the one thing that talks to the outside world — the chat request.
-Nothing else belongs there. A folder called `api` whose contents never leave the
+`src/api/` holds external requests: chat completions and the backend profile and
+task seed endpoints. A folder called `api` whose contents never leave the
 machine is a lie the next reader has to unlearn.
 
 ## Persistence
 
 There is none. The task list lives in `useTasks` for the life of the page and is
-re-seeded on every load. An earlier version wrote it to `localStorage`, which bought
+seeded from the backend on every visit. `/api/tasks` returns seed entries with
+day offsets; `createSeedTasks` expands them into local calendar dates. The fetched
+seed is kept for Reload sample data, which restores the plan without another
+request. A failed initial request can be retried with the same control. Tasks
+added during loading survive, and Delete all prevents a late seed response from
+restoring cleared tasks. An earlier version wrote it to `localStorage`, which bought
 a per-browser copy nobody had asked for and brought a storage key to version, a
 validation guard for whatever was already in there, and two tests that only proved
 the storage worked.
