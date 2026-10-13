@@ -15,6 +15,7 @@ test('tasks page, initial render', async ({ page }) => {
 
 test('profile page, initial render', async ({ page }) => {
   await page.goto('/profile')
+  await expect(page.getByRole('status')).toHaveCount(0)
   await expect(page).toHaveScreenshot('profile-page.png')
 })
 

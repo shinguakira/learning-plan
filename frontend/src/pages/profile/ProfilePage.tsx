@@ -5,12 +5,15 @@ import { SkillForm } from '@/pages/profile/SkillForm'
 import { SkillList } from '@/pages/profile/SkillList'
 import { CertificateForm } from '@/pages/profile/CertificateForm'
 import { CertificateList } from '@/pages/profile/CertificateList'
+import { StrengthForm } from '@/pages/profile/StrengthForm'
+import { StrengthList } from '@/pages/profile/StrengthList'
 
 export function ProfilePage() {
   const {
     skills,
     jobs,
     certificates,
+    strengths,
     loading,
     error,
     addSkill,
@@ -19,6 +22,8 @@ export function ProfilePage() {
     removeJob,
     addCertificate,
     removeCertificate,
+    addStrength,
+    removeStrength,
   } = useProfile()
 
   return (
@@ -50,6 +55,25 @@ export function ProfilePage() {
           <p className="text-muted-foreground text-sm">Loading skills…</p>
         ) : (
           <SkillList skills={skills} onRemove={removeSkill} />
+        )}
+      </section>
+
+      <section aria-labelledby="strengths-heading" className="space-y-5">
+        <div>
+          <h2 id="strengths-heading" className="text-base font-semibold">
+            Strengths
+          </h2>
+          <p className="text-muted-foreground mt-0.5 text-xs">
+            What you do well and how you put it into practice.
+          </p>
+        </div>
+        <StrengthForm onSubmit={addStrength} />
+        {loading ? (
+          <p role="status" className="text-muted-foreground text-sm">
+            Loading strengths…
+          </p>
+        ) : (
+          <StrengthList strengths={strengths} onRemove={removeStrength} />
         )}
       </section>
 

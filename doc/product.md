@@ -61,6 +61,9 @@ five browser tabs and losing the thread.
 **Keep a running list of what you can already do.** A profile page holds the
 technical skills you've picked up, each with a level from beginner to expert —
 a running draft of the list a resume or an interview answer would pull from.
+Alongside those skills, record your personal and professional strengths. Each has
+a name and a short explanation or example, so you can describe what you bring to
+a role beyond the technologies you know.
 
 ## Who it is for
 
