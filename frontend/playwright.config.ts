@@ -13,16 +13,23 @@ export default defineConfig({
     trace: 'on-first-retry',
   },
   projects: [{ name: 'chromium', use: { ...devices['Desktop Chrome'] } }],
-  webServer: {
-    command: 'npm run dev',
-    url: BASE_URL,
-    // Point the chat at a host that never resolves, so a spec that forgets to
-    // stub the endpoint fails loudly instead of reaching a real provider.
-    env: {
-      VITE_CHAT_API_URL: 'https://chat.invalid/v1/chat/completions',
-      VITE_CHAT_MODEL: 'stub-model',
+  webServer: [
+    {
+      command: 'npm --prefix ../backend run dev',
+      url: 'http://127.0.0.1:3001/api/tasks',
+      reuseExistingServer: false,
     },
-    // The env above has to be in effect, so never reuse an outside server.
-    reuseExistingServer: false,
-  },
+    {
+      command: 'npm run dev',
+      url: BASE_URL,
+      // Point the chat at a host that never resolves, so a spec that forgets to
+      // stub the endpoint fails loudly instead of reaching a real provider.
+      env: {
+        VITE_CHAT_API_URL: 'https://chat.invalid/v1/chat/completions',
+        VITE_CHAT_MODEL: 'stub-model',
+      },
+      // The env above has to be in effect, so never reuse an outside server.
+      reuseExistingServer: false,
+    },
+  ],
 })

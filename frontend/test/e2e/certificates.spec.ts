@@ -13,8 +13,8 @@ async function addCertificate(page: Page, name: string, issuer: string, credenti
 }
 
 test.beforeEach(async ({ page }) => {
-  await page.route('**/api/skills', (route) =>
-    route.fulfill({ json: { skills: [], jobs: [], certificates: [] } }),
+  await page.route('**/api/profile', (route) =>
+    route.fulfill({ json: { skills: [], jobs: [], certificates: [], strengths: [] } }),
   )
   await page.goto('/profile')
   await expect(certificatesIn(page).getByText('No certificates yet')).toBeVisible()
@@ -74,10 +74,11 @@ test('merges a certificate added during loading with the backend seed', async ({
   const ready = new Promise<void>((resolve) => {
     releaseSeed = resolve
   })
-  await page.route('**/api/skills', async (route) => {
+  await page.route('**/api/profile', async (route) => {
     await ready
     await route.fulfill({
       json: {
+        strengths: [],
         skills: [],
         jobs: [],
         certificates: [
@@ -162,9 +163,10 @@ test('URL is optional and invalid URLs block submission', async ({ page }) => {
 })
 
 test('renders a seeded credential link and hides unsafe seed URLs', async ({ page }) => {
-  await page.route('**/api/skills', (route) =>
+  await page.route('**/api/profile', (route) =>
     route.fulfill({
       json: {
+        strengths: [],
         skills: [],
         jobs: [],
         certificates: [

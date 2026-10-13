@@ -1,13 +1,15 @@
 import { useEffect, useState } from 'react'
-import { fetchSkills } from '@/api/skills'
+import { fetchProfile } from '@/api/profile'
 import type { Job, JobDraft } from '@/types/job'
 import type { Skill, SkillDraft } from '@/types/skill'
 import type { Certificate, CertificateDraft } from '@/types/certificate'
+import type { Strength, StrengthDraft } from '@/types/strength'
 
-export type SkillsApi = {
+export type ProfileApi = {
   skills: Skill[]
   jobs: Job[]
   certificates: Certificate[]
+  strengths: Strength[]
   /** True only while the initial seed request from the backend is in flight. */
   loading: boolean
   /** Set if the initial seed request failed; all lists still work from empty. */
@@ -18,26 +20,22 @@ export type SkillsApi = {
   removeJob: (id: string) => void
   addCertificate: (draft: CertificateDraft) => void
   removeCertificate: (id: string) => void
+  addStrength: (draft: StrengthDraft) => void
+  removeStrength: (id: string) => void
 }
 
-/**
- * The whole profile, seeded once from the backend on mount. Every change after
- * that - adding, removing - stays in memory only and is never sent back.
- *
- * Skills, job history, and certificates arrive in the same request, so they share one loading
- * and one error state rather than racing each other.
- */
-export function useSkills(): SkillsApi {
+export function useProfile(): ProfileApi {
   const [skills, setSkills] = useState<Skill[]>([])
   const [jobs, setJobs] = useState<Job[]>([])
   const [certificates, setCertificates] = useState<Certificate[]>([])
+  const [strengths, setStrengths] = useState<Strength[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     let active = true
 
-    fetchSkills()
+    fetchProfile()
       .then((seed) => {
         if (!active) return
         // The forms work while this is in flight, so anything already added stays
@@ -45,6 +43,7 @@ export function useSkills(): SkillsApi {
         setSkills((prev) => [...prev, ...seed.skills])
         setJobs((prev) => [...prev, ...seed.jobs])
         setCertificates((prev) => [...prev, ...seed.certificates])
+        setStrengths((prev) => [...prev, ...seed.strengths])
       })
       .catch((caught: unknown) => {
         if (active) setError(caught instanceof Error ? caught.message : 'Failed to load profile.')
@@ -62,6 +61,7 @@ export function useSkills(): SkillsApi {
     skills,
     jobs,
     certificates,
+    strengths,
     loading,
     error,
     addSkill: (draft) => {
@@ -92,6 +92,17 @@ export function useSkills(): SkillsApi {
     },
     removeCertificate: (id) => {
       setCertificates((prev) => prev.filter((cert) => cert.id !== id))
+    },
+    addStrength: (draft) => {
+      const strength: Strength = {
+        ...draft,
+        id: crypto.randomUUID(),
+        createdAt: new Date().toISOString(),
+      }
+      setStrengths((prev) => [strength, ...prev])
+    },
+    removeStrength: (id) => {
+      setStrengths((prev) => prev.filter((strength) => strength.id !== id))
     },
   }
 }
