@@ -22,6 +22,24 @@ async function stubReply(page: Page, reply: string): Promise<RequestBody[]> {
   return sent
 }
 
+/**
+ * Answers with whichever user the system prompt names, the way a real model
+ * would once it is told who it is talking to.
+ */
+async function stubEchoUser(page: Page): Promise<void> {
+  await page.route(ENDPOINT, (route: Route) => {
+    const body = route.request().postDataJSON() as RequestBody
+    const system = body.messages.find((message) => message.role === 'system')?.content ?? ''
+    const named = /You are talking to (\w+)\./.exec(system)?.[1]
+    const reply = named ? `You are ${named}.` : 'I was not told who you are.'
+    return route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: JSON.stringify({ choices: [{ message: { content: reply } }] }),
+    })
+  })
+}
+
 test.beforeEach(async ({ page }) => {
   await page.goto('/chat')
   await expect(page.getByRole('heading', { name: 'AI chat' })).toBeVisible()
@@ -182,3 +200,20 @@ test('does not persist the conversation across a reload', async ({ page }) => {
 
   await expect(page.getByText('What do you want to work out?')).toBeVisible()
 })
+
+// Keep in sync with MOCK_USERS in src/constants/user.ts.
+const MOCK_USERS = ['Sanjar', 'Akira', 'Mike', 'John'] as const
+
+for (const user of MOCK_USERS) {
+  test(`tells ${user} who they are when selected as the active user`, async ({ page }) => {
+    await stubEchoUser(page)
+
+    await page.getByRole('combobox', { name: 'Active user' }).click()
+    await page.getByRole('option', { name: user, exact: true }).click()
+
+    await page.getByLabel('Message').fill('Who am I?')
+    await page.getByLabel('Message').press('Enter')
+
+    await expect(page.getByText(`You are ${user}.`)).toBeVisible()
+  })
+}
