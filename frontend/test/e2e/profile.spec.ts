@@ -227,6 +227,7 @@ async function seedSlowly(page: Page) {
       status: 200,
       contentType: 'application/json',
       body: JSON.stringify({
+        strengths: [],
         skills: [
           {
             id: 's1',

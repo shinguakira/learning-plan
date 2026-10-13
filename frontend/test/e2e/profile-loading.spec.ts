@@ -13,6 +13,14 @@ for (const outcome of ['success', 'failure'] as const) {
       } else {
         await route.fulfill({
           json: {
+            strengths: [
+              {
+                id: 'strength',
+                name: 'Loaded strength',
+                description: 'A strength from the backend.',
+                createdAt: '2026-01-01T00:00:00.000Z',
+              },
+            ],
             skills: [
               {
                 id: 'skill',
@@ -54,6 +62,7 @@ for (const outcome of ['success', 'failure'] as const) {
         ['Skills', 'Loading skills…', 'Add skill'],
         ['Job history', 'Loading job history…', 'Add job'],
         ['Certificates', 'Loading certificates…', 'Add certificate'],
+        ['Strengths', 'Loading strengths…', 'Add strength'],
       ]) {
         const region = page.getByRole('region', { name: section, exact: true })
         await expect(region.getByRole('status', { name: label })).toBeVisible()
@@ -65,7 +74,7 @@ for (const outcome of ['success', 'failure'] as const) {
       await page.getByLabel('Job title').fill('Local role')
       await page.getByLabel('Started', { exact: true }).fill('2024-01-01')
       await page.getByRole('button', { name: 'Add job', exact: true }).click()
-      await expect(page.getByRole('status')).toHaveCount(3)
+      await expect(page.getByRole('status')).toHaveCount(4)
     } finally {
       release()
     }
@@ -76,6 +85,7 @@ for (const outcome of ['success', 'failure'] as const) {
       await expect(page.getByText('Loaded skill', { exact: true })).toBeVisible()
       await expect(page.getByText('Loaded role', { exact: true })).toBeVisible()
       await expect(page.getByText('Loaded certificate', { exact: true })).toBeVisible()
+      await expect(page.getByText('Loaded strength', { exact: true })).toBeVisible()
     } else {
       await expect(page.getByText('Request failed (503)', { exact: true })).toBeVisible()
       await expect(page.getByText('No skills registered yet')).toBeVisible()
