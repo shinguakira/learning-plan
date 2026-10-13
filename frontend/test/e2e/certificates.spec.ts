@@ -162,7 +162,7 @@ test('URL is optional and invalid URLs block submission', async ({ page }) => {
 })
 
 test('renders a seeded credential link and hides unsafe seed URLs', async ({ page }) => {
-  await page.route('**/api/skills', (route) =>
+  await page.route('**/api/profile', (route) =>
     route.fulfill({
       json: {
         skills: [],

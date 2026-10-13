@@ -5,6 +5,7 @@ import { SkillForm } from '@/pages/profile/SkillForm'
 import { SkillList } from '@/pages/profile/SkillList'
 import { CertificateForm } from '@/pages/profile/CertificateForm'
 import { CertificateList } from '@/pages/profile/CertificateList'
+import { ProfileSectionLoading } from '@/pages/profile/ProfileSectionLoading'
 
 export function ProfilePage() {
   const {
@@ -47,7 +48,7 @@ export function ProfilePage() {
         <SkillForm existingNames={skills.map((skill) => skill.name)} onSubmit={addSkill} />
 
         {loading ? (
-          <p className="text-muted-foreground text-sm">Loading skills…</p>
+          <ProfileSectionLoading label="Loading skills…" />
         ) : (
           <SkillList skills={skills} onRemove={removeSkill} />
         )}
@@ -68,7 +69,7 @@ export function ProfilePage() {
         <JobForm onSubmit={addJob} />
 
         {loading ? (
-          <p className="text-muted-foreground text-sm">Loading job history…</p>
+          <ProfileSectionLoading label="Loading job history…" />
         ) : (
           <JobList jobs={jobs} onRemove={removeJob} />
         )}
@@ -84,7 +85,7 @@ export function ProfilePage() {
         <CertificateForm onSubmit={addCertificate} />
 
         {loading ? (
-          <p className="text-muted-foreground text-sm">Loading certificates…</p>
+          <ProfileSectionLoading label="Loading certificates…" />
         ) : (
           <CertificateList certificates={certificates} onRemove={removeCertificate} />
         )}
