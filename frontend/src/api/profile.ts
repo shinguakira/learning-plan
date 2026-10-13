@@ -10,7 +10,6 @@ export type ProfileSeed = {
   certificates: Certificate[]
 }
 
-
 export async function fetchProfile(): Promise<ProfileSeed> {
   let response: Response
   try {
