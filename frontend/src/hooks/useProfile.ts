@@ -20,7 +20,6 @@ export type ProfileApi = {
   removeCertificate: (id: string) => void
 }
 
-
 export function useProfile(): ProfileApi {
   const [skills, setSkills] = useState<Skill[]>([])
   const [jobs, setJobs] = useState<Job[]>([])
