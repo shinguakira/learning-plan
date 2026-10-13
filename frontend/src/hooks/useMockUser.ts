@@ -1,10 +1,19 @@
-import { useState } from 'react'
-import { MOCK_USERS } from '@/constants/user'
+import { createContext, useContext } from 'react'
 import type { MockUser } from '@/types/user'
 
-/** The person the header claims to be signed in as. Mock only - never sent anywhere. */
-export function useMockUser() {
-  const [user, setUser] = useState<MockUser>(MOCK_USERS[0])
+export type MockUserContextValue = {
+  user: MockUser
+  setUser: (user: MockUser) => void
+}
 
-  return { user, setUser }
+/** Supplied by `MockUserProvider`, which owns the actual state. */
+export const MockUserContext = createContext<MockUserContextValue | null>(null)
+
+/** The person the header claims to be signed in as. */
+export function useMockUser(): MockUserContextValue {
+  const context = useContext(MockUserContext)
+  if (context === null) {
+    throw new Error('useMockUser must be used within a MockUserProvider')
+  }
+  return context
 }
