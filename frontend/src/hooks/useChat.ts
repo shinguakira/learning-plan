@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { fetchChatReply } from '@/api/chat'
+import { useMockUser } from '@/hooks/useMockUser'
 import type { ChatMessage } from '@/types/chat'
 
 export type ChatApi = {
@@ -10,6 +11,7 @@ export type ChatApi = {
 }
 
 export function useChat(): ChatApi {
+  const { user } = useMockUser()
   const [messages, setMessages] = useState<ChatMessage[]>([])
   const [pending, setPending] = useState(false)
   const request = useRef<AbortController | null>(null)
@@ -36,7 +38,7 @@ export function useChat(): ChatApi {
       // model said, so it is kept out of the history the request carries.
       const history = next.filter((message) => message.failed !== true)
 
-      void fetchChatReply(history, controller.signal)
+      void fetchChatReply(history, controller.signal, user)
         .then((content) => {
           if (controller.signal.aborted) return
           append({ id: crypto.randomUUID(), role: 'assistant', content })

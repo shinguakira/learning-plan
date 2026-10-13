@@ -1,5 +1,6 @@
 import { CHAT_API_KEY, CHAT_API_URL, CHAT_MODEL, CHAT_SYSTEM_PROMPT } from '@/constants/chat'
 import type { ChatMessage } from '@/types/chat'
+import type { MockUser } from '@/types/user'
 
 /**
  * Chat completions over plain fetch, called straight from the browser.
@@ -16,6 +17,7 @@ type ChatCompletion = {
 export async function fetchChatReply(
   history: readonly ChatMessage[],
   signal: AbortSignal,
+  user: MockUser,
 ): Promise<string> {
   if (CHAT_API_URL === '' || CHAT_MODEL === '') {
     throw new Error('Set VITE_CHAT_API_URL and VITE_CHAT_MODEL in .env to use the chat.')
@@ -37,7 +39,8 @@ export async function fetchChatReply(
     body: JSON.stringify({
       model: CHAT_MODEL,
       messages: [
-        { role: 'system', content: CHAT_SYSTEM_PROMPT },
+        // The header's active user, so the model knows who it is talking to.
+        { role: 'system', content: `${CHAT_SYSTEM_PROMPT} You are talking to ${user}.` },
         ...history.map(({ role, content }) => ({ role, content })),
       ],
     }),
