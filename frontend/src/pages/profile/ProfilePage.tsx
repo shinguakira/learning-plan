@@ -34,11 +34,28 @@ export function ProfilePage() {
 
   return (
     <div className="mx-auto max-w-6xl space-y-6 px-4 py-6 sm:px-6">
-      <div>
-        <h1 className="text-lg font-semibold">Profile</h1>
-        <p className="text-muted-foreground mt-0.5 text-xs">
-          What goes on your resume. Edits here are not saved.
-        </p>
+      <div className="flex flex-wrap items-end justify-between gap-3">
+        <div>
+          <h1 className="text-lg font-semibold">Profile</h1>
+          <p className="text-muted-foreground mt-0.5 text-xs">
+            What goes on your resume. Edits here are not saved.
+          </p>
+        </div>
+        <div>
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={downloadCsv}
+            disabled={csvStatus === "downloading"}
+          >
+            <Download />
+            Download CSV
+          </Button>
+          {csvStatus === "error" && (
+            <p className="text-destructive mt-1 text-xs">Could not download the CSV.</p>
+          )}
+        </div>
       </div>
 
       {error && <p className="text-destructive text-xs">{error}</p>}
@@ -55,33 +72,18 @@ export function ProfilePage() {
                 : `${skills.length} technical skill${skills.length === 1 ? "" : "s"}.`}
             </p>
           </div>
-          <div className="flex items-center gap-2">
-            <Button
-              type="button"
-              variant="outline"
-              size="sm"
-              onClick={downloadCsv}
-              disabled={csvStatus === "downloading"}
-            >
-              <Download />
-              Download CSV
-            </Button>
-            <ProfileFormDialog title="Add skill">
-              {(close) => (
-                <SkillForm
-                  existingNames={skills.map((skill) => skill.name)}
-                  onSubmit={(draft) => {
-                    addSkill(draft)
-                    close()
-                  }}
-                />
-              )}
-            </ProfileFormDialog>
-          </div>
+          <ProfileFormDialog title="Add skill">
+            {(close) => (
+              <SkillForm
+                existingNames={skills.map((skill) => skill.name)}
+                onSubmit={(draft) => {
+                  addSkill(draft)
+                  close()
+                }}
+              />
+            )}
+          </ProfileFormDialog>
         </div>
-        {csvStatus === "error" && (
-          <p className="text-destructive text-xs">Could not download the CSV.</p>
-        )}
 
         {loading ? (
           <ProfileSectionLoading label="Loading skills…" />
