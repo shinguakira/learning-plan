@@ -281,12 +281,43 @@ test("returns to the previous page when the final page is deleted", async ({ pag
 })
 
 test("clears every task and restores the samples", async ({ page }) => {
+  const initialCount = await shownCount(page)
   await page.getByRole("button", { name: "Delete all" }).click()
+  const confirmation = page.getByRole("dialog", {
+    name: "Are you sure you want to delete all the tasks?",
+  })
+  await expect(confirmation).toBeVisible()
+  expect(await shownCount(page)).toBe(initialCount)
+  await confirmation.getByRole("button", { name: "Delete all", exact: true }).click()
 
+  await expect(confirmation).toHaveCount(0)
   await expect(page.getByText("No tasks to show")).toBeVisible()
   expect(await shownCount(page)).toBe(0)
 
   await page.getByRole("button", { name: "Reload sample data" }).click()
 
-  expect(await shownCount(page)).toBe(SEED_COUNT)
+  expect(await shownCount(page)).toBe(initialCount)
+})
+
+test("cancel and Escape dismiss Delete all without removing tasks", async ({ page }) => {
+  const initialCount = await shownCount(page)
+  const trigger = page.getByRole("button", { name: "Delete all", exact: true })
+  const confirmation = page.getByRole("dialog", {
+    name: "Are you sure you want to delete all the tasks?",
+  })
+
+  await trigger.click()
+  const cancel = confirmation.getByRole("button", { name: "Cancel", exact: true })
+  await expect(cancel).toBeFocused()
+  await cancel.click()
+  await expect(confirmation).toHaveCount(0)
+  await expect(trigger).toBeFocused()
+  expect(await shownCount(page)).toBe(initialCount)
+
+  await trigger.click()
+  await expect(confirmation).toBeVisible()
+  await page.keyboard.press("Escape")
+  await expect(confirmation).toHaveCount(0)
+  await expect(trigger).toBeFocused()
+  expect(await shownCount(page)).toBe(initialCount)
 })

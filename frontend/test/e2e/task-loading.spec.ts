@@ -50,6 +50,7 @@ test("Delete all suppresses a pending seed but samples can still be restored", a
   await page.goto("/tasks")
   await expect(page.getByRole("status")).toBeVisible()
   await page.getByRole("button", { name: "Delete all" }).click()
+  await page.getByRole("dialog").getByRole("button", { name: "Delete all", exact: true }).click()
   release()
   await expect(page.getByRole("status")).toHaveCount(0)
   await expect(page.getByText(sample.title, { exact: true })).toHaveCount(0)

@@ -11,6 +11,7 @@ import { CertificateList } from "@/pages/profile/CertificateList"
 import { StrengthForm } from "@/pages/profile/StrengthForm"
 import { StrengthList } from "@/pages/profile/StrengthList"
 import { ProfileSectionLoading } from "@/pages/profile/ProfileSectionLoading"
+import { ProfileFormDialog } from "@/pages/profile/ProfileFormDialog"
 
 export function ProfilePage() {
   const {
@@ -43,7 +44,7 @@ export function ProfilePage() {
       {error && <p className="text-destructive text-xs">{error}</p>}
 
       <section aria-labelledby="skills-heading" className="space-y-5">
-        <div className="flex flex-wrap items-end justify-between gap-3">
+        <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
             <h2 id="skills-heading" className="text-base font-semibold">
               Skills
@@ -54,22 +55,33 @@ export function ProfilePage() {
                 : `${skills.length} technical skill${skills.length === 1 ? "" : "s"}.`}
             </p>
           </div>
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            onClick={downloadCsv}
-            disabled={csvStatus === "downloading"}
-          >
-            <Download />
-            Download CSV
-          </Button>
+          <div className="flex items-center gap-2">
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={downloadCsv}
+              disabled={csvStatus === "downloading"}
+            >
+              <Download />
+              Download CSV
+            </Button>
+            <ProfileFormDialog title="Add skill">
+              {(close) => (
+                <SkillForm
+                  existingNames={skills.map((skill) => skill.name)}
+                  onSubmit={(draft) => {
+                    addSkill(draft)
+                    close()
+                  }}
+                />
+              )}
+            </ProfileFormDialog>
+          </div>
         </div>
         {csvStatus === "error" && (
           <p className="text-destructive text-xs">Could not download the CSV.</p>
         )}
-
-        <SkillForm existingNames={skills.map((skill) => skill.name)} onSubmit={addSkill} />
 
         {loading ? (
           <ProfileSectionLoading label="Loading skills…" />
@@ -79,15 +91,26 @@ export function ProfilePage() {
       </section>
 
       <section aria-labelledby="strengths-heading" className="space-y-5">
-        <div>
-          <h2 id="strengths-heading" className="text-base font-semibold">
-            Strengths
-          </h2>
-          <p className="text-muted-foreground mt-0.5 text-xs">
-            What you do well and how you put it into practice.
-          </p>
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <h2 id="strengths-heading" className="text-base font-semibold">
+              Strengths
+            </h2>
+            <p className="text-muted-foreground mt-0.5 text-xs">
+              What you do well and how you put it into practice.
+            </p>
+          </div>
+          <ProfileFormDialog title="Add strength">
+            {(close) => (
+              <StrengthForm
+                onSubmit={(draft) => {
+                  addStrength(draft)
+                  close()
+                }}
+              />
+            )}
+          </ProfileFormDialog>
         </div>
-        <StrengthForm onSubmit={addStrength} />
         {loading ? (
           <ProfileSectionLoading label="Loading strengths…" />
         ) : (
@@ -96,18 +119,28 @@ export function ProfilePage() {
       </section>
 
       <section aria-labelledby="jobs-heading" className="space-y-5">
-        <div>
-          <h2 id="jobs-heading" className="text-base font-semibold">
-            Job history
-          </h2>
-          <p className="text-muted-foreground mt-0.5 text-xs">
-            {jobs.length === 0
-              ? "Where you have worked."
-              : `${jobs.length} role${jobs.length === 1 ? "" : "s"}, most recent first.`}
-          </p>
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <h2 id="jobs-heading" className="text-base font-semibold">
+              Job history
+            </h2>
+            <p className="text-muted-foreground mt-0.5 text-xs">
+              {jobs.length === 0
+                ? "Where you have worked."
+                : `${jobs.length} role${jobs.length === 1 ? "" : "s"}, most recent first.`}
+            </p>
+          </div>
+          <ProfileFormDialog title="Add job">
+            {(close) => (
+              <JobForm
+                onSubmit={(draft) => {
+                  addJob(draft)
+                  close()
+                }}
+              />
+            )}
+          </ProfileFormDialog>
         </div>
-
-        <JobForm onSubmit={addJob} />
 
         {loading ? (
           <ProfileSectionLoading label="Loading job history…" />
@@ -117,13 +150,21 @@ export function ProfilePage() {
       </section>
 
       <section aria-labelledby="certificates-heading" className="space-y-5">
-        <div>
+        <div className="flex flex-wrap items-center justify-between gap-3">
           <h2 id="certificates-heading" className="text-base font-semibold">
             Certificates
           </h2>
+          <ProfileFormDialog title="Add certificate">
+            {(close) => (
+              <CertificateForm
+                onSubmit={(draft) => {
+                  addCertificate(draft)
+                  close()
+                }}
+              />
+            )}
+          </ProfileFormDialog>
         </div>
-
-        <CertificateForm onSubmit={addCertificate} />
 
         {loading ? (
           <ProfileSectionLoading label="Loading certificates…" />
