@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { RotateCcw, Trash2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { useTaskFilters } from '@/hooks/useTaskFilters'
@@ -9,13 +9,23 @@ import { TaskListView } from '@/pages/tasks/TaskListView'
 import { TaskStats } from '@/pages/tasks/TaskStats'
 import { TimelineView } from '@/pages/tasks/TimelineView'
 import type { ViewMode } from '@/types/task'
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog'
 
 export function TasksPage() {
   const { tasks, loading, error, addTask, updateTask, removeTask, resetToSeed, clearAll } =
     useTasks()
   const [view, setView] = useState<ViewMode>('list')
   const [isFormOpen, setIsFormOpen] = useState(false)
+  const [isDeleteAllOpen, setIsDeleteAllOpen] = useState(false)
+  const cancelDeleteAllRef = useRef<HTMLButtonElement>(null)
   const filters = useTaskFilters(tasks)
 
   return (
@@ -48,10 +58,39 @@ export function TasksPage() {
             <RotateCcw />
             Reload sample data
           </Button>
-          <Button type="button" variant="outline" size="sm" onClick={clearAll}>
-            <Trash2 />
-            Delete all
-          </Button>
+          <Dialog open={isDeleteAllOpen} onOpenChange={setIsDeleteAllOpen}>
+            <DialogTrigger asChild>
+              <Button type="button" variant="outline" size="sm">
+                <Trash2 />
+                Delete all
+              </Button>
+            </DialogTrigger>
+            <DialogContent
+              showCloseButton={false}
+              aria-describedby={undefined}
+              onOpenAutoFocus={(event) => {
+                event.preventDefault()
+                cancelDeleteAllRef.current?.focus()
+              }}
+            >
+              <DialogHeader>
+                <DialogTitle>Are you sure you want to delete all the tasks?</DialogTitle>
+              </DialogHeader>
+              <DialogFooter>
+                <DialogClose asChild>
+                  <Button type="button" variant="destructive" onClick={clearAll}>
+                    <Trash2 />
+                    Delete all
+                  </Button>
+                </DialogClose>
+                <DialogClose asChild>
+                  <Button ref={cancelDeleteAllRef} type="button" variant="outline">
+                    Cancel
+                  </Button>
+                </DialogClose>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
         </div>
       </div>
 
