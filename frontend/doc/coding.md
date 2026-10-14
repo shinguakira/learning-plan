@@ -16,8 +16,10 @@ machine is a lie the next reader has to unlearn.
 
 ## Persistence
 
-There is none. The task list lives in `useTasks` for the life of the page and is
-seeded from the backend on every visit. `/api/tasks` returns seed entries with
+There is none. `TasksProvider` owns the list through `useTaskState` for the life
+of the app. `useTasks` reads that shared state on both Tasks and Chat, so navigation
+preserves local edits and chat analysis sees the current plan. Reloading starts
+fresh from the backend. `/api/tasks` returns seed entries with
 day offsets; `createSeedTasks` expands them into local calendar dates. The fetched
 seed is kept for Reload sample data, which restores the plan without another
 request. A failed initial request can be retried with the same control. Tasks
@@ -124,3 +126,13 @@ so it never picks up the Playwright specs.
 
 shadcn's `Select` is a Radix listbox, not a native `<select>`, so the specs open the
 trigger and click an option rather than calling `selectOption`.
+
+## Task analysis in chat
+
+Analysis uses the existing chat request and reply flow. A user message shows
+"Analyze my tasks" while carrying a separate task snapshot in its `context` field.
+The API includes that context in model history, so follow-up questions refer to the
+same plan without displaying its JSON in a bubble. A new analysis attaches a fresh
+snapshot. Ordinary messages do not attach tasks on their own. Chat and analysis
+share one pending request, its loading indicator, and cancellation. Cancelling
+removes the unfinished user message and ignores late responses.

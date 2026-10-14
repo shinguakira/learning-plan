@@ -16,8 +16,8 @@ npm install
 npm run dev
 ```
 
-Then open http://localhost:5173. The sample plan loads on every visit; edits last
-until you reload.
+Then open http://localhost:5173. Sample data loads when the app opens. Task edits
+stay available as you move between pages, until you reload.
 
 Install and start the backend too, in another terminal:
 
@@ -182,10 +182,10 @@ one thing and holds no state has nothing else to be.
 Anything that remembers something, or changes over time, is a **hook** — a function
 whose name starts with `use`. They all live in [`src/hooks/`](../src/hooks).
 
-[`useTasks`](../src/hooks/useTasks.ts) is the one to read first:
+[`useTaskState`](../src/hooks/useTaskState.ts) is the one to read first:
 
 ```ts
-export function useTasks(): TasksApi {
+export function useTaskState(): TasksApi {
   const [tasks, setTasks] = useState<Task[]>([])
   …
 }
@@ -193,10 +193,12 @@ export function useTasks(): TasksApi {
 
 `useState` gives back the current value and a function to replace it. Calling
 `setTasks` tells React the data changed, and every component displaying it redraws.
-`useTasks` fetches sample entries from `/api/tasks` on mount and expands their
+`useTaskState` fetches sample entries from `/api/tasks` on mount and expands their
 day offsets into calendar dates. Loading starts with an empty list; local tasks
 added during the request are preserved. It exposes `addTask`, `updateTask`, and
-`removeTask` so components do not need to know how the list is stored.
+`removeTask` so components do not need to know how the list is stored. `TasksProvider` owns
+this hook above the routes, and `useTasks` reads its context on Tasks and Chat.
+Navigating between those pages preserves edits; reloading starts fresh.
 
 The other hooks follow the same shape:
 

@@ -6,7 +6,8 @@ import type { ChatMessage } from "@/types/chat"
 export type ChatApi = {
   messages: ChatMessage[]
   pending: boolean
-  send: (text: string) => void
+  send: (text: string, context?: string) => void
+  cancel: () => void
   reset: () => void
 }
 
@@ -15,6 +16,7 @@ export function useChat(): ChatApi {
   const [messages, setMessages] = useState<ChatMessage[]>([])
   const [pending, setPending] = useState(false)
   const request = useRef<AbortController | null>(null)
+  const pendingMessage = useRef<string | null>(null)
 
   useEffect(() => () => request.current?.abort(), [])
 
@@ -23,16 +25,23 @@ export function useChat(): ChatApi {
   return {
     messages,
     pending,
-    send: (raw) => {
+    send: (raw, context) => {
       const text = raw.trim()
       if (text === "" || pending) return
 
-      const next = [...messages, { id: crypto.randomUUID(), role: "user" as const, content: text }]
+      const message: ChatMessage = {
+        id: crypto.randomUUID(),
+        role: "user",
+        content: text,
+        ...(context ? { context } : {}),
+      }
+      const next = [...messages, message]
       setMessages(next)
       setPending(true)
 
       const controller = new AbortController()
       request.current = controller
+      pendingMessage.current = message.id
 
       // A failed reply stays on screen but is our error text, not something the
       // model said, so it is kept out of the history the request carries.
@@ -53,13 +62,25 @@ export function useChat(): ChatApi {
           })
         })
         .finally(() => {
-          if (request.current === controller) request.current = null
-          setPending(false)
+          if (request.current === controller) {
+            request.current = null
+            pendingMessage.current = null
+            setPending(false)
+          }
         })
+    },
+    cancel: () => {
+      request.current?.abort()
+      request.current = null
+      const cancelledId = pendingMessage.current
+      pendingMessage.current = null
+      setMessages((previous) => previous.filter((message) => message.id !== cancelledId))
+      setPending(false)
     },
     reset: () => {
       request.current?.abort()
       request.current = null
+      pendingMessage.current = null
       setMessages([])
       setPending(false)
     },
