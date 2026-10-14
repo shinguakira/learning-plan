@@ -1,3 +1,6 @@
+import { Download } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { useDownloadSkillsCsv } from "@/hooks/useDownloadSkillsCsv"
 import { useProfile } from "@/hooks/useProfile"
 import { JobForm } from "@/pages/profile/JobForm"
 import { JobList } from "@/pages/profile/JobList"
@@ -27,14 +30,32 @@ export function ProfilePage() {
     addStrength,
     removeStrength,
   } = useProfile()
+  const { status: csvStatus, download: downloadCsv } = useDownloadSkillsCsv()
 
   return (
     <div className="mx-auto max-w-6xl space-y-6 px-4 py-6 sm:px-6">
-      <div>
-        <h1 className="text-lg font-semibold">Profile</h1>
-        <p className="text-muted-foreground mt-0.5 text-xs">
-          What goes on your resume. Edits here are not saved.
-        </p>
+      <div className="flex flex-wrap items-end justify-between gap-3">
+        <div>
+          <h1 className="text-lg font-semibold">Profile</h1>
+          <p className="text-muted-foreground mt-0.5 text-xs">
+            What goes on your resume. Edits here are not saved.
+          </p>
+        </div>
+        <div>
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={downloadCsv}
+            disabled={csvStatus === "downloading"}
+          >
+            <Download />
+            Download CSV
+          </Button>
+          {csvStatus === "error" && (
+            <p className="text-destructive mt-1 text-xs">Could not download the CSV.</p>
+          )}
+        </div>
       </div>
 
       {error && <p className="text-destructive text-xs">{error}</p>}
