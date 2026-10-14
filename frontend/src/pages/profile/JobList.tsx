@@ -1,12 +1,12 @@
-import { Briefcase, Building2, CalendarRange, X } from 'lucide-react'
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent } from '@/components/ui/card'
-import { EMPLOYMENT_TYPE_CHIP, EMPLOYMENT_TYPE_LABEL } from '@/constants/job'
-import { cn } from '@/lib/utils'
-import { today } from '@/utils/date'
-import { formatDuration, formatPeriod, sortJobs } from '@/utils/job'
-import type { Job } from '@/types/job'
+import { Briefcase, Building2, CalendarRange, X } from "lucide-react"
+import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent } from "@/components/ui/card"
+import { EMPLOYMENT_TYPE_CHIP, EMPLOYMENT_TYPE_LABEL } from "@/constants/job"
+import { cn } from "@/lib/utils"
+import { today } from "@/utils/date"
+import { formatDuration, formatPeriod, sortJobs } from "@/utils/job"
+import type { Job } from "@/types/job"
 
 export function JobList({ jobs, onRemove }: { jobs: Job[]; onRemove: (id: string) => void }) {
   if (jobs.length === 0) {
@@ -34,7 +34,7 @@ export function JobList({ jobs, onRemove }: { jobs: Job[]; onRemove: (id: string
                   <h3 className="text-sm font-semibold">{job.title}</h3>
                   <Badge
                     variant="outline"
-                    className={cn('h-5', EMPLOYMENT_TYPE_CHIP[job.employmentType])}
+                    className={cn("h-5", EMPLOYMENT_TYPE_CHIP[job.employmentType])}
                   >
                     {EMPLOYMENT_TYPE_LABEL[job.employmentType]}
                   </Badge>
@@ -60,7 +60,7 @@ export function JobList({ jobs, onRemove }: { jobs: Job[]; onRemove: (id: string
                   </span>
                 </p>
 
-                {job.summary !== '' && <p className="mt-2 text-xs">{job.summary}</p>}
+                {job.summary !== "" && <p className="mt-2 text-xs">{job.summary}</p>}
               </div>
 
               <Button

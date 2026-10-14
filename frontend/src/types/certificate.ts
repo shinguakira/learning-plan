@@ -1,4 +1,4 @@
-import type { ISODate } from '@/types/date'
+import type { ISODate } from "@/types/date"
 
 export type Certificate = {
   id: string
@@ -10,4 +10,4 @@ export type Certificate = {
   createdAt: string
 }
 
-export type CertificateDraft = Omit<Certificate, 'id' | 'createdAt'>
+export type CertificateDraft = Omit<Certificate, "id" | "createdAt">

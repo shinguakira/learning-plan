@@ -1,5 +1,5 @@
-import { Button } from '@/components/ui/button'
-import { SUGGESTIONS } from '@/constants/chat'
+import { Button } from "@/components/ui/button"
+import { SUGGESTIONS } from "@/constants/chat"
 
 /** Shown before the first message: a prompt plus starter questions. */
 export function ChatEmpty({ onPick }: { onPick: (prompt: string) => void }) {

@@ -1,13 +1,13 @@
-import { useProfile } from '@/hooks/useProfile'
-import { JobForm } from '@/pages/profile/JobForm'
-import { JobList } from '@/pages/profile/JobList'
-import { SkillForm } from '@/pages/profile/SkillForm'
-import { SkillList } from '@/pages/profile/SkillList'
-import { CertificateForm } from '@/pages/profile/CertificateForm'
-import { CertificateList } from '@/pages/profile/CertificateList'
-import { StrengthForm } from '@/pages/profile/StrengthForm'
-import { StrengthList } from '@/pages/profile/StrengthList'
-import { ProfileSectionLoading } from '@/pages/profile/ProfileSectionLoading'
+import { useProfile } from "@/hooks/useProfile"
+import { JobForm } from "@/pages/profile/JobForm"
+import { JobList } from "@/pages/profile/JobList"
+import { SkillForm } from "@/pages/profile/SkillForm"
+import { SkillList } from "@/pages/profile/SkillList"
+import { CertificateForm } from "@/pages/profile/CertificateForm"
+import { CertificateList } from "@/pages/profile/CertificateList"
+import { StrengthForm } from "@/pages/profile/StrengthForm"
+import { StrengthList } from "@/pages/profile/StrengthList"
+import { ProfileSectionLoading } from "@/pages/profile/ProfileSectionLoading"
 
 export function ProfilePage() {
   const {
@@ -45,8 +45,8 @@ export function ProfilePage() {
           </h2>
           <p className="text-muted-foreground mt-0.5 text-xs">
             {skills.length === 0
-              ? 'The technologies you can work with.'
-              : `${skills.length} technical skill${skills.length === 1 ? '' : 's'}.`}
+              ? "The technologies you can work with."
+              : `${skills.length} technical skill${skills.length === 1 ? "" : "s"}.`}
           </p>
         </div>
 
@@ -83,8 +83,8 @@ export function ProfilePage() {
           </h2>
           <p className="text-muted-foreground mt-0.5 text-xs">
             {jobs.length === 0
-              ? 'Where you have worked.'
-              : `${jobs.length} role${jobs.length === 1 ? '' : 's'}, most recent first.`}
+              ? "Where you have worked."
+              : `${jobs.length} role${jobs.length === 1 ? "" : "s"}, most recent first.`}
           </p>
         </div>
 

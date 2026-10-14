@@ -1,11 +1,11 @@
-import { MessageSquarePlus } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { useAutoScroll } from '@/hooks/useAutoScroll'
-import { useChat } from '@/hooks/useChat'
-import { ChatBubble } from '@/pages/chat/ChatBubble'
-import { ChatComposer } from '@/pages/chat/ChatComposer'
-import { ChatEmpty } from '@/pages/chat/ChatEmpty'
-import { ThinkingBubble } from '@/pages/chat/ThinkingBubble'
+import { MessageSquarePlus } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { useAutoScroll } from "@/hooks/useAutoScroll"
+import { useChat } from "@/hooks/useChat"
+import { ChatBubble } from "@/pages/chat/ChatBubble"
+import { ChatComposer } from "@/pages/chat/ChatComposer"
+import { ChatEmpty } from "@/pages/chat/ChatEmpty"
+import { ThinkingBubble } from "@/pages/chat/ThinkingBubble"
 
 export function ChatPage() {
   const { messages, pending, send, reset } = useChat()
