@@ -1,18 +1,18 @@
-import { CalendarRange, List, Search, X } from 'lucide-react'
-import { Card, CardContent } from '@/components/ui/card'
-import { Input } from '@/components/ui/input'
+import { CalendarRange, List, Search, X } from "lucide-react"
+import { Card, CardContent } from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select'
-import { CATEGORIES, SORT_LABEL, STATUSES, STATUS_LABEL } from '@/constants/task'
-import type { TaskFiltersApi } from '@/hooks/useTaskFilters'
-import { SegmentedButton } from '@/pages/tasks/SegmentedButton'
-import type { CategoryFilter, SortKey, ViewMode } from '@/types/task'
-import { useRef } from 'react'
+} from "@/components/ui/select"
+import { CATEGORIES, SORT_LABEL, STATUSES, STATUS_LABEL } from "@/constants/task"
+import type { TaskFiltersApi } from "@/hooks/useTaskFilters"
+import { SegmentedButton } from "@/pages/tasks/SegmentedButton"
+import type { CategoryFilter, SortKey, ViewMode } from "@/types/task"
+import { useRef } from "react"
 
 export function TaskFilters({
   filters,
@@ -32,7 +32,7 @@ export function TaskFilters({
     <Card>
       <CardContent className="flex flex-wrap items-center gap-2.5">
         <div className="bg-muted flex rounded-lg p-1">
-          <SegmentedButton active={statusFilter === 'all'} onClick={() => setStatusFilter('all')}>
+          <SegmentedButton active={statusFilter === "all"} onClick={() => setStatusFilter("all")}>
             All
           </SegmentedButton>
           {STATUSES.map((status) => (
@@ -66,12 +66,12 @@ export function TaskFilters({
         <Select
           value={sortKey}
           onValueChange={(value) => setSortKey(value as SortKey)}
-          disabled={view === 'timeline'}
+          disabled={view === "timeline"}
         >
           <SelectTrigger
             size="sm"
             aria-label="Sort order"
-            title={view === 'timeline' ? 'The timeline is always ordered by start date' : undefined}
+            title={view === "timeline" ? "The timeline is always ordered by start date" : undefined}
           >
             <SelectValue />
           </SelectTrigger>
@@ -99,7 +99,7 @@ export function TaskFilters({
               type="button"
               aria-label="Clear search"
               onClick={() => {
-                setQuery('')
+                setQuery("")
                 searchInputref.current?.focus()
               }}
               className='text-muted-foreground hover:text-foreground absolute top-1/2 right-2 -translate-y-1/2 cursor-pointer p-0.5"'
@@ -114,11 +114,11 @@ export function TaskFilters({
         </span>
 
         <div className="bg-muted ml-auto flex rounded-lg p-1">
-          <SegmentedButton active={view === 'list'} onClick={() => onViewChange('list')}>
+          <SegmentedButton active={view === "list"} onClick={() => onViewChange("list")}>
             <List />
             List
           </SegmentedButton>
-          <SegmentedButton active={view === 'timeline'} onClick={() => onViewChange('timeline')}>
+          <SegmentedButton active={view === "timeline"} onClick={() => onViewChange("timeline")}>
             <CalendarRange />
             Timeline
           </SegmentedButton>

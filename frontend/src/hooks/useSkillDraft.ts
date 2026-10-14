@@ -1,6 +1,6 @@
-import { useState } from 'react'
-import { SKILL_LEVELS } from '@/constants/skill'
-import type { SkillDraft } from '@/types/skill'
+import { useState } from "react"
+import { SKILL_LEVELS } from "@/constants/skill"
+import type { SkillDraft } from "@/types/skill"
 
 export type SkillDraftApi = {
   draft: SkillDraft
@@ -29,10 +29,10 @@ export function useSkillDraft(
 
   const trimmedName = draft.name.trim()
   const nameError =
-    trimmedName === ''
-      ? 'Enter a skill name'
+    trimmedName === ""
+      ? "Enter a skill name"
       : existingNames.some((name) => name.toLowerCase() === trimmedName.toLowerCase())
-        ? 'Already registered'
+        ? "Already registered"
         : null
 
   const reset = () => {

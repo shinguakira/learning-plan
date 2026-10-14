@@ -1,21 +1,21 @@
-import type { FormEvent } from 'react'
-import { Plus } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Input } from '@/components/ui/input'
+import type { FormEvent } from "react"
+import { Plus } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select'
-import { Textarea } from '@/components/ui/textarea'
-import { EMPLOYMENT_TYPES, EMPLOYMENT_TYPE_LABEL } from '@/constants/job'
-import { useJobDraft } from '@/hooks/useJobDraft'
-import { FormField } from '@/components/form/FormField'
-import type { ISODate } from '@/types/date'
-import type { EmploymentType, JobDraft } from '@/types/job'
+} from "@/components/ui/select"
+import { Textarea } from "@/components/ui/textarea"
+import { EMPLOYMENT_TYPES, EMPLOYMENT_TYPE_LABEL } from "@/constants/job"
+import { useJobDraft } from "@/hooks/useJobDraft"
+import { FormField } from "@/components/form/FormField"
+import type { ISODate } from "@/types/date"
+import type { EmploymentType, JobDraft } from "@/types/job"
 
 export function JobForm({ onSubmit }: { onSubmit: (draft: JobDraft) => void }) {
   const { draft, patch, companyError, titleError, dateError, touched, submit } = useJobDraft()
@@ -100,7 +100,7 @@ export function JobForm({ onSubmit }: { onSubmit: (draft: JobDraft) => void }) {
               <Input
                 id="job-end"
                 type="date"
-                value={draft.endDate ?? ''}
+                value={draft.endDate ?? ""}
                 min={draft.startDate}
                 onChange={(event) => patch({ endDate: (event.target.value as ISODate) || null })}
               />

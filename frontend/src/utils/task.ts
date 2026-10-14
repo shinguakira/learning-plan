@@ -1,7 +1,7 @@
-import { PRIORITIES } from '@/constants/task'
-import { diffDays, today } from '@/utils/date'
-import type { ISODate } from '@/types/date'
-import type { DueDescription, SortKey, Task, TaskFilterCriteria, TaskSummary } from '@/types/task'
+import { PRIORITIES } from "@/constants/task"
+import { diffDays, today } from "@/utils/date"
+import type { ISODate } from "@/types/date"
+import type { DueDescription, SortKey, Task, TaskFilterCriteria, TaskSummary } from "@/types/task"
 
 /**
  * Narrow the task list by status, category and free text. Every criterion is
@@ -15,10 +15,10 @@ export function filterTasks(tasks: readonly Task[], criteria: TaskFilterCriteria
   const needle = criteria.query.trim().toLowerCase()
 
   return tasks.filter((task) => {
-    if (criteria.status !== 'all' && task.status !== criteria.status) return false
-    if (criteria.category !== 'all' && task.category !== criteria.category) return false
+    if (criteria.status !== "all" && task.status !== criteria.status) return false
+    if (criteria.category !== "all" && task.category !== criteria.category) return false
     const haystack = `${task.title} ${task.note}`.toLowerCase()
-    if (needle !== '' && !haystack.includes(needle)) return false
+    if (needle !== "" && !haystack.includes(needle)) return false
     return true
   })
 }
@@ -26,18 +26,18 @@ export function filterTasks(tasks: readonly Task[], criteria: TaskFilterCriteria
 export function sortTasks(tasks: readonly Task[], key: SortKey): Task[] {
   const copy = [...tasks]
   switch (key) {
-    case 'due':
+    case "due":
       return copy.sort((a, b) => a.dueDate.localeCompare(b.dueDate))
-    case 'start':
+    case "start":
       return copy.sort((a, b) => a.startDate.localeCompare(b.startDate))
-    case 'priority':
+    case "priority":
       // PRIORITIES runs low -> high, so read it backwards for descending order
       return copy.sort(
         (a, b) =>
           PRIORITIES.indexOf(b.priority) - PRIORITIES.indexOf(a.priority) ||
           a.dueDate.localeCompare(b.dueDate),
       )
-    case 'created':
+    case "created":
       return copy.sort((a, b) => b.createdAt.localeCompare(a.createdAt))
   }
 }
@@ -45,10 +45,10 @@ export function sortTasks(tasks: readonly Task[], key: SortKey): Task[] {
 /** Time left until the due date, as a short label plus how urgent it is. */
 export function describeDue(due: ISODate): DueDescription {
   const left = diffDays(today(), due)
-  if (left < 0) return { label: `${-left}d overdue`, tone: 'over' }
-  if (left === 0) return { label: 'Due today', tone: 'over' }
-  if (left <= 3) return { label: `${left}d left`, tone: 'soon' }
-  return { label: `${left}d left`, tone: 'calm' }
+  if (left < 0) return { label: `${-left}d overdue`, tone: "over" }
+  if (left === 0) return { label: "Due today", tone: "over" }
+  if (left <= 3) return { label: `${left}d left`, tone: "soon" }
+  return { label: `${left}d left`, tone: "calm" }
 }
 
 /** Per-status counts plus the totals the stats row shows. */
@@ -66,7 +66,7 @@ export function summarizeTasks(tasks: readonly Task[]): TaskSummary {
   for (const task of tasks) {
     summary[task.status] += 1
     summary.hours += task.estimatedHours
-    if (task.status !== 'done' && task.dueDate < now) summary.overdue += 1
+    if (task.status !== "done" && task.dueDate < now) summary.overdue += 1
   }
   summary.rate = summary.total === 0 ? 0 : Math.round((summary.done / summary.total) * 100)
   return summary

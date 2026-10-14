@@ -1,7 +1,7 @@
-import { useState, type ReactNode } from 'react'
-import { MOCK_USERS } from '@/constants/user'
-import { MockUserContext } from '@/hooks/useMockUser'
-import type { MockUser } from '@/types/user'
+import { useState, type ReactNode } from "react"
+import { MOCK_USERS } from "@/constants/user"
+import { MockUserContext } from "@/hooks/useMockUser"
+import type { MockUser } from "@/types/user"
 
 /** Makes the header's active user available to `useMockUser` anywhere in the tree. */
 export function MockUserProvider({ children }: { children: ReactNode }) {

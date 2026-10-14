@@ -1,20 +1,20 @@
-import { useState } from 'react'
-import { RotateCcw, Trash2 } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { useTaskFilters } from '@/hooks/useTaskFilters'
-import { useTasks } from '@/hooks/useTasks'
-import { TaskFilters } from '@/pages/tasks/TaskFilters'
-import { TaskForm } from '@/pages/tasks/TaskForm'
-import { TaskListView } from '@/pages/tasks/TaskListView'
-import { TaskStats } from '@/pages/tasks/TaskStats'
-import { TimelineView } from '@/pages/tasks/TimelineView'
-import type { ViewMode } from '@/types/task'
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
+import { useState } from "react"
+import { RotateCcw, Trash2 } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { useTaskFilters } from "@/hooks/useTaskFilters"
+import { useTasks } from "@/hooks/useTasks"
+import { TaskFilters } from "@/pages/tasks/TaskFilters"
+import { TaskForm } from "@/pages/tasks/TaskForm"
+import { TaskListView } from "@/pages/tasks/TaskListView"
+import { TaskStats } from "@/pages/tasks/TaskStats"
+import { TimelineView } from "@/pages/tasks/TimelineView"
+import type { ViewMode } from "@/types/task"
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 
 export function TasksPage() {
   const { tasks, loading, error, addTask, updateTask, removeTask, resetToSeed, clearAll } =
     useTasks()
-  const [view, setView] = useState<ViewMode>('list')
+  const [view, setView] = useState<ViewMode>("list")
   const [isFormOpen, setIsFormOpen] = useState(false)
   const filters = useTaskFilters(tasks)
 
@@ -79,7 +79,7 @@ export function TasksPage() {
 
       <TaskFilters filters={filters} total={tasks.length} view={view} onViewChange={setView} />
 
-      {view === 'list' ? (
+      {view === "list" ? (
         <TaskListView
           key={JSON.stringify([
             filters.query,

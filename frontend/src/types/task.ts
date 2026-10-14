@@ -1,5 +1,5 @@
-import type { CATEGORIES, PRIORITIES, STATUSES, VIEW_MODES } from '@/constants/task'
-import type { ISODate } from '@/types/date'
+import type { CATEGORIES, PRIORITIES, STATUSES, VIEW_MODES } from "@/constants/task"
+import type { ISODate } from "@/types/date"
 
 export type Category = (typeof CATEGORIES)[number]
 export type Status = (typeof STATUSES)[number]
@@ -20,7 +20,7 @@ export type Task = {
   createdAt: string
 }
 
-export type TaskDraft = Omit<Task, 'id' | 'createdAt'>
+export type TaskDraft = Omit<Task, "id" | "createdAt">
 
 /** Tailwind classes a category wears in each place it appears. */
 export type CategoryTheme = {
@@ -33,7 +33,7 @@ export type CategoryTheme = {
 }
 
 /** How urgent a due date is, used to colour the remaining-days label. */
-export type DueTone = 'over' | 'soon' | 'calm'
+export type DueTone = "over" | "soon" | "calm"
 
 export type DueDescription = {
   label: string
@@ -41,9 +41,9 @@ export type DueDescription = {
 }
 
 export type ViewMode = (typeof VIEW_MODES)[number]
-export type StatusFilter = Status | 'all'
-export type CategoryFilter = Category | 'all'
-export type SortKey = 'due' | 'start' | 'priority' | 'created'
+export type StatusFilter = Status | "all"
+export type CategoryFilter = Category | "all"
+export type SortKey = "due" | "start" | "priority" | "created"
 
 /** What the filter row narrows the task list by. */
 export type TaskFilterCriteria = {
@@ -58,7 +58,7 @@ export type TaskFilterCriteria = {
  * derived from today when the seed is expanded, so the two date fields are
  * deliberately absent rather than filled with placeholders.
  */
-export type SeedTask = Omit<TaskDraft, 'startDate' | 'dueDate'> & {
+export type SeedTask = Omit<TaskDraft, "startDate" | "dueDate"> & {
   offsetStart: number
   span: number
 }

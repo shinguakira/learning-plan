@@ -1,15 +1,15 @@
-import { Card } from '@/components/ui/card'
-import { CATEGORY_THEME } from '@/constants/task'
-import { DAY_W, LABEL_W, ROW_H } from '@/constants/timeline'
-import { useTimeline } from '@/hooks/useTimeline'
-import { cn } from '@/lib/utils'
-import { isWeekend, today } from '@/utils/date'
-import { EmptyState } from '@/pages/tasks/EmptyState'
-import { TimelineBar } from '@/pages/tasks/TimelineBar'
-import { TimelineDays, TimelineMonths } from '@/pages/tasks/TimelineHeader'
-import { TimelineLegend } from '@/pages/tasks/TimelineLegend'
-import type { ISODate } from '@/types/date'
-import type { Task } from '@/types/task'
+import { Card } from "@/components/ui/card"
+import { CATEGORY_THEME } from "@/constants/task"
+import { DAY_W, LABEL_W, ROW_H } from "@/constants/timeline"
+import { useTimeline } from "@/hooks/useTimeline"
+import { cn } from "@/lib/utils"
+import { isWeekend, today } from "@/utils/date"
+import { EmptyState } from "@/pages/tasks/EmptyState"
+import { TimelineBar } from "@/pages/tasks/TimelineBar"
+import { TimelineDays, TimelineMonths } from "@/pages/tasks/TimelineHeader"
+import { TimelineLegend } from "@/pages/tasks/TimelineLegend"
+import type { ISODate } from "@/types/date"
+import type { Task } from "@/types/task"
 
 /** Weekend shading, drawn once behind every row rather than per row. */
 function WeekendColumns({ days, gridWidth }: { days: readonly ISODate[]; gridWidth: number }) {
@@ -23,7 +23,7 @@ function WeekendColumns({ days, gridWidth }: { days: readonly ISODate[]; gridWid
         <div
           key={day}
           style={{ width: DAY_W }}
-          className={cn('shrink-0 border-r', isWeekend(day) && 'bg-muted/40')}
+          className={cn("shrink-0 border-r", isWeekend(day) && "bg-muted/40")}
         />
       ))}
     </div>
@@ -45,11 +45,11 @@ function TimelineRow({
         className="bg-card sticky left-0 z-20 flex shrink-0 items-center gap-2 border-r px-4"
         style={{ width: LABEL_W }}
       >
-        <span className={cn('size-2 shrink-0 rounded-full', CATEGORY_THEME[task.category].dot)} />
+        <span className={cn("size-2 shrink-0 rounded-full", CATEGORY_THEME[task.category].dot)} />
         <span
           className={cn(
-            'truncate text-xs',
-            task.status === 'done' && 'text-muted-foreground line-through',
+            "truncate text-xs",
+            task.status === "done" && "text-muted-foreground line-through",
           )}
           title={task.title}
         >
