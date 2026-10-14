@@ -77,7 +77,7 @@ Node 20.19+, 22.13+ or 24+. The frontend's `engines` field declares the range, s
 | [`frontend/README.md`](frontend/README.md)                           | The frontend's stack, setup and scripts                                |
 | [`frontend/doc/getting-started.md`](frontend/doc/getting-started.md) | A tour of the frontend codebase for a first read                       |
 | [`frontend/doc/coding.md`](frontend/doc/coding.md)                   | Why the frontend code is arranged the way it is                        |
-| [`frontend/AGENTS.md`](frontend/AGENTS.md)                           | The frontend's conventions, as a list of rules                         |
+| [`AGENTS.md`](AGENTS.md)                                             | The repo's conventions, as a list of rules                             |
 
 ## Working on it
 

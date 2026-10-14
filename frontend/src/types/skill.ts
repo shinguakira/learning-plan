@@ -1,4 +1,4 @@
-import type { SKILL_LEVELS } from '@/constants/skill'
+import type { SKILL_LEVELS } from "@/constants/skill"
 
 export type SkillLevel = (typeof SKILL_LEVELS)[number]
 
@@ -11,4 +11,4 @@ export type Skill = {
   createdAt: string
 }
 
-export type SkillDraft = Omit<Skill, 'id' | 'createdAt'>
+export type SkillDraft = Omit<Skill, "id" | "createdAt">

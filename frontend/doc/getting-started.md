@@ -200,16 +200,17 @@ added during the request are preserved. It exposes `addTask`, `updateTask`, and
 
 The other hooks follow the same shape:
 
-| Hook             | Owns                                                    |
-| ---------------- | ------------------------------------------------------- |
-| `useTasks`       | the task list and the ways to change it                 |
-| `useTaskFilters` | the filter controls, and the narrowed list they produce |
-| `useTaskDraft`   | the add-task form and whether it is valid               |
-| `useTimeline`    | the dates, columns and rows the Gantt view draws        |
-| `useChat`        | the conversation and the request in flight              |
-| `useAutoScroll`  | keeping the chat pinned to the newest message           |
-| `useProfile`     | the registered skill list and the ways to change it     |
-| `useSkillDraft`  | the add-skill form and whether it is valid              |
+| Hook               | Owns                                                    |
+| ------------------ | ------------------------------------------------------- |
+| `useTasks`         | the task list and the ways to change it                 |
+| `useTaskFilters`   | the filter controls, and the narrowed list they produce |
+| `useTaskDraft`     | the add-task form and whether it is valid               |
+| `useTimeline`      | the dates, columns and rows the Gantt view draws        |
+| `useChat`          | the conversation and the request in flight              |
+| `useAutoScroll`    | keeping the chat pinned to the newest message           |
+| `useProfile`       | profile skills, strengths, jobs, and certificates       |
+| `useStrengthDraft` | the add-strength form and its validation                |
+| `useSkillDraft`    | the add-skill form and whether it is valid              |
 
 A rule that holds throughout: **if it only calculates, it is not a hook.**
 `filterTasks`, `sortTasks` and `summarizeTasks` are plain functions in
@@ -280,4 +281,4 @@ code consistent with what is already there.
 
 - [`doc/product.md`](../../doc/product.md) — what the app is for, and who for.
 - [`doc/coding.md`](coding.md) — why the code is arranged this way.
-- [`AGENTS.md`](../AGENTS.md) — the same decisions as a short list of rules.
+- [`AGENTS.md`](../../AGENTS.md) — the same decisions as a short list of rules.

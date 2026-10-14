@@ -1,6 +1,6 @@
-import { useState } from 'react'
-import { filterTasks, sortTasks } from '@/utils/task'
-import type { CategoryFilter, SortKey, StatusFilter, Task } from '@/types/task'
+import { useState } from "react"
+import { filterTasks, sortTasks } from "@/utils/task"
+import type { CategoryFilter, SortKey, StatusFilter, Task } from "@/types/task"
 
 export type TaskFiltersApi = {
   statusFilter: StatusFilter
@@ -22,10 +22,10 @@ export type TaskFiltersApi = {
  * in `@/utils/task`, so it can be tested without rendering anything.
  */
 export function useTaskFilters(tasks: readonly Task[]): TaskFiltersApi {
-  const [statusFilter, setStatusFilter] = useState<StatusFilter>('all')
-  const [categoryFilter, setCategoryFilter] = useState<CategoryFilter>('all')
-  const [sortKey, setSortKey] = useState<SortKey>('due')
-  const [query, setQuery] = useState('')
+  const [statusFilter, setStatusFilter] = useState<StatusFilter>("all")
+  const [categoryFilter, setCategoryFilter] = useState<CategoryFilter>("all")
+  const [sortKey, setSortKey] = useState<SortKey>("due")
+  const [query, setQuery] = useState("")
 
   const criteria = { status: statusFilter, category: categoryFilter, query }
 
@@ -39,6 +39,6 @@ export function useTaskFilters(tasks: readonly Task[]): TaskFiltersApi {
     query,
     setQuery,
     visible: sortTasks(filterTasks(tasks, criteria), sortKey),
-    filtering: statusFilter !== 'all' || categoryFilter !== 'all' || query.trim() !== '',
+    filtering: statusFilter !== "all" || categoryFilter !== "all" || query.trim() !== "",
   }
 }

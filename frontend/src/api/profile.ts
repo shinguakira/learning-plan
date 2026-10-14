@@ -1,13 +1,15 @@
-import { PROFILE_API_URL } from '@/constants/profile'
-import type { Certificate } from '@/types/certificate'
-import type { Job } from '@/types/job'
-import type { Skill } from '@/types/skill'
+import { PROFILE_API_URL } from "@/constants/profile"
+import type { Certificate } from "@/types/certificate"
+import type { Job } from "@/types/job"
+import type { Skill } from "@/types/skill"
+import type { Strength } from "@/types/strength"
 
-/** Everything the profile page is seeded with. One request, three lists. */
+/** Everything the profile page is seeded with. One request, four lists. */
 export type ProfileSeed = {
   skills: Skill[]
   jobs: Job[]
   certificates: Certificate[]
+  strengths: Strength[]
 }
 
 export async function fetchProfile(): Promise<ProfileSeed> {
@@ -15,7 +17,7 @@ export async function fetchProfile(): Promise<ProfileSeed> {
   try {
     response = await fetch(PROFILE_API_URL)
   } catch (error) {
-    throw new Error('Could not reach the backend. Is it running?', { cause: error })
+    throw new Error("Could not reach the backend. Is it running?", { cause: error })
   }
 
   if (!response.ok) {

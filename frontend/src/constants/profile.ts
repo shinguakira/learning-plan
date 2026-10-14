@@ -1,1 +1,1 @@
-export const PROFILE_API_URL = '/api/profile'
+export const PROFILE_API_URL = "/api/profile"

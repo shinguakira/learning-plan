@@ -1,7 +1,7 @@
 # Coding notes
 
 Why the code is arranged the way it is. These are decisions with reasons attached —
-the terse rule form lives in [`AGENTS.md`](../AGENTS.md).
+the terse rule form lives in [`AGENTS.md`](../../AGENTS.md).
 
 ## Where code goes
 

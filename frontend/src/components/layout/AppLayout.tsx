@@ -1,20 +1,20 @@
-import { NavLink, Outlet } from 'react-router-dom'
-import { GraduationCap, User } from 'lucide-react'
-import { buttonVariants } from '@/components/ui/button'
-import { MobileNav } from '@/components/layout/MobileNav'
+import { NavLink, Outlet } from "react-router-dom"
+import { GraduationCap, User } from "lucide-react"
+import { buttonVariants } from "@/components/ui/button"
+import { MobileNav } from "@/components/layout/MobileNav"
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select'
-import { APP_TITLE, TAB_ROW_FITS, TABS } from '@/constants/app'
-import { MOCK_USER_COLOR, MOCK_USERS } from '@/constants/user'
-import { useMediaQuery } from '@/hooks/useMediaQuery'
-import { useMockUser } from '@/hooks/useMockUser'
-import { cn } from '@/lib/utils'
-import type { MockUser } from '@/types/user'
+} from "@/components/ui/select"
+import { APP_TITLE, TAB_ROW_FITS, TABS } from "@/constants/app"
+import { MOCK_USER_COLOR, MOCK_USERS } from "@/constants/user"
+import { useMediaQuery } from "@/hooks/useMediaQuery"
+import { useMockUser } from "@/hooks/useMockUser"
+import { cn } from "@/lib/utils"
+import type { MockUser } from "@/types/user"
 
 export function AppLayout() {
   const { user, setUser } = useMockUser()
@@ -42,8 +42,8 @@ export function AppLayout() {
                 to={tab.to}
                 className={({ isActive }) =>
                   cn(
-                    buttonVariants({ variant: isActive ? 'secondary' : 'ghost', size: 'sm' }),
-                    !isActive && 'text-muted-foreground',
+                    buttonVariants({ variant: isActive ? "secondary" : "ghost", size: "sm" }),
+                    !isActive && "text-muted-foreground",
                   )
                 }
               >

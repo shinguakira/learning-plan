@@ -1,7 +1,7 @@
-import { expect, test } from '@playwright/test'
-import type { Page, Route } from '@playwright/test'
+import { expect, test } from "@playwright/test"
+import type { Page, Route } from "@playwright/test"
 
-const ENDPOINT = '**/v1/chat/completions'
+const ENDPOINT = "**/v1/chat/completions"
 
 type RequestBody = {
   model: string
@@ -15,170 +15,205 @@ async function stubReply(page: Page, reply: string): Promise<RequestBody[]> {
     sent.push(route.request().postDataJSON() as RequestBody)
     return route.fulfill({
       status: 200,
-      contentType: 'application/json',
+      contentType: "application/json",
       body: JSON.stringify({ choices: [{ message: { content: reply } }] }),
     })
   })
   return sent
 }
 
+/**
+ * Answers with whichever user the system prompt names, the way a real model
+ * would once it is told who it is talking to.
+ */
+async function stubEchoUser(page: Page): Promise<void> {
+  await page.route(ENDPOINT, (route: Route) => {
+    const body = route.request().postDataJSON() as RequestBody
+    const system = body.messages.find((message) => message.role === "system")?.content ?? ""
+    const named = /You are talking to (\w+)\./.exec(system)?.[1]
+    const reply = named ? `You are ${named}.` : "I was not told who you are."
+    return route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({ choices: [{ message: { content: reply } }] }),
+    })
+  })
+}
+
 test.beforeEach(async ({ page }) => {
-  await page.goto('/chat')
-  await expect(page.getByRole('heading', { name: 'AI chat' })).toBeVisible()
+  await page.goto("/chat")
+  await expect(page.getByRole("heading", { name: "AI chat" })).toBeVisible()
 })
 
-test('shows starter prompts while the conversation is empty', async ({ page }) => {
-  await expect(page.getByText('What do you want to work out?')).toBeVisible()
-  await expect(page.getByRole('button', { name: 'How should I learn React?' })).toBeVisible()
+test("shows starter prompts while the conversation is empty", async ({ page }) => {
+  await expect(page.getByText("What do you want to work out?")).toBeVisible()
+  await expect(page.getByRole("button", { name: "How should I learn React?" })).toBeVisible()
 })
 
-test('sends a typed message and renders the reply', async ({ page }) => {
-  await stubReply(page, 'Start with the docs.')
+test("sends a typed message and renders the reply", async ({ page }) => {
+  await stubReply(page, "Start with the docs.")
 
-  await page.getByLabel('Message').fill('how do I learn react')
-  await page.getByLabel('Message').press('Enter')
+  await page.getByLabel("Message").fill("how do I learn react")
+  await page.getByLabel("Message").press("Enter")
 
-  await expect(page.getByText('Start with the docs.')).toBeVisible()
-  await expect(page.getByLabel('Message')).toHaveValue('')
+  await expect(page.getByText("Start with the docs.")).toBeVisible()
+  await expect(page.getByLabel("Message")).toHaveValue("")
 })
 
-test('sends a starter prompt', async ({ page }) => {
-  await stubReply(page, 'Use a multi-stage build.')
+test("sends a starter prompt", async ({ page }) => {
+  await stubReply(page, "Use a multi-stage build.")
 
-  await page.getByRole('button', { name: 'How do I shrink a Docker image?' }).click()
+  await page.getByRole("button", { name: "How do I shrink a Docker image?" }).click()
 
-  await expect(page.getByText('How do I shrink a Docker image?')).toBeVisible()
-  await expect(page.getByText('Use a multi-stage build.')).toBeVisible()
+  await expect(page.getByText("How do I shrink a Docker image?")).toBeVisible()
+  await expect(page.getByText("Use a multi-stage build.")).toBeVisible()
 })
 
-test('sends the system prompt, the model and the full history', async ({ page }) => {
-  const sent = await stubReply(page, 'ok')
+test("sends the system prompt, the model and the full history", async ({ page }) => {
+  const sent = await stubReply(page, "ok")
 
-  await page.getByLabel('Message').fill('first')
-  await page.getByLabel('Message').press('Enter')
-  await expect(page.getByText('ok')).toBeVisible()
+  await page.getByLabel("Message").fill("first")
+  await page.getByLabel("Message").press("Enter")
+  await expect(page.getByText("ok")).toBeVisible()
 
-  await page.getByLabel('Message').fill('second')
-  await page.getByLabel('Message').press('Enter')
-  await expect(page.getByText('ok')).toHaveCount(2)
+  await page.getByLabel("Message").fill("second")
+  await page.getByLabel("Message").press("Enter")
+  await expect(page.getByText("ok")).toHaveCount(2)
 
   expect(sent).toHaveLength(2)
-  expect(sent[1]?.model).toBe('stub-model')
+  expect(sent[1]?.model).toBe("stub-model")
   expect(sent[1]?.messages.map((message) => message.role)).toEqual([
-    'system',
-    'user',
-    'assistant',
-    'user',
+    "system",
+    "user",
+    "assistant",
+    "user",
   ])
-  expect(sent[1]?.messages.at(-1)?.content).toBe('second')
+  expect(sent[1]?.messages.at(-1)?.content).toBe("second")
 })
 
-test('renders fenced code blocks in a reply', async ({ page }) => {
-  await stubReply(page, 'Try this:\n\n```dockerfile\nFROM node:22-slim\n```')
+test("renders fenced code blocks in a reply", async ({ page }) => {
+  await stubReply(page, "Try this:\n\n```dockerfile\nFROM node:22-slim\n```")
 
-  await page.getByLabel('Message').fill('docker')
-  await page.getByLabel('Message').press('Enter')
+  await page.getByLabel("Message").fill("docker")
+  await page.getByLabel("Message").press("Enter")
 
-  await expect(page.locator('pre code')).toContainText('FROM node:22-slim')
+  await expect(page.locator("pre code")).toContainText("FROM node:22-slim")
 })
 
-test('shows the provider error message when the request fails', async ({ page }) => {
+test("shows the provider error message when the request fails", async ({ page }) => {
   await page.route(ENDPOINT, (route) =>
     route.fulfill({
       status: 401,
-      contentType: 'application/json',
-      body: JSON.stringify({ error: { message: 'Invalid API key' } }),
+      contentType: "application/json",
+      body: JSON.stringify({ error: { message: "Invalid API key" } }),
     }),
   )
 
-  await page.getByLabel('Message').fill('anything')
-  await page.getByLabel('Message').press('Enter')
+  await page.getByLabel("Message").fill("anything")
+  await page.getByLabel("Message").press("Enter")
 
-  await expect(page.getByText('Invalid API key')).toBeVisible()
-  await expect(page.getByRole('button', { name: 'Copy reply', exact: true })).toHaveCount(0)
+  await expect(page.getByText("Invalid API key")).toBeVisible()
+  await expect(page.getByRole("button", { name: "Copy reply", exact: true })).toHaveCount(0)
 })
 
-test('copies raw assistant Markdown and resets the confirmation', async ({ page, context }) => {
-  await context.grantPermissions(['clipboard-read', 'clipboard-write'])
-  const reply = 'Try **this**:\n\n```ts\nconst value = 1\n```'
+test("copies raw assistant Markdown and resets the confirmation", async ({ page, context }) => {
+  await context.grantPermissions(["clipboard-read", "clipboard-write"])
+  const reply = "Try **this**:\n\n```ts\nconst value = 1\n```"
   await stubReply(page, reply)
-  await page.getByLabel('Message').fill('Give me an example')
-  await page.getByLabel('Message').press('Enter')
+  await page.getByLabel("Message").fill("Give me an example")
+  await page.getByLabel("Message").press("Enter")
 
-  const copy = page.getByRole('button', { name: 'Copy reply', exact: true })
+  const copy = page.getByRole("button", { name: "Copy reply", exact: true })
   await expect(copy).toHaveCount(1)
   await copy.focus()
-  await expect(copy).toHaveCSS('opacity', '1')
-  await copy.press('Enter')
-  await expect(page.getByRole('status')).toHaveText('Copied')
+  await expect(copy).toHaveCSS("opacity", "1")
+  await copy.press("Enter")
+  await expect(page.getByRole("status")).toHaveText("Copied")
   expect(await page.evaluate(() => navigator.clipboard.readText())).toBe(reply)
-  await expect(page.getByRole('button', { name: 'Copied reply', exact: true })).toBeVisible()
+  await expect(page.getByRole("button", { name: "Copied reply", exact: true })).toBeVisible()
   await expect(copy).toHaveCount(1)
-  await expect(page.getByRole('status')).toHaveText('')
+  await expect(page.getByRole("status")).toHaveText("")
 })
 
-test('reports a denied copy and allows retrying', async ({ page }) => {
+test("reports a denied copy and allows retrying", async ({ page }) => {
   await page.evaluate(() => {
-    Object.defineProperty(navigator.clipboard, 'writeText', {
+    Object.defineProperty(navigator.clipboard, "writeText", {
       configurable: true,
-      value: () => Promise.reject(new DOMException('Denied', 'NotAllowedError')),
+      value: () => Promise.reject(new DOMException("Denied", "NotAllowedError")),
     })
   })
-  await stubReply(page, 'Copy this answer.')
-  await page.getByLabel('Message').fill('question')
-  await page.getByLabel('Message').press('Enter')
-  const copy = page.getByRole('button', { name: 'Copy reply', exact: true })
+  await stubReply(page, "Copy this answer.")
+  await page.getByLabel("Message").fill("question")
+  await page.getByLabel("Message").press("Enter")
+  const copy = page.getByRole("button", { name: "Copy reply", exact: true })
   await copy.focus()
-  await copy.press('Enter')
-  await expect(page.getByRole('status')).toHaveText('Could not copy. Try again.')
-  await expect(page.getByRole('button', { name: 'Copied reply', exact: true })).toHaveCount(0)
+  await copy.press("Enter")
+  await expect(page.getByRole("status")).toHaveText("Could not copy. Try again.")
+  await expect(page.getByRole("button", { name: "Copied reply", exact: true })).toHaveCount(0)
 
   await page.evaluate(() => {
-    Object.defineProperty(navigator.clipboard, 'writeText', {
+    Object.defineProperty(navigator.clipboard, "writeText", {
       configurable: true,
       value: () => Promise.resolve(),
     })
   })
-  await copy.press('Enter')
-  await expect(page.getByRole('status')).toHaveText('Copied')
+  await copy.press("Enter")
+  await expect(page.getByRole("status")).toHaveText("Copied")
 })
 
-test('reports an empty reply rather than showing a blank bubble', async ({ page }) => {
+test("reports an empty reply rather than showing a blank bubble", async ({ page }) => {
   await page.route(ENDPOINT, (route) =>
     route.fulfill({
       status: 200,
-      contentType: 'application/json',
-      body: JSON.stringify({ choices: [{ message: { content: '' } }] }),
+      contentType: "application/json",
+      body: JSON.stringify({ choices: [{ message: { content: "" } }] }),
     }),
   )
 
-  await page.getByLabel('Message').fill('anything')
-  await page.getByLabel('Message').press('Enter')
+  await page.getByLabel("Message").fill("anything")
+  await page.getByLabel("Message").press("Enter")
 
-  await expect(page.getByText('The API returned an empty reply.')).toBeVisible()
+  await expect(page.getByText("The API returned an empty reply.")).toBeVisible()
 })
 
-test('clears the conversation', async ({ page }) => {
-  await stubReply(page, 'Some answer.')
+test("clears the conversation", async ({ page }) => {
+  await stubReply(page, "Some answer.")
 
-  await page.getByLabel('Message').fill('question')
-  await page.getByLabel('Message').press('Enter')
-  await expect(page.getByText('Some answer.')).toBeVisible()
+  await page.getByLabel("Message").fill("question")
+  await page.getByLabel("Message").press("Enter")
+  await expect(page.getByText("Some answer.")).toBeVisible()
 
-  await page.getByRole('button', { name: 'New chat' }).click()
+  await page.getByRole("button", { name: "New chat" }).click()
 
-  await expect(page.getByText('Some answer.')).toHaveCount(0)
-  await expect(page.getByText('What do you want to work out?')).toBeVisible()
+  await expect(page.getByText("Some answer.")).toHaveCount(0)
+  await expect(page.getByText("What do you want to work out?")).toBeVisible()
 })
 
-test('does not persist the conversation across a reload', async ({ page }) => {
-  await stubReply(page, 'Some answer.')
+test("does not persist the conversation across a reload", async ({ page }) => {
+  await stubReply(page, "Some answer.")
 
-  await page.getByLabel('Message').fill('question')
-  await page.getByLabel('Message').press('Enter')
-  await expect(page.getByText('Some answer.')).toBeVisible()
+  await page.getByLabel("Message").fill("question")
+  await page.getByLabel("Message").press("Enter")
+  await expect(page.getByText("Some answer.")).toBeVisible()
 
   await page.reload()
 
-  await expect(page.getByText('What do you want to work out?')).toBeVisible()
+  await expect(page.getByText("What do you want to work out?")).toBeVisible()
 })
+
+// Keep in sync with MOCK_USERS in src/constants/user.ts.
+const MOCK_USERS = ["Sanjar", "Akira", "Mike", "John"] as const
+
+for (const user of MOCK_USERS) {
+  test(`tells ${user} who they are when selected as the active user`, async ({ page }) => {
+    await stubEchoUser(page)
+
+    await page.getByRole("combobox", { name: "Active user" }).click()
+    await page.getByRole("option", { name: user, exact: true }).click()
+
+    await page.getByLabel("Message").fill("Who am I?")
+    await page.getByLabel("Message").press("Enter")
+
+    await expect(page.getByText(`You are ${user}.`)).toBeVisible()
+  })
+}

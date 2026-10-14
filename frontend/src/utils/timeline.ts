@@ -1,8 +1,8 @@
-import { MIN_RANGE_DAYS, RANGE_PADDING_DAYS } from '@/constants/timeline'
-import { addDays, diffDays, eachDay, formatMonth, today } from '@/utils/date'
-import type { ISODate } from '@/types/date'
-import type { Domain, MonthSegment } from '@/types/timeline'
-import type { Task } from '@/types/task'
+import { MIN_RANGE_DAYS, RANGE_PADDING_DAYS } from "@/constants/timeline"
+import { addDays, diffDays, eachDay, formatMonth, today } from "@/utils/date"
+import type { ISODate } from "@/types/date"
+import type { Domain, MonthSegment } from "@/types/timeline"
+import type { Task } from "@/types/task"
 
 /** Date range that fits every task and today, padded on both sides. */
 export function computeDomain(tasks: readonly Task[]): Domain {
