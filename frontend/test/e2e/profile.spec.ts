@@ -3,6 +3,12 @@ import type { Page } from "@playwright/test"
 
 /** shadcn's Select is a Radix listbox, not a native <select>. */
 async function chooseOption(page: Page, selectLabel: string, option: string) {
+  if (selectLabel === "Skill") {
+    await page
+      .getByRole("region", { name: "Skills", exact: true })
+      .getByRole("button", { name: "Add skill", exact: true })
+      .click()
+  }
   await page.getByRole("combobox", { name: selectLabel }).click()
   await page.getByRole("option", { name: option, exact: true }).click()
 }
@@ -28,7 +34,7 @@ test("starts with no skills registered", async ({ page }) => {
 
 test("registers a predefined skill under its level group", async ({ page }) => {
   await chooseOption(page, "Skill", "Docker")
-  await page.getByRole("button", { name: "Add skill" }).click()
+  await page.getByRole("dialog").getByRole("button", { name: "Add skill", exact: true }).click()
 
   const group = page.getByRole("region", { name: "Beginner skills" })
   await expect(group.getByText("Beginner", { exact: true })).toBeVisible()
@@ -38,7 +44,7 @@ test("registers a predefined skill under its level group", async ({ page }) => {
 test("registers a predefined skill at a chosen level", async ({ page }) => {
   await chooseOption(page, "Skill", "Rust")
   await chooseOption(page, "Level", "Advanced")
-  await page.getByRole("button", { name: "Add skill" }).click()
+  await page.getByRole("dialog").getByRole("button", { name: "Add skill", exact: true }).click()
 
   await expect(
     page.getByRole("region", { name: "Advanced skills" }).getByText("Rust"),
@@ -47,11 +53,11 @@ test("registers a predefined skill at a chosen level", async ({ page }) => {
 
 test("separates skills into their own level groups", async ({ page }) => {
   await chooseOption(page, "Skill", "Docker")
-  await page.getByRole("button", { name: "Add skill" }).click()
+  await page.getByRole("dialog").getByRole("button", { name: "Add skill", exact: true }).click()
 
   await chooseOption(page, "Skill", "Rust")
   await chooseOption(page, "Level", "Advanced")
-  await page.getByRole("button", { name: "Add skill" }).click()
+  await page.getByRole("dialog").getByRole("button", { name: "Add skill", exact: true }).click()
 
   await expect(
     page.getByRole("region", { name: "Beginner skills" }).getByText("Docker"),
@@ -73,7 +79,7 @@ test("registers a custom skill via Other", async ({ page }) => {
 
   await chooseOption(page, "Skill", "Other")
   await page.getByLabel("Custom skill").fill("Zig")
-  await page.getByRole("button", { name: "Add skill" }).click()
+  await page.getByRole("dialog").getByRole("button", { name: "Add skill", exact: true }).click()
 
   await expect(page.getByRole("region", { name: "Beginner skills" }).getByText("Zig")).toBeVisible()
   // Picking "Other" again for the next entry starts from a blank field.
@@ -83,38 +89,41 @@ test("registers a custom skill via Other", async ({ page }) => {
 
 test("refuses an Other skill with no name", async ({ page }) => {
   await chooseOption(page, "Skill", "Other")
-  await page.getByRole("button", { name: "Add skill" }).click()
+  await page.getByRole("dialog").getByRole("button", { name: "Add skill", exact: true }).click()
 
   await expect(page.getByText("Enter a skill name")).toBeVisible()
+  await page.getByRole("dialog").getByRole("button", { name: "Cancel" }).click()
   await expect(page.getByText("No skills registered yet")).toBeVisible()
 })
 
 test("refuses a duplicate predefined skill", async ({ page }) => {
   await chooseOption(page, "Skill", "Go")
-  await page.getByRole("button", { name: "Add skill" }).click()
+  await page.getByRole("dialog").getByRole("button", { name: "Add skill", exact: true }).click()
 
   await chooseOption(page, "Skill", "Go")
-  await page.getByRole("button", { name: "Add skill" }).click()
+  await page.getByRole("dialog").getByRole("button", { name: "Add skill", exact: true }).click()
 
   await expect(page.getByText("Already registered")).toBeVisible()
+  await page.getByRole("dialog").getByRole("button", { name: "Cancel" }).click()
   await expect(skillsIn(page).getByRole("listitem")).toHaveCount(1)
 })
 
 test("refuses a custom skill that duplicates a predefined one", async ({ page }) => {
   await chooseOption(page, "Skill", "Go")
-  await page.getByRole("button", { name: "Add skill" }).click()
+  await page.getByRole("dialog").getByRole("button", { name: "Add skill", exact: true }).click()
 
   await chooseOption(page, "Skill", "Other")
   await page.getByLabel("Custom skill").fill("go")
-  await page.getByRole("button", { name: "Add skill" }).click()
+  await page.getByRole("dialog").getByRole("button", { name: "Add skill", exact: true }).click()
 
   await expect(page.getByText("Already registered")).toBeVisible()
+  await page.getByRole("dialog").getByRole("button", { name: "Cancel" }).click()
   await expect(skillsIn(page).getByRole("listitem")).toHaveCount(1)
 })
 
 test("removes a registered skill", async ({ page }) => {
   await chooseOption(page, "Skill", "Docker")
-  await page.getByRole("button", { name: "Add skill" }).click()
+  await page.getByRole("dialog").getByRole("button", { name: "Add skill", exact: true }).click()
 
   await page.getByRole("button", { name: "Remove Docker" }).click()
 
@@ -123,7 +132,7 @@ test("removes a registered skill", async ({ page }) => {
 
 test("starts fresh on a reload - nothing is persisted", async ({ page }) => {
   await chooseOption(page, "Skill", "Kubernetes")
-  await page.getByRole("button", { name: "Add skill" }).click()
+  await page.getByRole("dialog").getByRole("button", { name: "Add skill", exact: true }).click()
   await expect(
     page.getByRole("region", { name: "Beginner skills" }).getByText("Kubernetes"),
   ).toBeVisible()
@@ -139,11 +148,13 @@ async function addJob(
   page: Page,
   values: { company: string; title: string; started: string; ended?: string },
 ) {
+  await jobsIn(page).getByRole("button", { name: "Add job", exact: true }).click()
   await page.getByLabel("Company").fill(values.company)
   await page.getByLabel("Job title").fill(values.title)
   await page.getByLabel("Started").fill(values.started)
   if (values.ended !== undefined) await page.getByLabel("Ended").fill(values.ended)
-  await page.getByRole("button", { name: "Add job" }).click()
+  await page.getByRole("dialog").getByRole("button", { name: "Add job", exact: true }).click()
+  await expect(page.getByRole("dialog")).toHaveCount(0)
 }
 
 test("starts with no job history - it comes from the backend, not the frontend", async ({
@@ -189,10 +200,12 @@ test("marks a role with no end date as current", async ({ page }) => {
 })
 
 test("refuses a job with no company or title", async ({ page }) => {
-  await page.getByRole("button", { name: "Add job" }).click()
+  await page.getByRole("button", { name: "Add job", exact: true }).click()
+  await page.getByRole("dialog").getByRole("button", { name: "Add job", exact: true }).click()
 
   await expect(page.getByText("Enter a company")).toBeVisible()
   await expect(page.getByText("Enter a job title")).toBeVisible()
+  await page.getByRole("dialog").getByRole("button", { name: "Cancel" }).click()
   await expect(jobsIn(page).getByRole("listitem")).toHaveCount(0)
 })
 
@@ -272,7 +285,7 @@ test("keeps a skill added while the seed request is still loading", async ({ pag
   await page.goto("/profile")
 
   await chooseOption(page, "Skill", "Rust")
-  await page.getByRole("button", { name: "Add skill" }).click()
+  await page.getByRole("dialog").getByRole("button", { name: "Add skill", exact: true }).click()
 
   // The seed lands after it; both must be there, each under its own level.
   await expect(

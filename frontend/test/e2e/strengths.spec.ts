@@ -4,10 +4,11 @@ import type { Page } from "@playwright/test"
 const strengthsIn = (page: Page) => page.getByRole("region", { name: "Strengths", exact: true })
 
 async function addStrength(page: Page, name: string, description: string) {
-  const section = strengthsIn(page)
-  await section.getByLabel("Strength", { exact: true }).fill(name)
-  await section.getByLabel("Description", { exact: true }).fill(description)
-  await section.getByRole("button", { name: "Add strength", exact: true }).click()
+  await strengthsIn(page).getByRole("button", { name: "Add strength", exact: true }).click()
+  const dialog = page.getByRole("dialog", { name: "Add strength", exact: true })
+  await dialog.getByLabel("Strength", { exact: true }).fill(name)
+  await dialog.getByLabel("Description", { exact: true }).fill(description)
+  await dialog.getByRole("button", { name: "Add strength", exact: true }).click()
 }
 
 test.beforeEach(async ({ page }) => {
@@ -29,27 +30,31 @@ test("adds trimmed values, resets the form, and starts fresh on reload", async (
   await expect(section.getByRole("listitem").getByText("I explain ideas clearly.")).toHaveText(
     "I explain ideas clearly.",
   )
-  await expect(section.getByLabel("Strength", { exact: true })).toHaveValue("")
-  await expect(section.getByLabel("Description", { exact: true })).toHaveValue("")
+  await expect(page.getByRole("dialog")).toHaveCount(0)
+  await section.getByRole("button", { name: "Add strength", exact: true }).click()
+  const dialog = page.getByRole("dialog")
+  await expect(dialog.getByLabel("Strength", { exact: true })).toHaveValue("")
+  await expect(dialog.getByLabel("Description", { exact: true })).toHaveValue("")
   await page.reload()
   await expect(section.getByText("No strengths added yet")).toBeVisible()
 })
 
 test("rejects whitespace-only fields and recovers after correction", async ({ page }) => {
   await page.goto("/profile")
-  const section = strengthsIn(page)
   await addStrength(page, "   ", "   ")
-  await expect(section.getByText("Enter a strength", { exact: true })).toBeVisible()
-  await expect(section.getByText("Describe your strength", { exact: true })).toBeVisible()
-  await expect(section.getByRole("listitem")).toHaveCount(0)
-  await section.getByLabel("Strength", { exact: true }).fill("Patience")
-  await section.getByRole("button", { name: "Add strength", exact: true }).click()
-  await expect(section.getByText("Enter a strength", { exact: true })).toHaveCount(0)
-  await expect(section.getByText("Describe your strength", { exact: true })).toBeVisible()
-  await expect(section.getByRole("listitem")).toHaveCount(0)
-  await section.getByLabel("Description").fill("I stay calm in difficult situations.")
-  await section.getByRole("button", { name: "Add strength", exact: true }).click()
-  await expect(section.getByRole("heading", { name: "Patience" })).toBeVisible()
+  const dialog = page.getByRole("dialog")
+  await expect(dialog.getByText("Enter a strength", { exact: true })).toBeVisible()
+  await expect(dialog.getByText("Describe your strength", { exact: true })).toBeVisible()
+  await expect(dialog).toBeVisible()
+  await dialog.getByLabel("Strength", { exact: true }).fill("Patience")
+  await dialog.getByRole("button", { name: "Add strength", exact: true }).click()
+  await expect(dialog.getByText("Enter a strength", { exact: true })).toHaveCount(0)
+  await expect(dialog.getByText("Describe your strength", { exact: true })).toBeVisible()
+  await expect(dialog).toBeVisible()
+  await dialog.getByLabel("Description").fill("I stay calm in difficult situations.")
+  await dialog.getByRole("button", { name: "Add strength", exact: true }).click()
+  await expect(dialog).toHaveCount(0)
+  await expect(strengthsIn(page).getByRole("heading", { name: "Patience" })).toBeVisible()
 })
 
 test("removes the correct entry when two strengths share a name", async ({ page }) => {

@@ -70,10 +70,11 @@ for (const outcome of ["success", "failure"] as const) {
         await expect(region.getByRole("button", { name: button, exact: true })).toBeEnabled()
       }
       // Actually submit while the request is pending to verify the form remains usable.
+      await page.getByRole("button", { name: "Add job", exact: true }).click()
       await page.getByLabel("Company", { exact: true }).fill("Local company")
       await page.getByLabel("Job title").fill("Local role")
       await page.getByLabel("Started", { exact: true }).fill("2024-01-01")
-      await page.getByRole("button", { name: "Add job", exact: true }).click()
+      await page.getByRole("dialog").getByRole("button", { name: "Add job", exact: true }).click()
       await expect(page.getByRole("status")).toHaveCount(4)
     } finally {
       release()
