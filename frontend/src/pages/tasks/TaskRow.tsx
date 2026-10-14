@@ -1,7 +1,7 @@
-import { useState } from 'react'
-import { CalendarDays, Clock, Trash2 } from 'lucide-react'
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
+import { useState } from "react"
+import { CalendarDays, Clock, Trash2 } from "lucide-react"
+import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
 import {
   CATEGORY_THEME,
   DUE_TONE,
@@ -9,12 +9,12 @@ import {
   PRIORITY_LABEL,
   STATUS_CHIP,
   STATUS_LABEL,
-} from '@/constants/task'
-import { cn } from '@/lib/utils'
-import { formatShort } from '@/utils/date'
-import { describeDue } from '@/utils/task'
-import { StatusToggle } from '@/pages/tasks/StatusToggle'
-import type { Task } from '@/types/task'
+} from "@/constants/task"
+import { cn } from "@/lib/utils"
+import { formatShort } from "@/utils/date"
+import { describeDue } from "@/utils/task"
+import { StatusToggle } from "@/pages/tasks/StatusToggle"
+import type { Task } from "@/types/task"
 
 export function TaskRow({
   task,
@@ -28,7 +28,7 @@ export function TaskRow({
   const [confirming, setConfirming] = useState(false)
   const due = describeDue(task.dueDate)
   const theme = CATEGORY_THEME[task.category]
-  const finished = task.status === 'done'
+  const finished = task.status === "done"
 
   return (
     <li className="group hover:bg-muted/50 flex items-start gap-3 px-4 py-3.5 transition">
@@ -39,8 +39,8 @@ export function TaskRow({
       <div className="min-w-0 flex-1">
         <p
           className={cn(
-            'text-sm font-medium break-words',
-            finished && 'text-muted-foreground line-through',
+            "text-sm font-medium break-words",
+            finished && "text-muted-foreground line-through",
           )}
         >
           {task.title}
@@ -53,7 +53,7 @@ export function TaskRow({
 
         <div className="mt-2 flex flex-wrap items-center gap-1.5">
           <Badge variant="outline" className={theme.chip}>
-            <span className={cn('size-1.5 rounded-full', theme.dot)} />
+            <span className={cn("size-1.5 rounded-full", theme.dot)} />
             {task.category}
           </Badge>
           <Badge variant="outline" className={STATUS_CHIP[task.status]}>
@@ -77,7 +77,7 @@ export function TaskRow({
 
       <div className="flex shrink-0 items-center gap-2 pt-0.5">
         {!finished && (
-          <span className={cn('text-[11px] font-medium', DUE_TONE[due.tone])}>{due.label}</span>
+          <span className={cn("text-[11px] font-medium", DUE_TONE[due.tone])}>{due.label}</span>
         )}
         {confirming ? (
           <span className="flex items-center gap-1">

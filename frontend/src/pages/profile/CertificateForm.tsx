@@ -1,11 +1,11 @@
-import type { FormEvent } from 'react'
-import { Plus } from 'lucide-react'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { FormField } from '@/components/form/FormField'
-import { useCertificateDraft } from '@/hooks/useCertificateDraft'
-import type { CertificateDraft } from '@/types/certificate'
+import type { FormEvent } from "react"
+import { Plus } from "lucide-react"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { FormField } from "@/components/form/FormField"
+import { useCertificateDraft } from "@/hooks/useCertificateDraft"
+import type { CertificateDraft } from "@/types/certificate"
 
 export function CertificateForm({ onSubmit }: { onSubmit: (draft: CertificateDraft) => void }) {
   const { draft, patch, touched, nameError, issuerError, dateError, urlError, submit } =

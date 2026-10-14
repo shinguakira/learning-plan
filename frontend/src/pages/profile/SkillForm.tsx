@@ -1,42 +1,42 @@
-import { useState } from 'react'
-import type { FormEvent } from 'react'
-import { Plus } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Input } from '@/components/ui/input'
+import { useState } from "react"
+import type { FormEvent } from "react"
+import { Plus } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select'
-import { SKILL_LEVELS, SKILL_LEVEL_LABEL, YEARS_OF_EXPERIENCE } from '@/constants/skill'
-import { useSkillDraft } from '@/hooks/useSkillDraft'
-import { FormField } from '@/components/form/FormField'
-import type { SkillDraft, SkillLevel } from '@/types/skill'
+} from "@/components/ui/select"
+import { SKILL_LEVELS, SKILL_LEVEL_LABEL, YEARS_OF_EXPERIENCE } from "@/constants/skill"
+import { useSkillDraft } from "@/hooks/useSkillDraft"
+import { FormField } from "@/components/form/FormField"
+import type { SkillDraft, SkillLevel } from "@/types/skill"
 
 const SKILL_OPTIONS = [
-  'JavaScript',
-  'TypeScript',
-  'React',
-  'Next.js',
-  'Node.js',
-  'HTML / CSS',
-  'Python',
-  'Go',
-  'Rust',
-  'Java',
-  'C#',
-  'SQL',
-  'PostgreSQL',
-  'MongoDB',
-  'Docker',
-  'Kubernetes',
-  'AWS',
-  'Git',
-  'Linux',
-  'Other',
+  "JavaScript",
+  "TypeScript",
+  "React",
+  "Next.js",
+  "Node.js",
+  "HTML / CSS",
+  "Python",
+  "Go",
+  "Rust",
+  "Java",
+  "C#",
+  "SQL",
+  "PostgreSQL",
+  "MongoDB",
+  "Docker",
+  "Kubernetes",
+  "AWS",
+  "Git",
+  "Linux",
+  "Other",
 ] as const
 
 const DEFAULT_SKILL: string = SKILL_OPTIONS[0]
@@ -49,12 +49,12 @@ export function SkillForm({
   onSubmit: (draft: SkillDraft) => void
 }) {
   const [selectedOption, setSelectedOption] = useState(DEFAULT_SKILL)
-  const isOther = selectedOption === 'Other'
+  const isOther = selectedOption === "Other"
   const { draft, patch, nameError, touched, submit } = useSkillDraft(existingNames, DEFAULT_SKILL)
 
   const handleSelect = (value: string) => {
     setSelectedOption(value)
-    patch({ name: value === 'Other' ? '' : value })
+    patch({ name: value === "Other" ? "" : value })
   }
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -138,7 +138,7 @@ export function SkillForm({
                 <SelectContent>
                   {YEARS_OF_EXPERIENCE.map((years) => (
                     <SelectItem key={years} value={String(years)}>
-                      {years} {years === 1 ? 'year' : 'years'}
+                      {years} {years === 1 ? "year" : "years"}
                     </SelectItem>
                   ))}
                 </SelectContent>

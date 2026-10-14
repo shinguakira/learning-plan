@@ -1,5 +1,5 @@
-import { useLayoutEffect, useRef } from 'react'
-import type { RefObject } from 'react'
+import { useLayoutEffect, useRef } from "react"
+import type { RefObject } from "react"
 
 /**
  * Keep a scroll container pinned to its bottom as content is appended.
