@@ -1,3 +1,6 @@
+import { Download } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { useDownloadSkillsCsv } from "@/hooks/useDownloadSkillsCsv"
 import { useProfile } from "@/hooks/useProfile"
 import { JobForm } from "@/pages/profile/JobForm"
 import { JobList } from "@/pages/profile/JobList"
@@ -26,6 +29,7 @@ export function ProfilePage() {
     addStrength,
     removeStrength,
   } = useProfile()
+  const { status: csvStatus, download: downloadCsv } = useDownloadSkillsCsv()
 
   return (
     <div className="mx-auto max-w-6xl space-y-6 px-4 py-6 sm:px-6">
@@ -39,16 +43,31 @@ export function ProfilePage() {
       {error && <p className="text-destructive text-xs">{error}</p>}
 
       <section aria-labelledby="skills-heading" className="space-y-5">
-        <div>
-          <h2 id="skills-heading" className="text-base font-semibold">
-            Skills
-          </h2>
-          <p className="text-muted-foreground mt-0.5 text-xs">
-            {skills.length === 0
-              ? "The technologies you can work with."
-              : `${skills.length} technical skill${skills.length === 1 ? "" : "s"}.`}
-          </p>
+        <div className="flex flex-wrap items-end justify-between gap-3">
+          <div>
+            <h2 id="skills-heading" className="text-base font-semibold">
+              Skills
+            </h2>
+            <p className="text-muted-foreground mt-0.5 text-xs">
+              {skills.length === 0
+                ? "The technologies you can work with."
+                : `${skills.length} technical skill${skills.length === 1 ? "" : "s"}.`}
+            </p>
+          </div>
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={downloadCsv}
+            disabled={csvStatus === "downloading"}
+          >
+            <Download />
+            Download CSV
+          </Button>
         </div>
+        {csvStatus === "error" && (
+          <p className="text-destructive text-xs">Could not download the CSV.</p>
+        )}
 
         <SkillForm existingNames={skills.map((skill) => skill.name)} onSubmit={addSkill} />
 
