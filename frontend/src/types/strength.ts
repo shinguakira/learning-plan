@@ -5,4 +5,4 @@ export type Strength = {
   createdAt: string
 }
 
-export type StrengthDraft = Omit<Strength, "id" | "createdAt">
+export type StrengthDraft = Omit<Strength, 'id' | 'createdAt'>

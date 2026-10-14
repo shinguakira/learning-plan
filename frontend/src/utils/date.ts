@@ -1,5 +1,5 @@
-import { DAY_MS, MONTH, MONTH_SHORT, WEEKDAY, WEEKDAY_INITIAL } from "@/constants/date"
-import type { DayIndex, ISODate, MonthIndex, WeekdayInitial } from "@/types/date"
+import { DAY_MS, MONTH, MONTH_SHORT, WEEKDAY, WEEKDAY_INITIAL } from '@/constants/date'
+import type { DayIndex, ISODate, MonthIndex, WeekdayInitial } from '@/types/date'
 
 /**
  * Dates are handled everywhere as local 'YYYY-MM-DD' strings.
@@ -28,8 +28,8 @@ function monthIndex(date: Date): MonthIndex {
 }
 
 export function toISODate(date: Date): ISODate {
-  const month = `${date.getMonth() + 1}`.padStart(2, "0")
-  const day = `${date.getDate()}`.padStart(2, "0")
+  const month = `${date.getMonth() + 1}`.padStart(2, '0')
+  const day = `${date.getDate()}`.padStart(2, '0')
   return `${date.getFullYear()}-${month}-${day}` as ISODate
 }
 

@@ -1,7 +1,7 @@
-import { Sparkles, X } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
-import type { Strength } from "@/types/strength"
+import { Sparkles, X } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent } from '@/components/ui/card'
+import type { Strength } from '@/types/strength'
 
 export function StrengthList({
   strengths,

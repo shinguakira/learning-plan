@@ -1,5 +1,5 @@
-import { useState } from "react"
-import { Card } from "@/components/ui/card"
+import { useState } from 'react'
+import { Card } from '@/components/ui/card'
 import {
   Pagination,
   PaginationContent,
@@ -8,12 +8,12 @@ import {
   PaginationLink,
   PaginationNext,
   PaginationPrevious,
-} from "@/components/ui/pagination"
-import { TASKS_PER_PAGE } from "@/constants/pagination"
-import { NEXT_STATUS } from "@/constants/task"
-import { EmptyState } from "@/pages/tasks/EmptyState"
-import { TaskRow } from "@/pages/tasks/TaskRow"
-import type { Task, TaskDraft } from "@/types/task"
+} from '@/components/ui/pagination'
+import { TASKS_PER_PAGE } from '@/constants/pagination'
+import { NEXT_STATUS } from '@/constants/task'
+import { EmptyState } from '@/pages/tasks/EmptyState'
+import { TaskRow } from '@/pages/tasks/TaskRow'
+import type { Task, TaskDraft } from '@/types/task'
 
 export function TaskListView({
   tasks,

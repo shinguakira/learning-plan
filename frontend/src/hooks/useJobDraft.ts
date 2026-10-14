@@ -1,7 +1,7 @@
-import { useState } from "react"
-import { EMPLOYMENT_TYPES } from "@/constants/job"
-import { today } from "@/utils/date"
-import type { JobDraft } from "@/types/job"
+import { useState } from 'react'
+import { EMPLOYMENT_TYPES } from '@/constants/job'
+import { today } from '@/utils/date'
+import type { JobDraft } from '@/types/job'
 
 export type JobDraftApi = {
   draft: JobDraft
@@ -19,12 +19,12 @@ export type JobDraftApi = {
 
 function emptyDraft(): JobDraft {
   return {
-    company: "",
-    title: "",
+    company: '',
+    title: '',
     employmentType: EMPLOYMENT_TYPES[0],
     startDate: today(),
     endDate: null,
-    summary: "",
+    summary: '',
   }
 }
 
@@ -33,11 +33,11 @@ export function useJobDraft(): JobDraftApi {
   const [draft, setDraft] = useState<JobDraft>(emptyDraft)
   const [touched, setTouched] = useState(false)
 
-  const companyError = draft.company.trim() === "" ? "Enter a company" : null
-  const titleError = draft.title.trim() === "" ? "Enter a job title" : null
+  const companyError = draft.company.trim() === '' ? 'Enter a company' : null
+  const titleError = draft.title.trim() === '' ? 'Enter a job title' : null
   const dateError =
     draft.endDate !== null && draft.endDate < draft.startDate
-      ? "End date must not precede the start date"
+      ? 'End date must not precede the start date'
       : null
   const invalid = companyError !== null || titleError !== null || dateError !== null
 

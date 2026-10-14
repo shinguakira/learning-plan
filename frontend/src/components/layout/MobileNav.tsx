@@ -1,10 +1,10 @@
-import { useState } from "react"
-import { NavLink } from "react-router-dom"
-import { Menu } from "lucide-react"
-import { Button, buttonVariants } from "@/components/ui/button"
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
-import { TABS } from "@/constants/app"
-import { cn } from "@/lib/utils"
+import { useState } from 'react'
+import { NavLink } from 'react-router-dom'
+import { Menu } from 'lucide-react'
+import { Button, buttonVariants } from '@/components/ui/button'
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet'
+import { TABS } from '@/constants/app'
+import { cn } from '@/lib/utils'
 
 /**
  * The same destinations as the header tab row, behind one button. The caller
@@ -33,9 +33,9 @@ export function MobileNav() {
               onClick={() => setOpen(false)}
               className={({ isActive }) =>
                 cn(
-                  buttonVariants({ variant: isActive ? "secondary" : "ghost", size: "sm" }),
-                  "justify-start",
-                  !isActive && "text-muted-foreground",
+                  buttonVariants({ variant: isActive ? 'secondary' : 'ghost', size: 'sm' }),
+                  'justify-start',
+                  !isActive && 'text-muted-foreground',
                 )
               }
             >

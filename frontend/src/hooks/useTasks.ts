@@ -1,7 +1,7 @@
-import { useEffect, useRef, useState } from "react"
-import { fetchTasks } from "@/api/tasks"
-import { createSeedTasks } from "@/utils/seed"
-import type { SeedTask, Task, TaskDraft } from "@/types/task"
+import { useEffect, useRef, useState } from 'react'
+import { fetchTasks } from '@/api/tasks'
+import { createSeedTasks } from '@/utils/seed'
+import type { SeedTask, Task, TaskDraft } from '@/types/task'
 
 export type TasksApi = {
   tasks: Task[]
@@ -38,7 +38,7 @@ export function useTasks(): TasksApi {
         }
       })
       .catch((caught: unknown) => {
-        if (active) setError(caught instanceof Error ? caught.message : "Failed to load tasks.")
+        if (active) setError(caught instanceof Error ? caught.message : 'Failed to load tasks.')
       })
       .finally(() => {
         if (active) setLoading(false)

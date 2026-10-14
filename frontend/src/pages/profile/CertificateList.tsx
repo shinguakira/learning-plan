@@ -1,8 +1,8 @@
-import { Award, Building2, Calendar, ExternalLink, X } from "lucide-react"
-import { Card, CardContent } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { parseCredentialUrl } from "@/utils/certificate"
-import type { Certificate } from "@/types/certificate"
+import { Award, Building2, Calendar, ExternalLink, X } from 'lucide-react'
+import { Card, CardContent } from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
+import { parseCredentialUrl } from '@/utils/certificate'
+import type { Certificate } from '@/types/certificate'
 
 export function CertificateList({
   certificates,
@@ -25,7 +25,7 @@ export function CertificateList({
   return (
     <ul className="space-y-3">
       {certificates.map((certificate) => {
-        const credentialUrl = parseCredentialUrl(certificate.credentialUrl ?? "")
+        const credentialUrl = parseCredentialUrl(certificate.credentialUrl ?? '')
         return (
           <li key={certificate.id}>
             <Card size="sm">

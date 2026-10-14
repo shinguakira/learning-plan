@@ -1,12 +1,12 @@
-import { Award, X } from "lucide-react"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
-import { cn } from "@/lib/utils"
-import { SKILL_LEVEL_CHIP, SKILL_LEVEL_LABEL, SKILL_LEVEL_TEXT } from "@/constants/skill"
-import { groupSkillsByLevel } from "@/utils/skill"
-import { SkillLevelMeter } from "@/pages/profile/SkillLevelMeter"
-import type { Skill } from "@/types/skill"
+import { Award, X } from 'lucide-react'
+import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent } from '@/components/ui/card'
+import { cn } from '@/lib/utils'
+import { SKILL_LEVEL_CHIP, SKILL_LEVEL_LABEL, SKILL_LEVEL_TEXT } from '@/constants/skill'
+import { groupSkillsByLevel } from '@/utils/skill'
+import { SkillLevelMeter } from '@/pages/profile/SkillLevelMeter'
+import type { Skill } from '@/types/skill'
 
 export function SkillList({
   skills,
@@ -35,7 +35,7 @@ export function SkillList({
             <CardContent className="flex flex-wrap items-start gap-3">
               <div
                 className={cn(
-                  "flex shrink-0 items-center gap-1.5 pt-1 text-xs font-semibold tracking-wide uppercase",
+                  'flex shrink-0 items-center gap-1.5 pt-1 text-xs font-semibold tracking-wide uppercase',
                   SKILL_LEVEL_TEXT[group.level],
                 )}
               >
@@ -49,10 +49,10 @@ export function SkillList({
               <ul className="flex min-w-0 flex-1 flex-wrap gap-1.5">
                 {group.skills.map((skill) => (
                   <li key={skill.id} className="group/skill relative">
-                    <Badge variant="outline" className={cn("h-7", SKILL_LEVEL_CHIP[group.level])}>
+                    <Badge variant="outline" className={cn('h-7', SKILL_LEVEL_CHIP[group.level])}>
                       <span>{skill.name}</span>
                       <span className="text-muted-foreground/80 ml-1.5 font-normal">
-                        ({skill.yearsOfExperience} {skill.yearsOfExperience === 1 ? "yr" : "yrs"})
+                        ({skill.yearsOfExperience} {skill.yearsOfExperience === 1 ? 'yr' : 'yrs'})
                       </span>
                     </Badge>
                     <Button

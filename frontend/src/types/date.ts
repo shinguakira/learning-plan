@@ -1,4 +1,4 @@
-import type { WEEKDAY, WEEKDAY_INITIAL } from "@/constants/date"
+import type { WEEKDAY, WEEKDAY_INITIAL } from '@/constants/date'
 
 declare const isoDateBrand: unique symbol
 

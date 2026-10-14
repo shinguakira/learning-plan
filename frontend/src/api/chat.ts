@@ -1,6 +1,6 @@
-import { CHAT_API_KEY, CHAT_API_URL, CHAT_MODEL, CHAT_SYSTEM_PROMPT } from "@/constants/chat"
-import type { ChatMessage } from "@/types/chat"
-import type { MockUser } from "@/types/user"
+import { CHAT_API_KEY, CHAT_API_URL, CHAT_MODEL, CHAT_SYSTEM_PROMPT } from '@/constants/chat'
+import type { ChatMessage } from '@/types/chat'
+import type { MockUser } from '@/types/user'
 
 /**
  * Chat completions over plain fetch, called straight from the browser.
@@ -19,28 +19,28 @@ export async function fetchChatReply(
   signal: AbortSignal,
   user: MockUser,
 ): Promise<string> {
-  if (CHAT_API_URL === "" || CHAT_MODEL === "") {
-    throw new Error("Set VITE_CHAT_API_URL and VITE_CHAT_MODEL in .env to use the chat.")
+  if (CHAT_API_URL === '' || CHAT_MODEL === '') {
+    throw new Error('Set VITE_CHAT_API_URL and VITE_CHAT_MODEL in .env to use the chat.')
   }
 
-  const headers: Record<string, string> = { "Content-Type": "application/json" }
+  const headers: Record<string, string> = { 'Content-Type': 'application/json' }
   // A local runtime often needs no key at all.
-  if (CHAT_API_KEY !== "") headers.Authorization = `Bearer ${CHAT_API_KEY}`
+  if (CHAT_API_KEY !== '') headers.Authorization = `Bearer ${CHAT_API_KEY}`
   // api.anthropic.com refuses browser origins unless the request opts in by
   // name. Sent only to that host, so every other endpoint sees the same
   // request it saw before.
-  if (new URL(CHAT_API_URL).hostname === "api.anthropic.com") {
-    headers["anthropic-dangerous-direct-browser-access"] = "true"
+  if (new URL(CHAT_API_URL).hostname === 'api.anthropic.com') {
+    headers['anthropic-dangerous-direct-browser-access'] = 'true'
   }
 
   const request = {
-    method: "POST",
+    method: 'POST',
     headers,
     body: JSON.stringify({
       model: CHAT_MODEL,
       messages: [
         // The header's active user, so the model knows who it is talking to.
-        { role: "system", content: `${CHAT_SYSTEM_PROMPT} You are talking to ${user}.` },
+        { role: 'system', content: `${CHAT_SYSTEM_PROMPT} You are talking to ${user}.` },
         ...history.map(({ role, content }) => ({ role, content })),
       ],
     }),
@@ -57,7 +57,7 @@ export async function fetchChatReply(
     if (signal.aborted) throw error
     throw new Error(
       `Could not reach ${new URL(CHAT_API_URL).origin}. The endpoint is unreachable, ` +
-        "or it does not accept requests from a browser.",
+        'or it does not accept requests from a browser.',
       { cause: error },
     )
   }
@@ -69,8 +69,8 @@ export async function fetchChatReply(
   }
 
   const text = body?.choices?.[0]?.message?.content
-  if (typeof text !== "string" || text.trim() === "") {
-    throw new Error("The API returned an empty reply.")
+  if (typeof text !== 'string' || text.trim() === '') {
+    throw new Error('The API returned an empty reply.')
   }
   return text
 }

@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test"
+import { expect, test } from '@playwright/test'
 
 /**
  * Pixel snapshots of the two initial renders asked for: the tasks page itself,
@@ -6,23 +6,23 @@ import { expect, test } from "@playwright/test"
  * interaction inside the modal, no other pages.
  */
 
-test("tasks page, initial render", async ({ page }) => {
-  await page.goto("/tasks")
-  await expect(page.getByText("Loading sample tasks…")).toHaveCount(0)
-  await expect(page.getByRole("heading", { name: "Learning tasks" })).toBeVisible()
-  await expect(page).toHaveScreenshot("tasks-page.png")
+test('tasks page, initial render', async ({ page }) => {
+  await page.goto('/tasks')
+  await expect(page.getByText('Loading sample tasks…')).toHaveCount(0)
+  await expect(page.getByRole('heading', { name: 'Learning tasks' })).toBeVisible()
+  await expect(page).toHaveScreenshot('tasks-page.png')
 })
 
-test("profile page, initial render", async ({ page }) => {
-  await page.goto("/profile")
-  await expect(page.getByRole("status")).toHaveCount(0)
-  await expect(page).toHaveScreenshot("profile-page.png")
+test('profile page, initial render', async ({ page }) => {
+  await page.goto('/profile')
+  await expect(page.getByRole('status')).toHaveCount(0)
+  await expect(page).toHaveScreenshot('profile-page.png')
 })
 
-test("add task modal, initial render", async ({ page }) => {
-  await page.goto("/tasks")
-  await expect(page.getByText("Loading sample tasks…")).toHaveCount(0)
-  await page.getByRole("button", { name: "Add a Task", exact: true }).click()
-  await expect(page.getByRole("dialog", { name: "Add Task" })).toBeVisible()
-  await expect(page).toHaveScreenshot("add-task-modal.png")
+test('add task modal, initial render', async ({ page }) => {
+  await page.goto('/tasks')
+  await expect(page.getByText('Loading sample tasks…')).toHaveCount(0)
+  await page.getByRole('button', { name: 'Add a Task', exact: true }).click()
+  await expect(page.getByRole('dialog', { name: 'Add Task' })).toBeVisible()
+  await expect(page).toHaveScreenshot('add-task-modal.png')
 })

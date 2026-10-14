@@ -1,5 +1,5 @@
-import type { SeedTask, Task } from "@/types/task"
-import { addDays, today } from "@/utils/date"
+import type { SeedTask, Task } from '@/types/task'
+import { addDays, today } from '@/utils/date'
 
 /** Expand the seed entries into real tasks anchored to today's date. */
 export function createSeedTasks(seedTasks: readonly SeedTask[]): Task[] {

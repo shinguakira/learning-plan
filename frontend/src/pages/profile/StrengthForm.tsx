@@ -1,12 +1,12 @@
-import type { FormEvent } from "react"
-import { Plus } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
-import { FormField } from "@/components/form/FormField"
-import { useStrengthDraft } from "@/hooks/useStrengthDraft"
-import type { StrengthDraft } from "@/types/strength"
+import type { FormEvent } from 'react'
+import { Plus } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Input } from '@/components/ui/input'
+import { Textarea } from '@/components/ui/textarea'
+import { FormField } from '@/components/form/FormField'
+import { useStrengthDraft } from '@/hooks/useStrengthDraft'
+import type { StrengthDraft } from '@/types/strength'
 
 export function StrengthForm({ onSubmit }: { onSubmit: (draft: StrengthDraft) => void }) {
   const { draft, touched, nameError, descriptionError, patch, submit } = useStrengthDraft()

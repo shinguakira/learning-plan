@@ -1,7 +1,7 @@
-import { useState } from "react"
-import { ArrowUp } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Textarea } from "@/components/ui/textarea"
+import { useState } from 'react'
+import { ArrowUp } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { Textarea } from '@/components/ui/textarea'
 
 /** Owns the draft text; the page only hears about completed messages. */
 export function ChatComposer({
@@ -11,12 +11,12 @@ export function ChatComposer({
   pending: boolean
   onSend: (text: string) => void
 }) {
-  const [draft, setDraft] = useState("")
+  const [draft, setDraft] = useState('')
 
   const submit = () => {
-    if (draft.trim() === "" || pending) return
+    if (draft.trim() === '' || pending) return
     onSend(draft)
-    setDraft("")
+    setDraft('')
   }
 
   return (
@@ -32,7 +32,7 @@ export function ChatComposer({
         value={draft}
         onChange={(event) => setDraft(event.target.value)}
         onKeyDown={(event) => {
-          if (event.key === "Enter" && !event.shiftKey && !event.nativeEvent.isComposing) {
+          if (event.key === 'Enter' && !event.shiftKey && !event.nativeEvent.isComposing) {
             event.preventDefault()
             submit()
           }
@@ -46,7 +46,7 @@ export function ChatComposer({
       <Button
         type="submit"
         size="icon"
-        disabled={draft.trim() === "" || pending}
+        disabled={draft.trim() === '' || pending}
         aria-label="Send"
         title="Send"
         className="rounded-xl"

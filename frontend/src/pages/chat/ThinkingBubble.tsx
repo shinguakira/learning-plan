@@ -1,4 +1,4 @@
-import { AssistantAvatar } from "@/pages/chat/AssistantAvatar"
+import { AssistantAvatar } from '@/pages/chat/AssistantAvatar'
 
 /** Placeholder while a reply is in flight. */
 export function ThinkingBubble() {

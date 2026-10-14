@@ -1,4 +1,4 @@
-import type { ISODate } from "@/types/date"
+import type { ISODate } from '@/types/date'
 
 /** The date range the timeline draws, and every day inside it. */
 export type Domain = {

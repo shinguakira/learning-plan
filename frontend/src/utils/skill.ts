@@ -1,5 +1,5 @@
-import { SKILL_LEVELS } from "@/constants/skill"
-import type { Skill, SkillLevel } from "@/types/skill"
+import { SKILL_LEVELS } from '@/constants/skill'
+import type { Skill, SkillLevel } from '@/types/skill'
 
 export type SkillGroup = {
   level: SkillLevel

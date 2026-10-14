@@ -1,10 +1,10 @@
-import { Navigate, Route, Routes } from "react-router-dom"
-import { AppLayout } from "@/components/layout/AppLayout"
-import { MockUserProvider } from "@/components/layout/MockUserProvider"
-import { ROUTES } from "@/constants/app"
-import { ChatPage } from "@/pages/chat/ChatPage"
-import { ProfilePage } from "@/pages/profile/ProfilePage"
-import { TasksPage } from "@/pages/tasks/TasksPage"
+import { Navigate, Route, Routes } from 'react-router-dom'
+import { AppLayout } from '@/components/layout/AppLayout'
+import { MockUserProvider } from '@/components/layout/MockUserProvider'
+import { ROUTES } from '@/constants/app'
+import { ChatPage } from '@/pages/chat/ChatPage'
+import { ProfilePage } from '@/pages/profile/ProfilePage'
+import { TasksPage } from '@/pages/tasks/TasksPage'
 
 export function App() {
   return (

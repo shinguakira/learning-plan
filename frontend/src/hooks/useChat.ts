@@ -1,7 +1,7 @@
-import { useEffect, useRef, useState } from "react"
-import { fetchChatReply } from "@/api/chat"
-import { useMockUser } from "@/hooks/useMockUser"
-import type { ChatMessage } from "@/types/chat"
+import { useEffect, useRef, useState } from 'react'
+import { fetchChatReply } from '@/api/chat'
+import { useMockUser } from '@/hooks/useMockUser'
+import type { ChatMessage } from '@/types/chat'
 
 export type ChatApi = {
   messages: ChatMessage[]
@@ -25,9 +25,9 @@ export function useChat(): ChatApi {
     pending,
     send: (raw) => {
       const text = raw.trim()
-      if (text === "" || pending) return
+      if (text === '' || pending) return
 
-      const next = [...messages, { id: crypto.randomUUID(), role: "user" as const, content: text }]
+      const next = [...messages, { id: crypto.randomUUID(), role: 'user' as const, content: text }]
       setMessages(next)
       setPending(true)
 
@@ -41,14 +41,14 @@ export function useChat(): ChatApi {
       void fetchChatReply(history, controller.signal, user)
         .then((content) => {
           if (controller.signal.aborted) return
-          append({ id: crypto.randomUUID(), role: "assistant", content })
+          append({ id: crypto.randomUUID(), role: 'assistant', content })
         })
         .catch((error: unknown) => {
           if (controller.signal.aborted) return
           append({
             id: crypto.randomUUID(),
-            role: "assistant",
-            content: error instanceof Error ? error.message : "The request failed.",
+            role: 'assistant',
+            content: error instanceof Error ? error.message : 'The request failed.',
             failed: true,
           })
         })

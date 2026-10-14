@@ -1,6 +1,6 @@
-import { formatMonth, parseDate } from "@/utils/date"
-import type { ISODate } from "@/types/date"
-import type { Job } from "@/types/job"
+import { formatMonth, parseDate } from '@/utils/date'
+import type { ISODate } from '@/types/date'
+import type { Job } from '@/types/job'
 
 /**
  * Most recent first, which is the order a work history is read in. The current
@@ -12,7 +12,7 @@ export function sortJobs(jobs: readonly Job[]): Job[] {
 
 /** 'April 2024 - Present' */
 export function formatPeriod(job: Job): string {
-  const end = job.endDate === null ? "Present" : formatMonth(job.endDate)
+  const end = job.endDate === null ? 'Present' : formatMonth(job.endDate)
   return `${formatMonth(job.startDate)} - ${end}`
 }
 

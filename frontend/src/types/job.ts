@@ -1,5 +1,5 @@
-import type { EMPLOYMENT_TYPES } from "@/constants/job"
-import type { ISODate } from "@/types/date"
+import type { EMPLOYMENT_TYPES } from '@/constants/job'
+import type { ISODate } from '@/types/date'
 
 export type EmploymentType = (typeof EMPLOYMENT_TYPES)[number]
 
@@ -16,4 +16,4 @@ export type Job = {
   createdAt: string
 }
 
-export type JobDraft = Omit<Job, "id" | "createdAt">
+export type JobDraft = Omit<Job, 'id' | 'createdAt'>

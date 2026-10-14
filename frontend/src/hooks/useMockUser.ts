@@ -1,5 +1,5 @@
-import { createContext, useContext } from "react"
-import type { MockUser } from "@/types/user"
+import { createContext, useContext } from 'react'
+import type { MockUser } from '@/types/user'
 
 export type MockUserContextValue = {
   user: MockUser
@@ -13,7 +13,7 @@ export const MockUserContext = createContext<MockUserContextValue | null>(null)
 export function useMockUser(): MockUserContextValue {
   const context = useContext(MockUserContext)
   if (context === null) {
-    throw new Error("useMockUser must be used within a MockUserProvider")
+    throw new Error('useMockUser must be used within a MockUserProvider')
   }
   return context
 }

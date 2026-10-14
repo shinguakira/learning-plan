@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react"
-import { fetchProfile } from "@/api/profile"
-import type { Job, JobDraft } from "@/types/job"
-import type { Skill, SkillDraft } from "@/types/skill"
-import type { Certificate, CertificateDraft } from "@/types/certificate"
-import type { Strength, StrengthDraft } from "@/types/strength"
+import { useEffect, useState } from 'react'
+import { fetchProfile } from '@/api/profile'
+import type { Job, JobDraft } from '@/types/job'
+import type { Skill, SkillDraft } from '@/types/skill'
+import type { Certificate, CertificateDraft } from '@/types/certificate'
+import type { Strength, StrengthDraft } from '@/types/strength'
 
 export type ProfileApi = {
   skills: Skill[]
@@ -46,7 +46,7 @@ export function useProfile(): ProfileApi {
         setStrengths((prev) => [...prev, ...seed.strengths])
       })
       .catch((caught: unknown) => {
-        if (active) setError(caught instanceof Error ? caught.message : "Failed to load profile.")
+        if (active) setError(caught instanceof Error ? caught.message : 'Failed to load profile.')
       })
       .finally(() => {
         if (active) setLoading(false)

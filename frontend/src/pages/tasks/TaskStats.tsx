@@ -1,10 +1,10 @@
-import { CircleCheck, CircleDashed, Clock, LoaderCircle, TriangleAlert } from "lucide-react"
-import { Card, CardContent } from "@/components/ui/card"
-import { Progress } from "@/components/ui/progress"
-import { Separator } from "@/components/ui/separator"
-import { summarizeTasks } from "@/utils/task"
-import { StatTile } from "@/pages/tasks/StatTile"
-import type { Task } from "@/types/task"
+import { CircleCheck, CircleDashed, Clock, LoaderCircle, TriangleAlert } from 'lucide-react'
+import { Card, CardContent } from '@/components/ui/card'
+import { Progress } from '@/components/ui/progress'
+import { Separator } from '@/components/ui/separator'
+import { summarizeTasks } from '@/utils/task'
+import { StatTile } from '@/pages/tasks/StatTile'
+import type { Task } from '@/types/task'
 
 export function TaskStats({ tasks }: { tasks: readonly Task[] }) {
   const summary = summarizeTasks(tasks)
@@ -49,7 +49,7 @@ export function TaskStats({ tasks }: { tasks: readonly Task[] }) {
             label="Overdue"
             value={summary.overdue}
             icon={TriangleAlert}
-            iconClass={summary.overdue > 0 ? "text-destructive" : undefined}
+            iconClass={summary.overdue > 0 ? 'text-destructive' : undefined}
             alert
           />
           <StatTile label="Estimated" value={summary.hours} unit="h" icon={Clock} />

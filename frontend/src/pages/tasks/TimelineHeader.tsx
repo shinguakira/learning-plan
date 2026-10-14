@@ -1,8 +1,8 @@
-import { DAY_W, LABEL_W } from "@/constants/timeline"
-import { cn } from "@/lib/utils"
-import { isWeekend, parseDate, weekdayInitial } from "@/utils/date"
-import type { ISODate } from "@/types/date"
-import type { MonthSegment } from "@/types/timeline"
+import { DAY_W, LABEL_W } from '@/constants/timeline'
+import { cn } from '@/lib/utils'
+import { isWeekend, parseDate, weekdayInitial } from '@/utils/date'
+import type { ISODate } from '@/types/date'
+import type { MonthSegment } from '@/types/timeline'
 
 /** Top row: one heading per calendar month, spanning its day columns. */
 export function TimelineMonths({
@@ -56,15 +56,15 @@ export function TimelineDays({
               key={day}
               style={{ width: DAY_W }}
               className={cn(
-                "flex shrink-0 flex-col items-center gap-0.5 py-1.5 text-[10px] leading-none",
-                weekend && "bg-muted/40",
+                'flex shrink-0 flex-col items-center gap-0.5 py-1.5 text-[10px] leading-none',
+                weekend && 'bg-muted/40',
               )}
             >
               <span
                 className={
                   day === today
-                    ? "bg-primary text-primary-foreground rounded-full px-1.5 py-0.5 font-bold"
-                    : cn("font-semibold", weekend && "text-muted-foreground")
+                    ? 'bg-primary text-primary-foreground rounded-full px-1.5 py-0.5 font-bold'
+                    : cn('font-semibold', weekend && 'text-muted-foreground')
                 }
               >
                 {parseDate(day).getDate()}

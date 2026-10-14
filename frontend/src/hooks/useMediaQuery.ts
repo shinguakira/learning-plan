@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState } from 'react'
 
 /**
  * Whether a CSS media query currently matches, so behaviour can follow the same
@@ -13,8 +13,8 @@ export function useMediaQuery(query: string): boolean {
 
     // The query may already have changed between the first render and this effect.
     update()
-    list.addEventListener("change", update)
-    return () => list.removeEventListener("change", update)
+    list.addEventListener('change', update)
+    return () => list.removeEventListener('change', update)
   }, [query])
 
   return matches

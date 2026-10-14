@@ -1,4 +1,4 @@
-import { Inbox } from "lucide-react"
+import { Inbox } from 'lucide-react'
 
 /** Shown in place of the list or timeline when there is nothing to draw. */
 export function EmptyState({ title, description }: { title: string; description: string }) {
