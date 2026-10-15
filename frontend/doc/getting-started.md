@@ -281,4 +281,4 @@ code consistent with what is already there.
 
 - [`doc/product.md`](../../doc/product.md) — what the app is for, and who for.
 - [`doc/coding.md`](coding.md) — why the code is arranged this way.
-- [`AGENTS.md`](../AGENTS.md) — the same decisions as a short list of rules.
+- [`AGENTS.md`](../../AGENTS.md) — the same decisions as a short list of rules.

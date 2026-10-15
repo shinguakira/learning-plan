@@ -1,9 +1,9 @@
-import { CATEGORIES } from '@/constants/task'
-import { DAY_W } from '@/constants/timeline'
-import { diffDays, today } from '@/utils/date'
-import { computeDomain, monthSegments } from '@/utils/timeline'
-import type { Domain, MonthSegment } from '@/types/timeline'
-import type { Category, Task } from '@/types/task'
+import { CATEGORIES } from "@/constants/task"
+import { DAY_W } from "@/constants/timeline"
+import { diffDays, today } from "@/utils/date"
+import { computeDomain, monthSegments } from "@/utils/timeline"
+import type { Domain, MonthSegment } from "@/types/timeline"
+import type { Category, Task } from "@/types/task"
 
 export type TimelineModel = {
   /** Tasks in the fixed timeline order: earliest start first. */
