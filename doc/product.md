@@ -71,6 +71,11 @@ Alongside those skills, record your personal and professional strengths. Each ha
 a name and a short explanation or example, so you can describe what you bring to
 a role beyond the technologies you know.
 
+**Download the sample profile.** Download CSV exports skills, strengths, job
+history and certificates in one `profile.csv` file. Each row identifies its
+section, with separate columns for its details, including certificate links and
+job summaries. Unsaved profile edits are not included in the download.
+
 ## Who it is for
 
 Someone studying largely alone, over months rather than weeks, with real deadlines

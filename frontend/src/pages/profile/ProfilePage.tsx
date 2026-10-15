@@ -1,6 +1,6 @@
 import { Award, Briefcase, Code, Download, Sparkles } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { useDownloadSkillsCsv } from "@/hooks/useDownloadSkillsCsv"
+import { useDownloadProfileCsv } from "@/hooks/useDownloadProfileCsv"
 import { useProfile } from "@/hooks/useProfile"
 import { JobForm } from "@/pages/profile/JobForm"
 import { JobList } from "@/pages/profile/JobList"
@@ -40,7 +40,7 @@ export function ProfilePage() {
     addStrength,
     removeStrength,
   } = useProfile()
-  const { status: csvStatus, download: downloadCsv } = useDownloadSkillsCsv()
+  const { status: csvStatus, download: downloadCsv } = useDownloadProfileCsv()
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6">
@@ -62,6 +62,9 @@ export function ProfilePage() {
             <Download />
             Download CSV
           </Button>
+          <p className="text-muted-foreground mt-1 max-w-xs text-xs">
+            Exports sample skills, strengths, jobs and certificates. Unsaved edits are not included.
+          </p>
           {csvStatus === "error" && (
             <p className="text-destructive mt-1 text-xs">Could not download the CSV.</p>
           )}
