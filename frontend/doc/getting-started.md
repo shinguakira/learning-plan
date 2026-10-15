@@ -16,8 +16,8 @@ npm install
 npm run dev
 ```
 
-Then open http://localhost:5173. The sample plan loads on every visit; edits last
-until you reload.
+Then open http://localhost:5173. Sample data loads on each visit to Tasks. Task edits
+last until you leave that page or reload.
 
 Install and start the backend too, in another terminal:
 
@@ -196,7 +196,9 @@ export function useTasks(): TasksApi {
 `useTasks` fetches sample entries from `/api/tasks` on mount and expands their
 day offsets into calendar dates. Loading starts with an empty list; local tasks
 added during the request are preserved. It exposes `addTask`, `updateTask`, and
-`removeTask` so components do not need to know how the list is stored.
+`removeTask` so components do not need to know how the list is stored. Chat analysis
+fetches the backend list independently when requested; it does not share the local
+Tasks-page state.
 
 The other hooks follow the same shape:
 

@@ -52,11 +52,17 @@ deadlines have already passed, and how many hours you have committed to in total
 The overdue count is deliberately prominent — a plan with no overdue items is
 usually a plan nobody is being honest about.
 
-**Ask questions without leaving.** A separate chat page answers the things that come
-up mid-study — how to approach a topic, why something behaves the way it does,
-what to learn first. It has no knowledge of your task list and does not try to
-manage your plan for you; it is there so that hitting a wall does not mean opening
-five browser tabs and losing the thread.
+**Ask questions without leaving.** The chat page answers questions that come up
+mid-study — how to approach a topic, why something behaves the way it does, and what
+to learn first.
+
+**Get feedback on the plan.** In AI chat, Analyze my tasks fetches a fresh copy of
+the sample plan and adds its analysis to the conversation. Unsaved edits on the
+Tasks page are not included. It reviews the whole sample plan for potential
+bottlenecks, overdue work and unrealistic scheduling. You can ask follow-up
+questions about the same review. A loading indicator appears while the AI works,
+and Cancel stops the pending request. Suggestions leave the plan for you to edit.
+Task edits remain local to the Tasks page and reset when you leave it.
 
 **Keep a running list of what you can already do.** A profile page holds the
 technical skills you've picked up, each with a level from beginner to expert —

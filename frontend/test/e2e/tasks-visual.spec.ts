@@ -1,10 +1,13 @@
 import { expect, test } from "@playwright/test"
 
 /**
- * Pixel snapshots of the two initial renders asked for: the tasks page itself,
- * and the Add Task modal right after it opens. Nothing beyond that - no
- * interaction inside the modal, no other pages.
+ * Pixel snapshots of Tasks, Profile, and the Add Task modal's initial render.
+ * Fix the clock because sample task dates and overdue counts depend on today.
  */
+
+test.beforeEach(async ({ page }) => {
+  await page.clock.setFixedTime(new Date("2026-10-14T12:00:00"))
+})
 
 test("tasks page, initial render", async ({ page }) => {
   await page.goto("/tasks")
