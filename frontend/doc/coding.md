@@ -125,16 +125,6 @@ so it never picks up the Playwright specs.
 shadcn's `Select` is a Radix listbox, not a native `<select>`, so the specs open the
 trigger and click an option rather than calling `selectOption`.
 
-## Task visibility
-
-Task visibility is defined by `canViewTask` in `src/utils/task.ts`: the active user
-sees their assigned tasks, and `TASK_ADMIN_USER` (Akira) sees all tasks. `useTasks`
-retains the full list locally and returns only the active user's view. Updates,
-removal, Delete all and Reload sample data use the same rule, so a non-admin's
-actions preserve other users' tasks. Cleared users are tracked separately while
-samples load; a late response cannot resurrect their tasks or suppress everyone
-else's samples. Pagination resets when the selected user changes.
-
 ## Task analysis in chat
 
 Analysis uses the existing chat request and reply flow. A user message shows
