@@ -138,19 +138,28 @@ with `include` scoped to `test/unit/`, so it never picks up the Playwright specs
 - Assert invariants and relative changes, not numbers baked into the seed data.
 - Never write a test that asserts something it does not actually exercise.
 
+**Do not touch the tests unless you are told to.** Writing a spec, editing an
+assertion, adjusting a fixture, regenerating a snapshot baseline — every one of
+those waits for an explicit instruction. A change that makes a test fail is not
+permission to edit the test.
+
+**Do not run the tests, and ignore test failures.** This covers `test-e2e` and
+`test-unit` alike. Say what you changed and stop there; running the suite and
+deciding what to do about it is the user's call, not yours.
+
 ## Verification
 
-Before calling frontend work done, all five must pass from `frontend/`:
+Before calling frontend work done, these must pass from `frontend/`:
 
 ```bash
 npm run format-check
 npm run lint
 npm run type-check
-npm run test-unit
-npm run test-e2e
 ```
 
-Do not verify behaviour by taking browser screenshots — write or run a test.
+`test-unit` and `test-e2e` are deliberately absent — see Tests.
+
+Do not verify behaviour by taking browser screenshots.
 
 The backend has `npm run type-check`.
 
