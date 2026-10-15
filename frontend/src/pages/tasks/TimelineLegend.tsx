@@ -1,6 +1,6 @@
-import { CATEGORY_THEME } from '@/constants/task'
-import { cn } from '@/lib/utils'
-import type { Category } from '@/types/task'
+import { CATEGORY_THEME } from "@/constants/task"
+import { cn } from "@/lib/utils"
+import type { Category } from "@/types/task"
 
 /**
  * Names every category on screen, plus what the bar styles mean. The text is
@@ -11,7 +11,7 @@ export function TimelineLegend({ categories }: { categories: readonly Category[]
     <div className="text-muted-foreground bg-muted/40 flex flex-wrap items-center gap-x-4 gap-y-2 border-t px-4 py-2.5 text-[11px]">
       {categories.map((category) => (
         <span key={category} className="flex items-center gap-1.5">
-          <span className={cn('size-2 rounded-full', CATEGORY_THEME[category].dot)} />
+          <span className={cn("size-2 rounded-full", CATEGORY_THEME[category].dot)} />
           {category}
         </span>
       ))}

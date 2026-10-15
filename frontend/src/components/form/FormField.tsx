@@ -1,6 +1,6 @@
-import type { ReactNode } from 'react'
-import { Label } from '@/components/ui/label'
-import { cn } from '@/lib/utils'
+import type { ReactNode } from "react"
+import { Label } from "@/components/ui/label"
+import { cn } from "@/lib/utils"
 
 /** A labelled slot in a form, with room for a validation message. Shared by every page. */
 export function FormField({
@@ -24,7 +24,7 @@ export function FormField({
         {label}
         {hint && <span className="text-muted-foreground font-normal">{hint}</span>}
       </Label>
-      <div className={cn('mt-1.5')}>{children}</div>
+      <div className={cn("mt-1.5")}>{children}</div>
       {error && <p className="text-destructive mt-1 text-xs">{error}</p>}
     </div>
   )

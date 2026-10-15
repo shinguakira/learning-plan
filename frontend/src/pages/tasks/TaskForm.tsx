@@ -1,15 +1,15 @@
-import type { FormEvent } from 'react'
-import { Plus, User } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
+import type { FormEvent } from "react"
+import { Plus, User } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select'
-import { Textarea } from '@/components/ui/textarea'
+} from "@/components/ui/select"
+import { Textarea } from "@/components/ui/textarea"
 import {
   CATEGORIES,
   PRIORITIES,
@@ -17,14 +17,14 @@ import {
   STATUSES,
   STATUS_LABEL,
   TASK_NOTE_MAX_LENGTH,
-} from '@/constants/task'
-import { MOCK_USERS, MOCK_USER_COLOR } from '@/constants/user'
-import { useTaskDraft } from '@/hooks/useTaskDraft'
-import { today } from '@/utils/date'
-import { FormField } from '@/components/form/FormField'
-import type { ISODate } from '@/types/date'
-import type { Category, Priority, Status, TaskDraft } from '@/types/task'
-import type { MockUser } from '@/types/user'
+} from "@/constants/task"
+import { useTaskDraft } from "@/hooks/useTaskDraft"
+import { today } from "@/utils/date"
+import { FormField } from "@/components/form/FormField"
+import type { ISODate } from "@/types/date"
+import type { Category, Priority, Status, TaskDraft } from "@/types/task"
+import { MOCK_USERS, MOCK_USER_COLOR } from "@/constants/user"
+import type { MockUser } from "@/types/user"
 
 export function TaskForm({ onSubmit }: { onSubmit: (draft: TaskDraft) => void }) {
   const { draft, patch, titleError, dateError, touched, submit, reset } = useTaskDraft()

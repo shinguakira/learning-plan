@@ -1,6 +1,6 @@
-import { MOCK_USERS } from '@/constants/user'
-import type { SeedTask, Task } from '@/types/task'
-import { addDays, today } from '@/utils/date'
+import type { SeedTask, Task } from "@/types/task"
+import { addDays, today } from "@/utils/date"
+import { MOCK_USERS } from "@/constants/user"
 
 /** Expand the seed entries into real tasks anchored to today's date. */
 export function createSeedTasks(seedTasks: readonly SeedTask[]): Task[] {

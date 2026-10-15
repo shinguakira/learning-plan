@@ -1,6 +1,6 @@
-import type { CATEGORIES, PRIORITIES, STATUSES, VIEW_MODES } from '@/constants/task'
-import type { ISODate } from '@/types/date'
-import type { MockUser } from '@/types/user'
+import type { CATEGORIES, PRIORITIES, STATUSES, VIEW_MODES } from "@/constants/task"
+import type { ISODate } from "@/types/date"
+import type { MockUser } from "@/types/user"
 
 export type Category = (typeof CATEGORIES)[number]
 export type Status = (typeof STATUSES)[number]
@@ -23,7 +23,7 @@ export type Task = {
   createdAt: string
 }
 
-export type TaskDraft = Omit<Task, 'id' | 'createdAt'>
+export type TaskDraft = Omit<Task, "id" | "createdAt">
 
 /** Tailwind classes a category wears in each place it appears. */
 export type CategoryTheme = {
@@ -36,7 +36,7 @@ export type CategoryTheme = {
 }
 
 /** How urgent a due date is, used to colour the remaining-days label. */
-export type DueTone = 'over' | 'soon' | 'calm'
+export type DueTone = "over" | "soon" | "calm"
 
 export type DueDescription = {
   label: string
@@ -44,9 +44,9 @@ export type DueDescription = {
 }
 
 export type ViewMode = (typeof VIEW_MODES)[number]
-export type StatusFilter = Status | 'all'
-export type CategoryFilter = Category | 'all'
-export type SortKey = 'due' | 'start' | 'priority' | 'created'
+export type StatusFilter = Status | "all"
+export type CategoryFilter = Category | "all"
+export type SortKey = "due" | "start" | "priority" | "created"
 
 /** What the filter row narrows the task list by. */
 export type TaskFilterCriteria = {
@@ -63,7 +63,7 @@ export type TaskFilterCriteria = {
  * no notion of the header's mock users either, so the assignee is rotated
  * in when the seed is expanded, the same way the dates are derived.
  */
-export type SeedTask = Omit<TaskDraft, 'startDate' | 'dueDate' | 'assignee'> & {
+export type SeedTask = Omit<TaskDraft, "startDate" | "dueDate" | "assignee"> & {
   offsetStart: number
   span: number
 }
