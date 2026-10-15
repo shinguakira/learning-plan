@@ -43,6 +43,22 @@ test("adds a task", async ({ page }) => {
   expect(await shownCount(page)).toBe(SEED_COUNT + 1)
 })
 
+test("defaults a new task to the active header user and shows the chosen assignee", async ({
+  page,
+}) => {
+  await page.getByRole("button", { name: "Add a Task", exact: true }).click()
+  await expect(page.getByRole("combobox", { name: "Assignee" })).toHaveText("Sanjar")
+
+  await chooseOption(page, "Assignee", "Mike")
+  await page.getByLabel("Title").fill("Pair on the checkout bug")
+  await page.getByRole("button", { name: "Add task", exact: true }).click()
+  await page.getByRole("button", { name: "Close", exact: true }).click()
+
+  await page.getByLabel("Search tasks").fill("Pair on the checkout bug")
+  const row = page.getByRole("listitem").filter({ hasText: "Pair on the checkout bug" })
+  await expect(row.getByText("Mike", { exact: true })).toBeVisible()
+})
+
 test("refuses a task with no title", async ({ page }) => {
   await page.getByRole("button", { name: "Add a Task", exact: true }).click()
   await page.getByRole("button", { name: "Add task", exact: true }).click()

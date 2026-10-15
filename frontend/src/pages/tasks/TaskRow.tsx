@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { CalendarDays, Clock, Trash2 } from "lucide-react"
+import { CalendarDays, Clock, Trash2, User } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import {
@@ -15,6 +15,7 @@ import { formatShort } from "@/utils/date"
 import { describeDue } from "@/utils/task"
 import { StatusToggle } from "@/pages/tasks/StatusToggle"
 import type { Task } from "@/types/task"
+import { MOCK_USER_COLOR } from "@/constants/user"
 
 export function TaskRow({
   task,
@@ -62,7 +63,16 @@ export function TaskRow({
           <Badge variant="outline" className={PRIORITY_CHIP[task.priority]}>
             {PRIORITY_LABEL[task.priority]} priority
           </Badge>
-          <span className="text-muted-foreground ml-1 flex items-center gap-1 text-[11px]">
+          <span
+            className={cn(
+              "ml-1 flex items-center gap-1 text-[11px]",
+              MOCK_USER_COLOR[task.assignee],
+            )}
+          >
+            <User className="size-3" />
+            {task.assignee}
+          </span>
+          <span className="text-muted-foreground flex items-center gap-1 text-[11px]">
             <CalendarDays className="size-3" />
             {formatShort(task.startDate)} → {formatShort(task.dueDate)}
           </span>
