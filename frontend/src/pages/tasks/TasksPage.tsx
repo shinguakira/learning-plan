@@ -37,7 +37,6 @@ export function TasksPage() {
       <div className="flex flex-wrap items-end justify-between gap-3">
         <div>
           <h1 className="text-lg font-semibold">Learning tasks</h1>
-          
         </div>
         <div className="flex items-center gap-2">
           <Button
