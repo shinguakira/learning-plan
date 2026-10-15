@@ -6,22 +6,11 @@ export function createTaskAnalysisContext(tasks: readonly Task[]): string {
   const plan = {
     today: today(),
     tasks: tasks.map(
-      ({
+      ({ title, category, status, priority, startDate, dueDate, estimatedHours, note }) => ({
         title,
         category,
         status,
         priority,
-        assignee,
-        startDate,
-        dueDate,
-        estimatedHours,
-        note,
-      }) => ({
-        title,
-        category,
-        status,
-        priority,
-        assignee,
         startDate,
         dueDate,
         estimatedHours,

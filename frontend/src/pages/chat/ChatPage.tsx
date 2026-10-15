@@ -50,8 +50,7 @@ export function ChatPage() {
       </div>
 
       <p className="text-muted-foreground pb-3 text-xs">
-        Analysis fetches the backend tasks visible to the selected user. Unsaved edits on the Tasks
-        page are not included.
+        Analysis fetches the backend task list. Unsaved edits on the Tasks page are not included.
       </p>
 
       <div ref={scrollRef} className="scrollbar-slim min-h-0 flex-1 space-y-4 overflow-y-auto pb-4">

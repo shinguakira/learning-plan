@@ -125,7 +125,7 @@ so it never picks up the Playwright specs.
 shadcn's `Select` is a Radix listbox, not a native `<select>`, so the specs open the
 trigger and click an option rather than calling `selectOption`.
 
-## Task analysis in chat
+## Task visibility
 
 Task visibility is defined by `canViewTask` in `src/utils/task.ts`: the active user
 sees their assigned tasks, and `TASK_ADMIN_USER` (Akira) sees all tasks. `useTasks`
@@ -135,11 +135,7 @@ actions preserve other users' tasks. Cleared users are tracked separately while
 samples load; a late response cannot resurrect their tasks or suppress everyone
 else's samples. Pagination resets when the selected user changes.
 
-Chat analysis applies the same visibility rule after fetching and expanding the
-backend seed. Switching the header user remounts the chat to discard the previous
-user's conversation and cancel requests carrying their task snapshot. The backend
-still supplies the full mock seed; assignments are derived from its stable order
-in `createSeedTasks`.
+## Task analysis in chat
 
 Analysis uses the existing chat request and reply flow. A user message shows
 "Analyze my tasks" while carrying a separate task snapshot in its `context` field.

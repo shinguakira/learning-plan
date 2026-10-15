@@ -3,7 +3,6 @@ import { fetchChatReply } from "@/api/chat"
 import { fetchTasks } from "@/api/tasks"
 import { useMockUser } from "@/hooks/useMockUser"
 import { createSeedTasks } from "@/utils/seed"
-import { canViewTask } from "@/utils/task"
 import { createTaskAnalysisContext } from "@/utils/taskAnalysis"
 import type { ChatMessage, ChatPendingPhase } from "@/types/chat"
 
@@ -89,9 +88,7 @@ export function useChat(): ChatApi {
         const response = await fetchTasks(signal)
         if (response.tasks.length === 0)
           throw new Error("No tasks to analyze. The backend returned an empty plan.")
-        const tasks = createSeedTasks(response.tasks).filter((task) => canViewTask(task, user))
-        if (tasks.length === 0) throw new Error("No tasks are assigned to the selected user.")
-        return createTaskAnalysisContext(tasks)
+        return createTaskAnalysisContext(createSeedTasks(response.tasks))
       }),
     cancel: () => {
       request.current?.abort()
