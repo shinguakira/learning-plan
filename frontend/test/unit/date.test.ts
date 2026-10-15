@@ -44,5 +44,4 @@ describe("isWeekend", () => {
   it("is false on a Weekday", () => {
     expect(isWeekend(iso("2026-01-05"))).toBe(false)
   })
-
 })
