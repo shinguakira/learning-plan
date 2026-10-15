@@ -12,9 +12,12 @@ import {
 
 export function ProfileFormDialog({
   title,
+  triggerClassName,
   children,
 }: {
   title: string
+  /** Lets a profile section paint its trigger in the section's own colour. */
+  triggerClassName?: string
   children: (close: () => void) => ReactNode
 }) {
   const [open, setOpen] = useState(false)
@@ -22,7 +25,7 @@ export function ProfileFormDialog({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button type="button" variant="outline" size="sm">
+        <Button type="button" variant="outline" size="sm" className={triggerClassName}>
           <Plus />
           {title}
         </Button>
