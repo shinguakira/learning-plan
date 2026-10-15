@@ -37,12 +37,7 @@ export function TasksPage() {
       <div className="flex flex-wrap items-end justify-between gap-3">
         <div>
           <h1 className="text-lg font-semibold">Learning tasks</h1>
-          <p className="text-muted-foreground mt-0.5 text-xs">
-            {user === TASK_ADMIN_USER
-              ? "Showing all users' tasks."
-              : `Showing tasks assigned to ${user}.`}{" "}
-            Sample data loads on every visit. Nothing is saved.
-          </p>
+          
         </div>
         <div className="flex items-center gap-2">
           <Button
