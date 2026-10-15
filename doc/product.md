@@ -36,6 +36,13 @@ limit, and some symbols, such as emoji, count as two characters.
 progress, and done. That is the whole ceremony; anything heavier and you stop
 doing it.
 
+**See the tasks assigned to you.** Selecting Sanjar, Mike, or John in the header
+shows only that person's tasks. Akira has an administrator view of everyone's
+tasks. The list, timeline, progress figures and filters all use that same view.
+Delete all and Reload sample data affect the selected person's tasks; in Akira's
+view they affect everyone's tasks. Switching between people preserves their edits
+for as long as the Tasks page stays open.
+
 **See the plan as a list when you are working.** Sort by deadline to see what is
 next, or by priority when you have an hour and want it to count. Filter to one
 subject when you want to focus, or search when you half-remember writing something
