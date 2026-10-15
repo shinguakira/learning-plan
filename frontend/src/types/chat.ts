@@ -1,4 +1,5 @@
 export type ChatRole = "user" | "assistant"
+export type ChatPendingPhase = "tasks" | "analysis" | "reply" | null
 
 export type ChatMessage = {
   id: string

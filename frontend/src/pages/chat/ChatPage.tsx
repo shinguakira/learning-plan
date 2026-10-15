@@ -2,16 +2,13 @@ import { MessageSquarePlus, Sparkles } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useAutoScroll } from "@/hooks/useAutoScroll"
 import { useChat } from "@/hooks/useChat"
-import { useTasks } from "@/hooks/useTasks"
-import { createTaskAnalysisContext } from "@/utils/taskAnalysis"
 import { ChatBubble } from "@/pages/chat/ChatBubble"
 import { ChatComposer } from "@/pages/chat/ChatComposer"
 import { ChatEmpty } from "@/pages/chat/ChatEmpty"
 import { ThinkingBubble } from "@/pages/chat/ThinkingBubble"
 
 export function ChatPage() {
-  const { messages, pending, send, cancel, reset } = useChat()
-  const { tasks, loading, error } = useTasks()
+  const { messages, pending, phase, send, analyzeTasks, cancel, reset } = useChat()
   const scrollRef = useAutoScroll<HTMLDivElement>([messages, pending])
 
   return (
@@ -20,7 +17,7 @@ export function ChatPage() {
         <div>
           <h1 className="text-lg font-semibold">AI chat</h1>
           <p className="text-muted-foreground mt-0.5 text-xs">
-            Ask a question or review your current learning plan.
+            Ask a question or review the tasks from the backend.
           </p>
         </div>
         <div className="flex flex-wrap items-center gap-2">
@@ -28,8 +25,8 @@ export function ChatPage() {
             type="button"
             variant="outline"
             size="sm"
-            disabled={pending || loading || tasks.length === 0}
-            onClick={() => send("Analyze my tasks", createTaskAnalysisContext(tasks))}
+            disabled={pending}
+            onClick={analyzeTasks}
           >
             <Sparkles />
             Analyze my tasks
@@ -52,21 +49,9 @@ export function ChatPage() {
         </div>
       </div>
 
-      {loading && (
-        <p role="status" className="text-muted-foreground pb-3 text-xs">
-          Loading tasks for analysis…
-        </p>
-      )}
-      {!loading && error && (
-        <p className="text-muted-foreground pb-3 text-xs">
-          {error} Analysis uses any tasks you added on the Tasks page.
-        </p>
-      )}
-      {!loading && !error && tasks.length === 0 && (
-        <p className="text-muted-foreground pb-3 text-xs">
-          Add tasks on the Tasks page to analyze your plan.
-        </p>
-      )}
+      <p className="text-muted-foreground pb-3 text-xs">
+        Analysis fetches the backend task list. Unsaved edits on the Tasks page are not included.
+      </p>
 
       <div ref={scrollRef} className="scrollbar-slim min-h-0 flex-1 space-y-4 overflow-y-auto pb-4">
         {messages.length === 0 && !pending ? (
@@ -78,7 +63,13 @@ export function ChatPage() {
             ))}
             {pending && (
               <ThinkingBubble
-                label={messages.at(-1)?.context ? "Analyzing your tasks…" : "Thinking…"}
+                label={
+                  phase === "tasks"
+                    ? "Loading tasks for analysis…"
+                    : phase === "analysis"
+                      ? "Analyzing your tasks…"
+                      : "Thinking…"
+                }
               />
             )}
           </>

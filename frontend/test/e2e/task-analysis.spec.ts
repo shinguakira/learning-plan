@@ -31,9 +31,7 @@ test.beforeEach(async ({ page }) => {
   await expect(page.getByRole("button", { name: "Analyze my tasks", exact: true })).toHaveCount(0)
 })
 
-test("analyzes the full current plan, including local edits and filtered-out tasks", async ({
-  page,
-}) => {
+test("fetches backend tasks on demand without sharing local task edits", async ({ page }) => {
   await page.clock.setFixedTime(new Date("2026-10-14T12:00:00"))
   await page.getByRole("combobox", { name: "Active user" }).click()
   await page.getByRole("option", { name: "Akira", exact: true }).click()
@@ -53,7 +51,13 @@ test("analyzes the full current plan, including local edits and filtered-out tas
       json: { choices: [{ message: { content: "Spread out React and Docker." } }] },
     })
   })
+  let backendRequests = 0
+  await page.route("**/api/tasks", (route) => {
+    backendRequests += 1
+    return route.fulfill({ json: { tasks: samples } })
+  })
   await page.getByRole("link", { name: "AI chat", exact: true }).click()
+  expect(backendRequests).toBe(0)
   await page.getByRole("button", { name: "Analyze my tasks", exact: true }).click()
   await expect(page.getByText("Spread out React and Docker.")).toBeVisible()
   await expect(page.getByRole("dialog")).toHaveCount(0)
@@ -67,7 +71,8 @@ test("analyzes the full current plan, including local edits and filtered-out tas
   expect(prompt).toContain("Do not invent dependencies")
   const plan = JSON.parse(prompt.split("Learning plan data:\n")[1] ?? "{}")
   expect(plan.today).toBe("2026-10-14")
-  expect(plan.tasks).toHaveLength(3)
+  expect(backendRequests).toBe(1)
+  expect(plan.tasks).toHaveLength(samples.length)
   expect(plan.tasks).toEqual(
     expect.arrayContaining([
       expect.objectContaining({ title: "Learn React", estimatedHours: 20, status: "todo" }),
@@ -76,12 +81,10 @@ test("analyzes the full current plan, including local edits and filtered-out tas
         status: "doing",
         note: "Use a multi-stage build",
       }),
-      expect.objectContaining({
-        title: "Read TypeScript docs",
-        note: "Focus on narrowing",
-        startDate: "2026-10-14",
-      }),
     ]),
+  )
+  expect(plan.tasks.map((task: { title: string }) => task.title)).not.toContain(
+    "Read TypeScript docs",
   )
   for (const task of plan.tasks) {
     expect(task.startDate).toMatch(/^\d{4}-\d{2}-\d{2}$/)
@@ -98,18 +101,26 @@ test("analyzes the full current plan, including local edits and filtered-out tas
     "assistant",
     "user",
   ])
-  expect(sent[1]?.messages[1]?.content).toContain("Read TypeScript docs")
+  expect(sent[1]?.messages[1]?.content).toContain("Learn React")
   expect(sent[1]?.messages.at(-1)?.content).toBe("Which task should I do first?")
+  expect(backendRequests).toBe(1)
   await page.getByRole("link", { name: "Tasks", exact: true }).click()
   await page.getByLabel("Search tasks").fill("Learn React")
-  await expect(page.getByText("1 shown of 3", { exact: true })).toBeVisible()
+  await expect(page.getByText("1 shown of 2", { exact: true })).toBeVisible()
 })
 
-test("returning to chat sends updated task statuses and omits deleted tasks", async ({ page }) => {
+test("each analysis fetches the latest backend list without navigating", async ({ page }) => {
+  let requests = 0
+  await page.route("**/api/tasks", (route) => {
+    requests += 1
+    return route.fulfill({
+      json: { tasks: requests === 1 ? samples : [{ ...samples[0], status: "doing" }] },
+    })
+  })
   const plans: { tasks: { title: string; status: string }[] }[] = []
   await page.route(ENDPOINT, (route) => {
     const body = route.request().postDataJSON() as { messages: { role: string; content: string }[] }
-    const prompt = body.messages.find((message) => message.role === "user")?.content ?? ""
+    const prompt = body.messages.filter((message) => message.role === "user").at(-1)?.content ?? ""
     plans.push(JSON.parse(prompt.split("Learning plan data:\n")[1] ?? "{}"))
     return route.fulfill({
       json: { choices: [{ message: { content: `Review ${plans.length}` } }] },
@@ -119,13 +130,9 @@ test("returning to chat sends updated task statuses and omits deleted tasks", as
   const trigger = page.getByRole("button", { name: "Analyze my tasks", exact: true })
   await trigger.click()
   await expect(page.getByText("Review 1", { exact: true })).toBeVisible()
-  await page.getByRole("link", { name: "Tasks", exact: true }).click()
-  await page.getByRole("button", { name: "Cycle status (currently: To do)", exact: true }).click()
-  await page.getByRole("button", { name: 'Delete "Learn Docker"', exact: true }).click()
-  await page.getByRole("button", { name: "Delete", exact: true }).click()
-  await page.getByRole("link", { name: "AI chat", exact: true }).click()
   await trigger.click()
   await expect(page.getByText("Review 2", { exact: true })).toBeVisible()
+  expect(requests).toBe(2)
   expect(plans[1]?.tasks).toHaveLength(1)
   expect(plans[1]?.tasks[0]).toMatchObject({ title: "Learn React", status: "doing" })
 })
@@ -191,31 +198,97 @@ test("cancels a pending request and keeps its old reply out of a new analysis", 
   }
 })
 
-test("disables analysis while loading and when the plan is empty", async ({ page }) => {
+test("shows task loading, prevents duplicate requests, and cancels the backend fetch", async ({
+  page,
+}) => {
   let release = () => {}
   const gate = new Promise<void>((resolve) => {
     release = resolve
   })
+  let backendRequests = 0
   await page.route("**/api/tasks", async (route) => {
-    await gate
-    await route.fulfill({ json: { tasks: samples } })
+    backendRequests += 1
+    if (backendRequests === 1) await gate
+    await route.fulfill({ json: { tasks: samples } }).catch(() => {})
   })
+  await page.route(ENDPOINT, (route) =>
+    route.fulfill({ json: { choices: [{ message: { content: "New backend review" } }] } }),
+  )
   await page.getByRole("link", { name: "AI chat", exact: true }).click()
-  await page.reload()
   const trigger = page.getByRole("button", { name: "Analyze my tasks", exact: true })
   try {
-    await expect(page.getByText("Loading tasks for analysis…")).toBeVisible()
+    await trigger.click()
+    await expect(page.getByRole("status")).toHaveText("Loading tasks for analysis…")
+    await expect.poll(() => backendRequests).toBe(1)
     await expect(trigger).toBeDisabled()
+    await page.getByLabel("Message").fill("Wait for the analysis")
+    await expect(page.getByRole("button", { name: "Send", exact: true })).toBeDisabled()
+    const aborted = page.waitForEvent("requestfailed", (request) =>
+      request.url().endsWith("/api/tasks"),
+    )
+    await page.getByRole("button", { name: "Cancel", exact: true }).click()
+    release()
+    await aborted
+    await expect(trigger).toBeEnabled()
+    await expect(page.getByText("Loading tasks for analysis…", { exact: true })).toHaveCount(0)
+    await trigger.click()
+    await expect(page.getByText("New backend review", { exact: true })).toBeVisible()
+    expect(backendRequests).toBe(2)
   } finally {
     release()
   }
-  await expect(trigger).toBeEnabled()
-  await page.getByRole("link", { name: "Tasks", exact: true }).click()
-  await page.getByRole("button", { name: "Delete all", exact: true }).click()
-  await page.getByRole("dialog").getByRole("button", { name: "Delete all", exact: true }).click()
-  await expect(page.getByText("0 shown", { exact: true })).toBeVisible()
+})
+
+for (const failure of ["error", "empty"] as const) {
+  test(`handles a backend ${failure} without sending tasks to the AI and allows retry`, async ({
+    page,
+  }) => {
+    let fail = true
+    await page.route("**/api/tasks", (route) =>
+      fail
+        ? failure === "empty"
+          ? route.fulfill({ json: { tasks: [] } })
+          : route.fulfill({ status: 503, json: {} })
+        : route.fulfill({ json: { tasks: samples } }),
+    )
+    let aiRequests = 0
+    await page.route(ENDPOINT, (route) => {
+      aiRequests += 1
+      return route.fulfill({ json: { choices: [{ message: { content: "Backend recovered" } }] } })
+    })
+    await page.getByRole("link", { name: "AI chat", exact: true }).click()
+    const trigger = page.getByRole("button", { name: "Analyze my tasks", exact: true })
+    await trigger.click()
+    await expect(
+      page.getByText(
+        failure === "empty"
+          ? "No tasks to analyze. The backend returned an empty plan."
+          : "Request failed (503)",
+        { exact: true },
+      ),
+    ).toBeVisible()
+    expect(aiRequests).toBe(0)
+    fail = false
+    await trigger.click()
+    await expect(page.getByText("Backend recovered", { exact: true })).toBeVisible()
+    expect(aiRequests).toBe(1)
+  })
+}
+
+test("ordinary chat works without fetching backend tasks", async ({ page }) => {
+  let requests = 0
+  await page.route("**/api/tasks", (route) => {
+    requests += 1
+    return route.fulfill({ status: 503, json: {} })
+  })
+  await page.route(ENDPOINT, (route) =>
+    route.fulfill({ json: { choices: [{ message: { content: "Start with the docs." } }] } }),
+  )
   await page.getByRole("link", { name: "AI chat", exact: true }).click()
-  await expect(trigger).toBeDisabled()
+  await page.getByLabel("Message").fill("How do I learn React?")
+  await page.getByRole("button", { name: "Send", exact: true }).click()
+  await expect(page.getByText("Start with the docs.", { exact: true })).toBeVisible()
+  expect(requests).toBe(0)
 })
 
 test("keeps analysis and its loading controls usable on a phone", async ({ page }) => {

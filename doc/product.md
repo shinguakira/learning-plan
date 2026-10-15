@@ -56,13 +56,13 @@ usually a plan nobody is being honest about.
 mid-study — how to approach a topic, why something behaves the way it does, and what
 to learn first.
 
-**Get feedback on the plan.** In AI chat, Analyze my tasks sends your current plan
-and adds the analysis to the conversation. It reviews all tasks, including those
-hidden by filters, for potential bottlenecks, overdue work and unrealistic
-scheduling. You can ask follow-up questions about the same review. A loading
-indicator appears while the AI works, and Cancel stops the pending request.
-Suggestions leave the plan for you to edit. Task edits stay available as you move
-between Tasks and Chat, until you reload the app.
+**Get feedback on the plan.** In AI chat, Analyze my tasks fetches a fresh copy of
+the sample plan and adds its analysis to the conversation. Unsaved edits on the
+Tasks page are not included. It reviews the whole sample plan for potential
+bottlenecks, overdue work and unrealistic scheduling. You can ask follow-up
+questions about the same review. A loading indicator appears while the AI works,
+and Cancel stops the pending request. Suggestions leave the plan for you to edit.
+Task edits remain local to the Tasks page and reset when you leave it.
 
 **Keep a running list of what you can already do.** A profile page holds the
 technical skills you've picked up, each with a level from beginner to expert —
