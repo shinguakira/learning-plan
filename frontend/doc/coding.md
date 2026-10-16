@@ -125,24 +125,6 @@ so it never picks up the Playwright specs.
 shadcn's `Select` is a Radix listbox, not a native `<select>`, so the specs open the
 trigger and click an option rather than calling `selectOption`.
 
-## Profile CSV export
-
-`GET /api/profile` and `GET /api/profile/csv` both use the backend's
-`profileService.getProfile()`, which gathers skills, strengths, jobs and
-certificates from their existing services. The download therefore exports the
-sample profile, not the frontend's unsaved edits.
-
-`PROFILE_CSV_COLUMNS` defines one header for the complete file. Each record has a
-`section` value (`skills`, `strengths`, `jobs`, or `certificates`), and fields from
-other sections are blank. Skills retain name, level and experience; strengths add
-name and description; jobs include company, title, employment type, dates and
-summary; certificates include name, issuer, earned date and optional credential
-URL. Internal IDs and creation timestamps are omitted. The existing `toCsv`
-utility handles commas, quotes and line breaks in all fields.
-
-The Profile header uses `useDownloadProfileCsv` and `downloadProfileCsv`. The URL
-remains `/api/profile/csv`, and the attachment remains `profile.csv`.
-
 ## Task analysis in chat
 
 Analysis uses the existing chat request and reply flow. A user message shows

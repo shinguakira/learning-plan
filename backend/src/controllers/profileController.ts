@@ -4,7 +4,7 @@ import { skillService } from '../services/skillService.js'
 import { certificateService } from '../services/certificateService.js'
 import { strengthService } from '../services/strengthService.js'
 import { profileService } from '../services/profileService.js'
-import { profileToCsv } from '../utils/profileCsv.js'
+import { toCsv } from '../utils/csv.js'
 
 export default async function profileController(app: FastifyInstance): Promise<void> {
   app.get('/api/profile', async () => ({
@@ -18,6 +18,6 @@ export default async function profileController(app: FastifyInstance): Promise<v
     return reply
       .header('Content-Type', 'text/csv; charset=utf-8')
       .header('Content-Disposition', 'attachment; filename="profile.csv"')
-      .send(profileToCsv(profileService.getProfile()))
+      .send(toCsv(profileService.getProfile()))
   })
 }

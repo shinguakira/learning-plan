@@ -62,9 +62,6 @@ export function ProfilePage() {
             <Download />
             Download CSV
           </Button>
-          <p className="text-muted-foreground mt-1 max-w-xs text-xs">
-            Exports sample skills, strengths, jobs and certificates. Unsaved edits are not included.
-          </p>
           {csvStatus === "error" && (
             <p className="text-destructive mt-1 text-xs">Could not download the CSV.</p>
           )}
