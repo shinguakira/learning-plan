@@ -1,7 +1,11 @@
 import { useEffect, useRef, useState } from "react"
 import { fetchTasks } from "@/api/tasks"
+import { MOCK_USERS, TASK_ADMIN_USER } from "@/constants/user"
+import { useMockUser } from "@/hooks/useMockUser"
 import { createSeedTasks } from "@/utils/seed"
+import { canViewTask } from "@/utils/task"
 import type { SeedTask, Task, TaskDraft } from "@/types/task"
+import type { MockUser } from "@/types/user"
 
 export type TasksApi = {
   tasks: Task[]
@@ -16,12 +20,13 @@ export type TasksApi = {
 
 /** Seed from the backend on mount; all edits remain in browser memory. */
 export function useTasks(): TasksApi {
+  const { user } = useMockUser()
   const [tasks, setTasks] = useState<Task[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [attempt, setAttempt] = useState(0)
   const seed = useRef<SeedTask[] | null>(null)
-  const cleared = useRef(false)
+  const cleared = useRef(new Set<MockUser>())
 
   useEffect(() => {
     let active = true
@@ -31,11 +36,11 @@ export function useTasks(): TasksApi {
       .then((response) => {
         if (!active) return
         seed.current = response.tasks
-        // Do not resurrect samples after Delete all, or overwrite tasks added while loading.
-        if (!cleared.current) {
-          const samples = createSeedTasks(response.tasks)
-          setTasks((previous) => [...previous, ...samples])
-        }
+        // Preserve local additions and suppress late samples only for cleared users.
+        const samples = createSeedTasks(response.tasks).filter(
+          (task) => !cleared.current.has(task.assignee),
+        )
+        setTasks((previous) => [...previous, ...samples])
       })
       .catch((caught: unknown) => {
         if (active) setError(caught instanceof Error ? caught.message : "Failed to load tasks.")
@@ -51,7 +56,7 @@ export function useTasks(): TasksApi {
   }, [attempt])
 
   return {
-    tasks,
+    tasks: tasks.filter((task) => canViewTask(task, user)),
     loading,
     error,
     addTask: (draft) => {
@@ -63,15 +68,21 @@ export function useTasks(): TasksApi {
       setTasks((prev) => [task, ...prev])
     },
     updateTask: (id, patch) => {
-      setTasks((prev) => prev.map((task) => (task.id === id ? { ...task, ...patch } : task)))
+      setTasks((prev) =>
+        prev.map((task) =>
+          task.id === id && canViewTask(task, user) ? { ...task, ...patch } : task,
+        ),
+      )
     },
     removeTask: (id) => {
-      setTasks((prev) => prev.filter((task) => task.id !== id))
+      setTasks((prev) => prev.filter((task) => task.id !== id || !canViewTask(task, user)))
     },
     resetToSeed: () => {
-      cleared.current = false
+      if (user === TASK_ADMIN_USER) cleared.current.clear()
+      else cleared.current.delete(user)
       if (seed.current !== null) {
-        setTasks(createSeedTasks(seed.current))
+        const samples = createSeedTasks(seed.current).filter((task) => canViewTask(task, user))
+        setTasks((previous) => [...previous.filter((task) => !canViewTask(task, user)), ...samples])
       } else {
         setError(null)
         setLoading(true)
@@ -79,8 +90,10 @@ export function useTasks(): TasksApi {
       }
     },
     clearAll: () => {
-      cleared.current = true
-      setTasks([])
+      for (const name of user === TASK_ADMIN_USER ? MOCK_USERS : [user]) {
+        cleared.current.add(name)
+      }
+      setTasks((previous) => previous.filter((task) => !canViewTask(task, user)))
     },
   }
 }

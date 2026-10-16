@@ -3,6 +3,8 @@ import { RotateCcw, Trash2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useTaskFilters } from "@/hooks/useTaskFilters"
 import { useTasks } from "@/hooks/useTasks"
+import { useMockUser } from "@/hooks/useMockUser"
+import { TASK_ADMIN_USER } from "@/constants/user"
 import { TaskFilters } from "@/pages/tasks/TaskFilters"
 import { TaskForm } from "@/pages/tasks/TaskForm"
 import { TaskListView } from "@/pages/tasks/TaskListView"
@@ -13,6 +15,7 @@ import {
   Dialog,
   DialogClose,
   DialogContent,
+  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -20,6 +23,7 @@ import {
 } from "@/components/ui/dialog"
 
 export function TasksPage() {
+  const { user } = useMockUser()
   const { tasks, loading, error, addTask, updateTask, removeTask, resetToSeed, clearAll } =
     useTasks()
   const [view, setView] = useState<ViewMode>("list")
@@ -33,9 +37,6 @@ export function TasksPage() {
       <div className="flex flex-wrap items-end justify-between gap-3">
         <div>
           <h1 className="text-lg font-semibold">Learning tasks</h1>
-          <p className="text-muted-foreground mt-0.5 text-xs">
-            Sample data loads on every visit. Nothing is saved.
-          </p>
         </div>
         <div className="flex items-center gap-2">
           <Button
@@ -67,7 +68,6 @@ export function TasksPage() {
             </DialogTrigger>
             <DialogContent
               showCloseButton={false}
-              aria-describedby={undefined}
               onOpenAutoFocus={(event) => {
                 event.preventDefault()
                 cancelDeleteAllRef.current?.focus()
@@ -75,6 +75,11 @@ export function TasksPage() {
             >
               <DialogHeader>
                 <DialogTitle>Are you sure you want to delete all the tasks?</DialogTitle>
+                <DialogDescription>
+                  {user === TASK_ADMIN_USER
+                    ? "This deletes tasks for every user."
+                    : `This deletes only tasks assigned to ${user}.`}
+                </DialogDescription>
               </DialogHeader>
               <DialogFooter>
                 <DialogClose asChild>
@@ -112,7 +117,7 @@ export function TasksPage() {
           <DialogHeader>
             <DialogTitle>Add Task</DialogTitle>
           </DialogHeader>
-          <TaskForm onSubmit={addTask} />
+          <TaskForm key={user} onSubmit={addTask} />
         </DialogContent>
       </Dialog>
 
@@ -121,6 +126,7 @@ export function TasksPage() {
       {view === "list" ? (
         <TaskListView
           key={JSON.stringify([
+            user,
             filters.query,
             filters.statusFilter,
             filters.categoryFilter,

@@ -1,7 +1,14 @@
 import { PRIORITIES } from "@/constants/task"
+import { TASK_ADMIN_USER } from "@/constants/user"
 import { diffDays, today } from "@/utils/date"
 import type { ISODate } from "@/types/date"
 import type { DueDescription, SortKey, Task, TaskFilterCriteria, TaskSummary } from "@/types/task"
+import type { MockUser } from "@/types/user"
+
+/** Akira sees the whole plan; everyone else sees their assigned tasks. */
+export function canViewTask(task: Task, user: MockUser): boolean {
+  return user === TASK_ADMIN_USER || task.assignee === user
+}
 
 /**
  * Narrow the task list by status, category and free text. Every criterion is
