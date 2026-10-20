@@ -41,7 +41,10 @@ export async function fetchChatReply(
       messages: [
         // The header's active user, so the model knows who it is talking to.
         { role: "system", content: `${CHAT_SYSTEM_PROMPT} You are talking to ${user}.` },
-        ...history.map(({ role, content }) => ({ role, content })),
+        ...history.map(({ role, content, context }) => ({
+          role,
+          content: context ? `${content}\n\n${context}` : content,
+        })),
       ],
     }),
     signal,
