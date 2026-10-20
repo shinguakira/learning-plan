@@ -1,8 +1,9 @@
 import { useRef, useState } from "react"
-import { RotateCcw, Trash2 } from "lucide-react"
+import { Download, RotateCcw, Trash2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useTaskFilters } from "@/hooks/useTaskFilters"
 import { useTasks } from "@/hooks/useTasks"
+import { useDownloadTasksCsv } from "@/hooks/useDownloadTasksCsv"
 import { useMockUser } from "@/hooks/useMockUser"
 import { TASK_ADMIN_USER } from "@/constants/user"
 import { TaskFilters } from "@/pages/tasks/TaskFilters"
@@ -31,6 +32,7 @@ export function TasksPage() {
   const [isDeleteAllOpen, setIsDeleteAllOpen] = useState(false)
   const cancelDeleteAllRef = useRef<HTMLButtonElement>(null)
   const filters = useTaskFilters(tasks)
+  const { status: csvStatus, download: downloadCsv } = useDownloadTasksCsv()
 
   return (
     <div className="mx-auto max-w-6xl space-y-5 px-4 py-6 sm:px-6">
@@ -38,7 +40,23 @@ export function TasksPage() {
         <div>
           <h1 className="text-lg font-semibold">Learning tasks</h1>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
+          <div>
+            <Button
+              type="button"
+              size="sm"
+              onClick={downloadCsv}
+              disabled={csvStatus === "downloading"}
+            >
+              <Download />
+              Download CSV
+            </Button>
+            {csvStatus === "error" && (
+              <p role="alert" className="text-destructive mt-1 text-xs">
+                Could not download the CSV.
+              </p>
+            )}
+          </div>
           <Button
             type="button"
             variant="outline"
