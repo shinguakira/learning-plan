@@ -10,7 +10,7 @@ export const app = Fastify()
 
 app.register(cors, {
   origin: ALLOWED_ORIGIN,
-  methods: ['GET', 'OPTIONS'],
+  methods: ['GET', 'POST', 'OPTIONS'],
 })
 
 /** Every file here registers its own route; adding a controller never touches this file. */

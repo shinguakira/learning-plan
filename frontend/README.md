@@ -8,12 +8,10 @@ is for** if you want the why rather than the how.
   and a Gantt-style timeline.
 - **Profile** — technical skills for a resume.
 - **AI chat** — a standalone chatbot, unrelated to the other pages. It POSTs to the
-  endpoint you configure in `.env`.
+  backend at `/api/chat`.
 
-Only the Profile page's skill list needs the backend (`../backend`,
-`GET /api/profile`). Nothing is persisted anywhere: tasks are seeded here
-and live in memory for the session, and the chat page calls a completions
-endpoint straight from the browser.
+The backend supplies sample tasks and profile data and handles chat requests.
+Nothing is persisted: page edits and chat history live in memory for the session.
 
 ## Tech stack
 
@@ -65,20 +63,16 @@ npm run test-e2e
 
 ### Chat endpoint
 
-The chat page needs one. Copy [`.env.example`](.env.example) to `.env` and set:
+The chat page calls the backend at `/api/chat`. Copy `backend/.env.example` to
+`backend/.env` and configure `CHAT_API_URL`, `CHAT_MODEL` and `CHAT_API_KEY` there.
+The backend development script loads that file. Production reads the same names
+from the backend service environment. Never use `VITE_` for provider credentials.
 
-```
-VITE_CHAT_API_URL=
-VITE_CHAT_API_KEY=
-VITE_CHAT_MODEL=
-```
+The backend accepts the OpenAI-style `/chat/completions` format. An HTTPS endpoint
+requires a key; a loopback local runtime may use HTTP and an empty key. Missing
+configuration disables chat while the sample-data routes remain available.
 
-The request body is the OpenAI-style `/chat/completions` shape, so any provider or
-local runtime that speaks it works — no vendor is baked in. `VITE_CHAT_API_KEY` can
-be left blank for a local runtime that does not need one.
-
-Without an endpoint the rest of the app works normally; only the chat page reports
-that it is unconfigured.
+Deployment and key rotation steps are in [chat security setup](../doc/chat-security.md).
 
 ## shadcn/ui
 

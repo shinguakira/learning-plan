@@ -1,77 +1,40 @@
-import { CHAT_API_KEY, CHAT_API_URL, CHAT_MODEL, CHAT_SYSTEM_PROMPT } from "@/constants/chat"
-import type { ChatMessage } from "@/types/chat"
+import { CHAT_API_URL } from "@/constants/chat"
+import type { ChatMessage, ChatReply } from "@/types/chat"
 import type { MockUser } from "@/types/user"
-
-/**
- * Chat completions over plain fetch, called straight from the browser.
- *
- * The request body is the OpenAI-style `/chat/completions` shape, which most
- * providers and local runtimes speak, so the endpoint and model come entirely
- * from .env - nothing here is tied to a vendor.
- */
-type ChatCompletion = {
-  choices?: { message?: { content?: string } }[]
-  error?: { message?: string }
-}
 
 export async function fetchChatReply(
   history: readonly ChatMessage[],
   signal: AbortSignal,
   user: MockUser,
 ): Promise<string> {
-  if (CHAT_API_URL === "" || CHAT_MODEL === "") {
-    throw new Error("Set VITE_CHAT_API_URL and VITE_CHAT_MODEL in .env to use the chat.")
-  }
-
-  const headers: Record<string, string> = { "Content-Type": "application/json" }
-  // A local runtime often needs no key at all.
-  if (CHAT_API_KEY !== "") headers.Authorization = `Bearer ${CHAT_API_KEY}`
-  // api.anthropic.com refuses browser origins unless the request opts in by
-  // name. Sent only to that host, so every other endpoint sees the same
-  // request it saw before.
-  if (new URL(CHAT_API_URL).hostname === "api.anthropic.com") {
-    headers["anthropic-dangerous-direct-browser-access"] = "true"
-  }
-
   const request = {
     method: "POST",
-    headers,
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
-      model: CHAT_MODEL,
-      messages: [
-        // The header's active user, so the model knows who it is talking to.
-        { role: "system", content: `${CHAT_SYSTEM_PROMPT} You are talking to ${user}.` },
-        ...history.map(({ role, content, context }) => ({
-          role,
-          content: context ? `${content}\n\n${context}` : content,
-        })),
-      ],
+      user,
+      messages: history.map(({ role, content, context }) => ({
+        role,
+        content: context ? `${content}\n\n${context}` : content,
+      })),
     }),
     signal,
   }
 
-  // fetch only rejects when the request never reached the endpoint at all, and
-  // the browser gives the same opaque message whether the host is unreachable
-  // or it refused this origin. Say which failure it is rather than repeat it.
   let response: Response
   try {
     response = await fetch(CHAT_API_URL, request)
   } catch (error) {
     if (signal.aborted) throw error
-    throw new Error(
-      `Could not reach ${new URL(CHAT_API_URL).origin}. The endpoint is unreachable, ` +
-        "or it does not accept requests from a browser.",
-      { cause: error },
-    )
+    throw new Error("Could not reach the backend. Is it running?", { cause: error })
   }
 
-  const body = (await response.json().catch(() => null)) as ChatCompletion | null
+  const body = (await response.json().catch(() => null)) as ChatReply | null
 
   if (!response.ok) {
-    throw new Error(body?.error?.message ?? `Request failed (${response.status})`)
+    throw new Error(body?.message ?? `Request failed (${response.status})`)
   }
 
-  const text = body?.choices?.[0]?.message?.content
+  const text = body?.content
   if (typeof text !== "string" || text.trim() === "") {
     throw new Error("The API returned an empty reply.")
   }

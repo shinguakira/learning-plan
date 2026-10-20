@@ -23,12 +23,14 @@ Install and start the backend too, in another terminal:
 
 ```bash
 npm --prefix ../backend install
+cp ../backend/.env.example ../backend/.env
 npm --prefix ../backend run dev
 ```
 
-The task page loads its sample plan from the backend. The chat page
-needs an endpoint — copy `.env.example` to `.env` and fill in the three values; the
-README's **Chat endpoint** section says what they are.
+The task page loads its sample plan from the backend. The chat page calls
+`/api/chat` on the same backend. Configure the provider in `backend/.env`; the
+README's **Chat endpoint** section lists the variables. Provider credentials never
+belong in the frontend environment.
 
 ## `package.json` and `node_modules`
 
