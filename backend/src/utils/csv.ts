@@ -7,6 +7,11 @@ function escapeField(field: string): string {
   return /[",\r\n]/.test(field) ? `"${field.replace(/"/g, '""')}"` : field
 }
 
+/** Shared CSV serialization for profile and task downloads. */
+export function serializeCsv(rows: readonly (readonly string[])[]): string {
+  return rows.map((row) => row.map(escapeField).join(',')).join('\r\n')
+}
+
 /** Export every user-facing profile field through the existing CSV escaper. */
 export function toCsv(profile: Profile): string {
   const rows: ProfileCsvRow[] = [
@@ -39,10 +44,8 @@ export function toCsv(profile: Profile): string {
     })),
   ]
 
-  return [
+  return serializeCsv([
     PROFILE_CSV_COLUMNS,
     ...rows.map((row) => PROFILE_CSV_COLUMNS.map((column) => row[column] ?? '')),
-  ]
-    .map((row) => row.map(escapeField).join(','))
-    .join('\r\n')
+  ])
 }
