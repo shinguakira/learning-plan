@@ -10,8 +10,7 @@ types in `src/types/`, constants in `src/constants/`, hooks in `src/hooks/`, thi
 project's helpers in `src/utils/`, and `src/lib/` only for code that would drop into
 another project unchanged.
 
-`src/api/` holds external requests: chat completions and the backend profile and
-task seed endpoints. A folder called `api` whose contents never leave the
+`src/api/` holds requests to the backend: chat, profile and task seed endpoints. A folder called `api` whose contents never leave the
 machine is a lie the next reader has to unlearn.
 
 ## Persistence
@@ -101,6 +100,17 @@ ESLint's `react-refresh/only-export-components` is switched off for
 design. The rule stays on everywhere else.
 
 ## The chat
+
+The browser sends conversation history and the selected mock name to `/api/chat`.
+Fastify validates the body, supplies the system prompt, chooses the configured
+provider and adds its credential. The selected mock name is personalization only.
+The UI and chat history remain local; there is no login or shared state.
+
+Provider credentials live in the backend environment. Browser bundles contain
+only the relative backend URL. Timeouts, body limits, output limits, concurrency
+limits and a request quota bound work per backend process. These are resource
+controls, not authentication or a distributed spending cap. See
+[chat security setup](../../doc/chat-security.md).
 
 There is no offline fallback. If the endpoint is unset or the request fails, the chat
 says so rather than inventing an answer. An earlier version shipped a keyword bot as
