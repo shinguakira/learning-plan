@@ -9,4 +9,4 @@ export type ChatCompletion = {
 
 export type ChatResult =
   | { ok: true; content: string }
-  | { ok: false; status: 502 | 504; message: string };
+  | { ok: false; status: 502; message: string };

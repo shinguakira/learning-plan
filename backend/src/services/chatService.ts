@@ -1,8 +1,4 @@
-import {
-  CHAT_MAX_OUTPUT_TOKENS,
-  CHAT_SYSTEM_PROMPT,
-  CHAT_TIMEOUT_MS,
-} from "../constants/chat.js";
+import { CHAT_SYSTEM_PROMPT } from "../constants/chat.js";
 import type { ChatCompletion, ChatRequest, ChatResult } from "../types/chat.js";
 import type { ChatConfig } from "../types/chatConfig.js";
 
@@ -12,7 +8,6 @@ export async function getChatReply(
   config: ChatConfig,
   signal: AbortSignal,
 ): Promise<ChatResult> {
-  const timeout = AbortSignal.timeout(CHAT_TIMEOUT_MS);
   try {
     const headers: Record<string, string> = {
       "Content-Type": "application/json",
@@ -22,10 +17,9 @@ export async function getChatReply(
       method: "POST",
       headers,
       redirect: "error",
-      signal: AbortSignal.any([signal, timeout]),
+      signal,
       body: JSON.stringify({
         model: config.model,
-        max_tokens: CHAT_MAX_OUTPUT_TOKENS,
         messages: [
           {
             role: "system",
@@ -54,16 +48,10 @@ export async function getChatReply(
     }
     return { ok: true, content };
   } catch {
-    return timeout.aborted
-      ? {
-          ok: false,
-          status: 504,
-          message: "The chat provider took too long to respond.",
-        }
-      : {
-          ok: false,
-          status: 502,
-          message: "Could not reach the chat provider.",
-        };
+    return {
+      ok: false,
+      status: 502,
+      message: "Could not reach the chat provider.",
+    };
   }
 }
