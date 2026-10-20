@@ -1,10 +1,3 @@
-export const CHAT_BODY_LIMIT = 256 * 1024;
-export const CHAT_MAX_MESSAGES = 40;
-export const CHAT_MAX_CONTENT_LENGTH = 160_000;
-export const CHAT_RATE_WINDOW_MS = 60_000;
-export const CHAT_REQUESTS_PER_WINDOW = 30;
-export const CHAT_MAX_CONCURRENT_REQUESTS = 2;
-
 export const CHAT_SYSTEM_PROMPT = [
   "You are an assistant that helps people learning software engineering.",
   "Use fenced code blocks with a language tag when you show code.",
