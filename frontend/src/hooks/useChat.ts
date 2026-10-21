@@ -86,9 +86,10 @@ export function useChat(): ChatApi {
     analyzeTasks: () =>
       start("Analyze my tasks", async (signal) => {
         const response = await fetchTasks(signal)
-        if (response.tasks.length === 0)
-          throw new Error("No tasks to analyze. The backend returned an empty plan.")
-        return createTaskAnalysisContext(createSeedTasks(response.tasks))
+        const tasks = createSeedTasks(response.tasks).filter((task) => task.assignee === user)
+        if (tasks.length === 0)
+          throw new Error(`No tasks to analyze. No backend tasks are assigned to ${user}.`)
+        return createTaskAnalysisContext(tasks)
       }),
     cancel: () => {
       request.current?.abort()
