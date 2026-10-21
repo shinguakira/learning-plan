@@ -1,6 +1,7 @@
 import { CHAT_SYSTEM_PROMPT } from "../constants/chat.js";
 import type { ChatCompletion, ChatRequest, ChatResult } from "../types/chat.js";
 import type { ChatConfig } from "../types/chatConfig.js";
+import { createTaskAnalysisContext } from "../utils/taskAnalysis.js";
 
 /** Only the server chooses the upstream destination, model and credentials. */
 export async function getChatReply(
@@ -9,6 +10,16 @@ export async function getChatReply(
   signal: AbortSignal,
 ): Promise<ChatResult> {
   try {
+    const context = input.analyzeTasks
+      ? createTaskAnalysisContext(input.user)
+      : null;
+    if (input.analyzeTasks && context === null) {
+      return {
+        ok: false,
+        status: 422,
+        message: `No tasks to analyze. No backend tasks are assigned to ${input.user}.`,
+      };
+    }
     const headers: Record<string, string> = {
       "Content-Type": "application/json",
     };
@@ -25,7 +36,11 @@ export async function getChatReply(
             role: "system",
             content: `${CHAT_SYSTEM_PROMPT} You are talking to ${input.user}.`,
           },
-          ...input.messages,
+          ...input.messages.map((message, index) =>
+            context && index === input.messages.length - 1
+              ? { ...message, content: `${message.content}\n\n${context}` }
+              : message,
+          ),
         ],
       }),
     });

@@ -3,6 +3,7 @@ export const CHAT_REQUEST_SCHEMA = {
   additionalProperties: false,
   required: ["user", "messages"],
   properties: {
+    analyzeTasks: { type: "boolean" },
     user: { type: "string", enum: ["Sanjar", "Akira", "Mike", "John"] },
     messages: {
       type: "array",

@@ -1,8 +1,5 @@
 import { useEffect, useRef, useState } from "react"
 import { fetchChatReply } from "@/api/chat"
-import { fetchTasks } from "@/api/tasks"
-import { createSeedTasks } from "@/utils/seed"
-import { createTaskAnalysisContext } from "@/utils/taskAnalysis"
 import type { ChatMessage, ChatPendingPhase } from "@/types/chat"
 import type { MockUser } from "@/types/user"
 
@@ -40,14 +37,19 @@ export function useChat(user: MockUser): ChatApi {
 
   const append = (message: ChatMessage) => setMessages((previous) => [...previous, message])
 
-  const start = (raw: string, loadContext?: (signal: AbortSignal) => Promise<string>) => {
+  const start = (raw: string, analyzeTasks = false) => {
     const text = raw.trim()
     if (text === "" || request.current !== null) return
 
-    const message: ChatMessage = { id: crypto.randomUUID(), role: "user", content: text }
+    const message: ChatMessage = {
+      id: crypto.randomUUID(),
+      role: "user",
+      content: text,
+      analyzeTasks,
+    }
     const next = [...messages, message]
     setMessages(next)
-    setPhase(loadContext ? "tasks" : "reply")
+    setPhase(analyzeTasks ? "analysis" : "reply")
 
     const controller = new AbortController()
     request.current = controller
@@ -55,20 +57,8 @@ export function useChat(user: MockUser): ChatApi {
 
     void (async () => {
       try {
-        let prepared = next
-        if (loadContext) {
-          const context = await loadContext(controller.signal)
-          if (controller.signal.aborted) return
-          const withContext = { ...message, context }
-          prepared = next.map((item) => (item.id === message.id ? withContext : item))
-          setMessages((previous) =>
-            previous.map((item) => (item.id === message.id ? withContext : item)),
-          )
-          setPhase("analysis")
-        }
-
         // Error bubbles are our own messages, so exclude them from model history.
-        const history = prepared.filter((item) => item.failed !== true)
+        const history = next.filter((item) => item.failed !== true)
         const content = await fetchChatReply(history, controller.signal, user)
         if (!controller.signal.aborted)
           append({ id: crypto.randomUUID(), role: "assistant", content })
@@ -96,14 +86,7 @@ export function useChat(user: MockUser): ChatApi {
     pending: phase !== null,
     phase,
     send: (text) => start(text),
-    analyzeTasks: () =>
-      start("Analyze my tasks", async (signal) => {
-        const response = await fetchTasks(signal)
-        const tasks = createSeedTasks(response.tasks).filter((task) => task.assignee === user)
-        if (tasks.length === 0)
-          throw new Error(`No tasks to analyze. No backend tasks are assigned to ${user}.`)
-        return createTaskAnalysisContext(tasks)
-      }),
+    analyzeTasks: () => start("Analyze my tasks", true),
     cancel: () => {
       request.current?.abort()
       request.current = null
