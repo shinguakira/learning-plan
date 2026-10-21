@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from "react"
 import { fetchChatReply } from "@/api/chat"
 import { fetchTasks } from "@/api/tasks"
-import { useMockUser } from "@/hooks/useMockUser"
 import { createSeedTasks } from "@/utils/seed"
 import { createTaskAnalysisContext } from "@/utils/taskAnalysis"
 import type { ChatMessage, ChatPendingPhase } from "@/types/chat"
+import type { MockUser } from "@/types/user"
 
 export type ChatApi = {
   messages: ChatMessage[]
@@ -16,14 +16,27 @@ export type ChatApi = {
   reset: () => void
 }
 
-export function useChat(): ChatApi {
-  const { user } = useMockUser()
+export function useChat(user: MockUser): ChatApi {
+  const [previousUser, setPreviousUser] = useState(user)
   const [messages, setMessages] = useState<ChatMessage[]>([])
   const [phase, setPhase] = useState<ChatPendingPhase>(null)
   const request = useRef<AbortController | null>(null)
   const pendingMessage = useRef<string | null>(null)
 
-  useEffect(() => () => request.current?.abort(), [])
+  if (previousUser !== user) {
+    setPreviousUser(user)
+    setMessages([])
+    setPhase(null)
+  }
+
+  useEffect(
+    () => () => {
+      request.current?.abort()
+      request.current = null
+      pendingMessage.current = null
+    },
+    [user],
+  )
 
   const append = (message: ChatMessage) => setMessages((previous) => [...previous, message])
 
@@ -86,9 +99,10 @@ export function useChat(): ChatApi {
     analyzeTasks: () =>
       start("Analyze my tasks", async (signal) => {
         const response = await fetchTasks(signal)
-        if (response.tasks.length === 0)
-          throw new Error("No tasks to analyze. The backend returned an empty plan.")
-        return createTaskAnalysisContext(createSeedTasks(response.tasks))
+        const tasks = createSeedTasks(response.tasks).filter((task) => task.assignee === user)
+        if (tasks.length === 0)
+          throw new Error(`No tasks to analyze. No backend tasks are assigned to ${user}.`)
+        return createTaskAnalysisContext(tasks)
       }),
     cancel: () => {
       request.current?.abort()
