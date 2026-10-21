@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom"
+import { ROUTES } from "@/constants/app"
 import { Card } from "@/components/ui/card"
 import { CATEGORY_THEME } from "@/constants/task"
 import { DAY_W, LABEL_W, ROW_H } from "@/constants/timeline"
@@ -46,15 +48,16 @@ function TimelineRow({
         style={{ width: LABEL_W }}
       >
         <span className={cn("size-2 shrink-0 rounded-full", CATEGORY_THEME[task.category].dot)} />
-        <span
+        <Link
+          to={`${ROUTES.tasks}?taskid=${encodeURIComponent(task.id)}`}
           className={cn(
-            "truncate text-xs",
+            "rounded-sm truncate text-xs underline-offset-4 hover:underline focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none",
             task.status === "done" && "text-muted-foreground line-through",
           )}
           title={task.title}
         >
           {task.title}
-        </span>
+        </Link>
       </div>
       <div className="relative shrink-0" style={{ width: gridWidth }}>
         <TimelineBar task={task} domainStart={domainStart} />
