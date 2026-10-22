@@ -1,7 +1,6 @@
 import { useState } from "react"
 import { downloadProfileCsv } from "@/api/profile"
-
-export type DownloadStatus = "idle" | "downloading" | "error"
+import type { DownloadStatus } from "@/types/download"
 
 /** Owns the Profile page's CSV download button and its error feedback. */
 export function useDownloadProfileCsv() {

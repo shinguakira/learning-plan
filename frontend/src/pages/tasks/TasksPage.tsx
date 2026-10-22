@@ -1,10 +1,14 @@
 import { useRef, useState } from "react"
-import { RotateCcw, Trash2 } from "lucide-react"
+import { useSearchParams } from "react-router-dom"
+import { Download, RotateCcw, Trash2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useTaskFilters } from "@/hooks/useTaskFilters"
 import { useTasks } from "@/hooks/useTasks"
+import { useDownloadTasksCsv } from "@/hooks/useDownloadTasksCsv"
 import { useMockUser } from "@/hooks/useMockUser"
 import { TASK_ADMIN_USER } from "@/constants/user"
+import { ROUTES } from "@/constants/app"
+import { TaskDetails } from "@/pages/tasks/TaskDetails"
 import { TaskFilters } from "@/pages/tasks/TaskFilters"
 import { TaskForm } from "@/pages/tasks/TaskForm"
 import { TaskListView } from "@/pages/tasks/TaskListView"
@@ -24,6 +28,7 @@ import {
 
 export function TasksPage() {
   const { user } = useMockUser()
+  const [searchParams] = useSearchParams()
   const { tasks, loading, error, addTask, updateTask, removeTask, resetToSeed, clearAll } =
     useTasks()
   const [view, setView] = useState<ViewMode>("list")
@@ -31,6 +36,22 @@ export function TasksPage() {
   const [isDeleteAllOpen, setIsDeleteAllOpen] = useState(false)
   const cancelDeleteAllRef = useRef<HTMLButtonElement>(null)
   const filters = useTaskFilters(tasks)
+  const { status: csvStatus, download: downloadCsv } = useDownloadTasksCsv()
+
+  const taskId = searchParams.get("taskid")
+  if (taskId !== null) {
+    const listParams = new URLSearchParams(searchParams)
+    listParams.delete("taskid")
+    return (
+      <TaskDetails
+        task={tasks.find((task) => task.id === taskId)}
+        loading={loading}
+        error={error}
+        onRetry={resetToSeed}
+        backTo={{ pathname: ROUTES.tasks, search: listParams.toString() }}
+      />
+    )
+  }
 
   return (
     <div className="mx-auto max-w-6xl space-y-5 px-4 py-6 sm:px-6">
@@ -38,7 +59,23 @@ export function TasksPage() {
         <div>
           <h1 className="text-lg font-semibold">Learning tasks</h1>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
+          <div>
+            <Button
+              type="button"
+              size="sm"
+              onClick={downloadCsv}
+              disabled={csvStatus === "downloading"}
+            >
+              <Download />
+              Download CSV
+            </Button>
+            {csvStatus === "error" && (
+              <p role="alert" className="text-destructive mt-1 text-xs">
+                Could not download the CSV.
+              </p>
+            )}
+          </div>
           <Button
             type="button"
             variant="outline"

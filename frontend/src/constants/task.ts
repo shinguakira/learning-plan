@@ -3,6 +3,8 @@ import type { Category, CategoryTheme, DueTone, Priority, SortKey, Status } from
 /** Keep task notes short enough to scan alongside the task. */
 export const TASK_NOTE_MAX_LENGTH = 280
 
+export const TASKS_CSV_API_URL = "/api/tasks/csv"
+
 export const CATEGORIES = [
   "Frontend",
   "Backend",

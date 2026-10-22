@@ -1,4 +1,5 @@
 import { useState } from "react"
+import { Link } from "react-router-dom"
 import { CalendarDays, Clock, Trash2, User } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -15,6 +16,7 @@ import { formatShort } from "@/utils/date"
 import { describeDue } from "@/utils/task"
 import { StatusToggle } from "@/pages/tasks/StatusToggle"
 import type { Task } from "@/types/task"
+import { ROUTES } from "@/constants/app"
 import { MOCK_USER_COLOR } from "@/constants/user"
 
 export function TaskRow({
@@ -44,7 +46,12 @@ export function TaskRow({
             finished && "text-muted-foreground line-through",
           )}
         >
-          {task.title}
+          <Link
+            to={`${ROUTES.tasks}?taskid=${encodeURIComponent(task.id)}`}
+            className="rounded-sm underline-offset-4 hover:underline focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+          >
+            {task.title}
+          </Link>
         </p>
         {task.note && (
           <p className="text-muted-foreground mt-0.5 text-xs break-words whitespace-pre-line">

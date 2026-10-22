@@ -42,7 +42,8 @@ vercel.json routes the deployment to frontend/
 
 Nothing is persisted. Tasks are seeded from the backend and live in memory for the
 session; skills are seeded once from the backend and edited in memory
-after that; the chat page calls a completions endpoint straight from the browser.
+after that; the chat page calls `/api/chat` on the backend, which keeps provider
+credentials in server environment variables.
 
 ## Running it
 
@@ -60,10 +61,14 @@ Open http://localhost:5173.
 **Backend**
 
 ```bash
-cd backend && npm install && npm run dev
+cd backend
+npm install
+cp .env.example .env
+npm run dev
 ```
 
-Serves `GET /api/profile` on http://localhost:3001.
+Serves sample data and `POST /api/chat` on http://localhost:3001. Configure chat
+through `backend/.env`; see [chat security setup](doc/chat-security.md).
 
 Node 20.19+, 22.13+ or 24+. The frontend's `engines` field declares the range, so
 `npm install` warns if you are outside it.
