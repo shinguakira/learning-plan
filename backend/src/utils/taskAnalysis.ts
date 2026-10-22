@@ -17,11 +17,12 @@ export function createTaskAnalysisContext(user: MockUser): string | null {
     return [
       {
         ...details,
+        url: `/tasks?taskid=seed-${index + 1}`,
         startDate: dateAtOffset(offsetStart),
         dueDate: dateAtOffset(offsetStart + span),
       },
     ];
   });
   if (tasks.length === 0) return null;
-  return `Learning plan data:\n${JSON.stringify({ today: dateAtOffset(0), tasks })}`;
+  return `When mentioning a supplied task, link its title using Markdown [task title](url) with that task's exact supplied url.\n\nLearning plan data:\n${JSON.stringify({ today: dateAtOffset(0), tasks })}`;
 }
