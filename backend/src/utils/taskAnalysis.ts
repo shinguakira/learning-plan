@@ -1,4 +1,3 @@
-import { TASK_ANALYSIS_PROMPT } from "../constants/taskAnalysis.js";
 import { MOCK_USERS } from "../constants/user.js";
 import { taskService } from "../services/taskService.js";
 import type { MockUser } from "../types/user.js";
@@ -24,5 +23,5 @@ export function createTaskAnalysisContext(user: MockUser): string | null {
     ];
   });
   if (tasks.length === 0) return null;
-  return `${TASK_ANALYSIS_PROMPT}\n\nLearning plan data:\n${JSON.stringify({ today: dateAtOffset(0), tasks })}`;
+  return `Learning plan data:\n${JSON.stringify({ today: dateAtOffset(0), tasks })}`;
 }
