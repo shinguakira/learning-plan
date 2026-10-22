@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom"
+import { Link, useSearchParams } from "react-router-dom"
 import { ROUTES } from "@/constants/app"
 import { Card } from "@/components/ui/card"
 import { CATEGORY_THEME } from "@/constants/task"
@@ -41,6 +41,9 @@ function TimelineRow({
   domainStart: ISODate
   gridWidth: number
 }) {
+  const [searchParams] = useSearchParams()
+  const taskParams = new URLSearchParams(searchParams)
+  taskParams.set("taskid", task.id)
   return (
     <div className="relative flex border-b last:border-b-0" style={{ height: ROW_H }}>
       <div
@@ -49,7 +52,7 @@ function TimelineRow({
       >
         <span className={cn("size-2 shrink-0 rounded-full", CATEGORY_THEME[task.category].dot)} />
         <Link
-          to={`${ROUTES.tasks}?taskid=${encodeURIComponent(task.id)}`}
+          to={`${ROUTES.tasks}?${taskParams}`}
           className={cn(
             "rounded-sm truncate text-xs underline-offset-4 hover:underline focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none",
             task.status === "done" && "text-muted-foreground line-through",
