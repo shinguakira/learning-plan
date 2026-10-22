@@ -1,18 +1,18 @@
 import type { FastifyInstance, FastifyReply } from 'fastify'
-import { jobService } from '../services/jobService.js'
-import { skillService } from '../services/skillService.js'
-import { certificateService } from '../services/certificateService.js'
-import { strengthService } from '../services/strengthService.js'
 import { profileService } from '../services/profileService.js'
 import { toCsv } from '../utils/csv.js'
+import { MOCK_USERS } from '../constants/user.js'
+import type { MockUser } from '../types/user.js'
 
 export default async function profileController(app: FastifyInstance): Promise<void> {
-  app.get('/api/profile', async () => ({
-    skills: skillService.getSkills(),
-    jobs: jobService.getJobs(),
-    certificates: certificateService.getCertificates(),
-    strengths: strengthService.getStrengths(),
-  }))
+  app.get<{ Querystring: { user?: MockUser } }>('/api/profile', {
+    schema: {
+      querystring: {
+        type: 'object',
+        properties: { user: { type: 'string', enum: MOCK_USERS } },
+      },
+    },
+  }, async (request) => profileService.getProfile(request.query.user))
 
   app.get('/api/profile/csv', async (_request, reply: FastifyReply) => {
     return reply
