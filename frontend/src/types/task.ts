@@ -1,4 +1,10 @@
-import type { CATEGORIES, PRIORITIES, STATUSES, VIEW_MODES } from "@/constants/task"
+import type {
+  CATEGORIES,
+  PRIORITIES,
+  STATUSES,
+  TASK_FILTER_KEYS,
+  VIEW_MODES,
+} from "@/constants/task"
 import type { ISODate } from "@/types/date"
 import type { MockUser } from "@/types/user"
 
@@ -44,6 +50,8 @@ export type DueDescription = {
 }
 
 export type ViewMode = (typeof VIEW_MODES)[number]
+export type TaskFilterKey = (typeof TASK_FILTER_KEYS)[keyof typeof TASK_FILTER_KEYS]
+
 export type StatusFilter = Status | "all"
 export type CategoryFilter = Category | "all"
 export type SortKey = "due" | "start" | "priority" | "created"

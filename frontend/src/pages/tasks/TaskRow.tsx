@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import {
   CATEGORY_THEME,
+  TASK_FILTER_KEYS,
   DUE_TONE,
   PRIORITY_CHIP,
   PRIORITY_LABEL,
@@ -31,7 +32,7 @@ export function TaskRow({
   const [confirming, setConfirming] = useState(false)
   const [searchParams] = useSearchParams()
   const taskParams = new URLSearchParams(searchParams)
-  taskParams.set("taskid", task.id)
+  taskParams.set(TASK_FILTER_KEYS.taskId, task.id)
   const due = describeDue(task.dueDate)
   const theme = CATEGORY_THEME[task.category]
   const finished = task.status === "done"

@@ -5,6 +5,14 @@ export const TASK_NOTE_MAX_LENGTH = 280
 
 export const TASKS_CSV_API_URL = "/api/tasks/csv"
 
+export const TASK_FILTER_KEYS = {
+  status: "status",
+  category: "category",
+  sort: "sort",
+  query: "q",
+  taskId: "taskid",
+} as const
+
 export const CATEGORIES = [
   "Frontend",
   "Backend",

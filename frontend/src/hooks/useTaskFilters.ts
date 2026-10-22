@@ -1,7 +1,7 @@
 import { useSearchParams } from "react-router-dom"
-import { CATEGORIES, STATUSES } from "@/constants/task"
+import { CATEGORIES, STATUSES, TASK_FILTER_KEYS } from "@/constants/task"
 import { filterTasks, sortTasks } from "@/utils/task"
-import type { CategoryFilter, SortKey, StatusFilter, Task } from "@/types/task"
+import type { CategoryFilter, SortKey, StatusFilter, Task, TaskFilterKey } from "@/types/task"
 
 export type TaskFiltersApi = {
   statusFilter: StatusFilter
@@ -25,19 +25,15 @@ export type TaskFiltersApi = {
 export function useTaskFilters(tasks: readonly Task[]): TaskFiltersApi {
   const [searchParams, setSearchParams] = useSearchParams()
   const statusFilter: StatusFilter =
-    STATUSES.find((value) => value === searchParams.get("status")) ?? "all"
+    STATUSES.find((value) => value === searchParams.get(TASK_FILTER_KEYS.status)) ?? "all"
   const categoryFilter: CategoryFilter =
-    CATEGORIES.find((value) => value === searchParams.get("category")) ?? "all"
-  const sort = searchParams.get("sort")
+    CATEGORIES.find((value) => value === searchParams.get(TASK_FILTER_KEYS.category)) ?? "all"
+  const sort = searchParams.get(TASK_FILTER_KEYS.sort)
   const sortKey: SortKey =
     sort === "start" || sort === "priority" || sort === "created" ? sort : "due"
-  const query = searchParams.get("q") ?? ""
+  const query = searchParams.get(TASK_FILTER_KEYS.query) ?? ""
 
-  const setFilter = (
-    key: "status" | "category" | "sort" | "q",
-    value: string,
-    defaultValue: string,
-  ) => {
+  const setFilter = (key: TaskFilterKey, value: string, defaultValue: string) => {
     setSearchParams(
       (previous) => {
         const next = new URLSearchParams(previous)
@@ -45,7 +41,7 @@ export function useTaskFilters(tasks: readonly Task[]): TaskFiltersApi {
         else next.set(key, value)
         return next
       },
-      { replace: key === "q" },
+      { replace: key === TASK_FILTER_KEYS.query },
     )
   }
 
@@ -53,13 +49,13 @@ export function useTaskFilters(tasks: readonly Task[]): TaskFiltersApi {
 
   return {
     statusFilter,
-    setStatusFilter: (value) => setFilter("status", value, "all"),
+    setStatusFilter: (value) => setFilter(TASK_FILTER_KEYS.status, value, "all"),
     categoryFilter,
-    setCategoryFilter: (value) => setFilter("category", value, "all"),
+    setCategoryFilter: (value) => setFilter(TASK_FILTER_KEYS.category, value, "all"),
     sortKey,
-    setSortKey: (value) => setFilter("sort", value, "due"),
+    setSortKey: (value) => setFilter(TASK_FILTER_KEYS.sort, value, "due"),
     query,
-    setQuery: (value) => setFilter("q", value, ""),
+    setQuery: (value) => setFilter(TASK_FILTER_KEYS.query, value, ""),
     visible: sortTasks(filterTasks(tasks, criteria), sortKey),
     filtering: statusFilter !== "all" || categoryFilter !== "all" || query.trim() !== "",
   }

@@ -1,7 +1,7 @@
 import { Link, useSearchParams } from "react-router-dom"
 import { ROUTES } from "@/constants/app"
 import { Card } from "@/components/ui/card"
-import { CATEGORY_THEME } from "@/constants/task"
+import { CATEGORY_THEME, TASK_FILTER_KEYS } from "@/constants/task"
 import { DAY_W, LABEL_W, ROW_H } from "@/constants/timeline"
 import { useTimeline } from "@/hooks/useTimeline"
 import { cn } from "@/lib/utils"
@@ -43,7 +43,7 @@ function TimelineRow({
 }) {
   const [searchParams] = useSearchParams()
   const taskParams = new URLSearchParams(searchParams)
-  taskParams.set("taskid", task.id)
+  taskParams.set(TASK_FILTER_KEYS.taskId, task.id)
   return (
     <div className="relative flex border-b last:border-b-0" style={{ height: ROW_H }}>
       <div
