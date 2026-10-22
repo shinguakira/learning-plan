@@ -1,5 +1,8 @@
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { fetchProfile } from "@/api/profile"
+import { EMPTY_PROFILE_STATE } from "@/constants/profile"
+import type { ProfileState } from "@/types/profile"
+import type { MockUser } from "@/types/user"
 import type { Job, JobDraft } from "@/types/job"
 import type { Skill, SkillDraft } from "@/types/skill"
 import type { Certificate, CertificateDraft } from "@/types/certificate"
@@ -24,74 +27,101 @@ export type ProfileApi = {
   removeStrength: (id: string) => void
 }
 
-export function useProfile(): ProfileApi {
-  const [skills, setSkills] = useState<Skill[]>([])
-  const [jobs, setJobs] = useState<Job[]>([])
-  const [certificates, setCertificates] = useState<Certificate[]>([])
-  const [strengths, setStrengths] = useState<Strength[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
+export function useProfile(user: MockUser): ProfileApi {
+  const [profiles, setProfiles] = useState<Partial<Record<MockUser, ProfileState>>>({})
+  const loaded = useRef(new Set<MockUser>())
 
   useEffect(() => {
+    if (loaded.current.has(user)) return
     let active = true
+    const controller = new AbortController()
 
-    fetchProfile()
+    fetchProfile(user, controller.signal)
       .then((seed) => {
         if (!active) return
-        // The forms work while this is in flight, so anything already added stays
-        // and the seed goes after it. Replacing outright would discard it.
-        setSkills((prev) => [...prev, ...seed.skills])
-        setJobs((prev) => [...prev, ...seed.jobs])
-        setCertificates((prev) => [...prev, ...seed.certificates])
-        setStrengths((prev) => [...prev, ...seed.strengths])
+        loaded.current.add(user)
+        setProfiles((previous) => {
+          const profile = previous[user] ?? EMPTY_PROFILE_STATE
+          return {
+            ...previous,
+            [user]: {
+              skills: [...profile.skills, ...seed.skills],
+              jobs: [...profile.jobs, ...seed.jobs],
+              certificates: [...profile.certificates, ...seed.certificates],
+              strengths: [...profile.strengths, ...seed.strengths],
+              loading: false,
+              error: null,
+            },
+          }
+        })
       })
       .catch((caught: unknown) => {
-        if (active) setError(caught instanceof Error ? caught.message : "Failed to load profile.")
-      })
-      .finally(() => {
-        if (active) setLoading(false)
+        if (!active) return
+        setProfiles((previous) => ({
+          ...previous,
+          [user]: {
+            ...(previous[user] ?? EMPTY_PROFILE_STATE),
+            loading: false,
+            error: caught instanceof Error ? caught.message : "Failed to load profile.",
+          },
+        }))
       })
 
     return () => {
       active = false
+      controller.abort()
     }
-  }, [])
+  }, [user])
+
+  const updateProfile = (update: (profile: ProfileState) => ProfileState) => {
+    setProfiles((previous) => ({
+      ...previous,
+      [user]: update(previous[user] ?? EMPTY_PROFILE_STATE),
+    }))
+  }
 
   return {
-    skills,
-    jobs,
-    certificates,
-    strengths,
-    loading,
-    error,
+    ...(profiles[user] ?? EMPTY_PROFILE_STATE),
     addSkill: (draft) => {
       const skill: Skill = {
         ...draft,
         id: crypto.randomUUID(),
         createdAt: new Date().toISOString(),
       }
-      setSkills((prev) => [skill, ...prev])
+      updateProfile((profile) => ({ ...profile, skills: [skill, ...profile.skills] }))
     },
     removeSkill: (id) => {
-      setSkills((prev) => prev.filter((skill) => skill.id !== id))
+      updateProfile((profile) => ({
+        ...profile,
+        skills: profile.skills.filter((skill) => skill.id !== id),
+      }))
     },
     addJob: (draft) => {
       const job: Job = { ...draft, id: crypto.randomUUID(), createdAt: new Date().toISOString() }
-      setJobs((prev) => [job, ...prev])
+      updateProfile((profile) => ({ ...profile, jobs: [job, ...profile.jobs] }))
     },
     removeJob: (id) => {
-      setJobs((prev) => prev.filter((job) => job.id !== id))
+      updateProfile((profile) => ({
+        ...profile,
+        jobs: profile.jobs.filter((job) => job.id !== id),
+      }))
     },
     addCertificate: (draft) => {
-      const certificate = {
+      const certificate: Certificate = {
         ...draft,
         id: crypto.randomUUID(),
         createdAt: new Date().toISOString(),
       }
-      setCertificates((prev) => [certificate, ...prev])
+      updateProfile((profile) => ({
+        ...profile,
+        certificates: [certificate, ...profile.certificates],
+      }))
     },
     removeCertificate: (id) => {
-      setCertificates((prev) => prev.filter((cert) => cert.id !== id))
+      updateProfile((profile) => ({
+        ...profile,
+        certificates: profile.certificates.filter((certificate) => certificate.id !== id),
+      }))
     },
     addStrength: (draft) => {
       const strength: Strength = {
@@ -99,10 +129,13 @@ export function useProfile(): ProfileApi {
         id: crypto.randomUUID(),
         createdAt: new Date().toISOString(),
       }
-      setStrengths((prev) => [strength, ...prev])
+      updateProfile((profile) => ({ ...profile, strengths: [strength, ...profile.strengths] }))
     },
     removeStrength: (id) => {
-      setStrengths((prev) => prev.filter((strength) => strength.id !== id))
+      updateProfile((profile) => ({
+        ...profile,
+        strengths: profile.strengths.filter((strength) => strength.id !== id),
+      }))
     },
   }
 }

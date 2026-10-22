@@ -1,6 +1,7 @@
 import { Award, Briefcase, Code, Download, Sparkles } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useDownloadProfileCsv } from "@/hooks/useDownloadProfileCsv"
+import { useMockUser } from "@/hooks/useMockUser"
 import { useProfile } from "@/hooks/useProfile"
 import { JobForm } from "@/pages/profile/JobForm"
 import { JobList } from "@/pages/profile/JobList"
@@ -24,6 +25,7 @@ import { ProfileFormDialog } from "@/pages/profile/ProfileFormDialog"
  * `EMPLOYMENT_TYPE_CHIP`.
  */
 export function ProfilePage() {
+  const { user } = useMockUser()
   const {
     skills,
     jobs,
@@ -39,7 +41,7 @@ export function ProfilePage() {
     removeCertificate,
     addStrength,
     removeStrength,
-  } = useProfile()
+  } = useProfile(user)
   const { status: csvStatus, download: downloadCsv } = useDownloadProfileCsv()
 
   return (
@@ -94,6 +96,7 @@ export function ProfilePage() {
             </div>
           </div>
           <ProfileFormDialog
+            key={user}
             title="Add skill"
             triggerClassName="border-blue-600 bg-blue-600 text-white hover:bg-blue-700 hover:text-white"
           >
@@ -140,6 +143,7 @@ export function ProfilePage() {
             </div>
           </div>
           <ProfileFormDialog
+            key={user}
             title="Add strength"
             triggerClassName="border-purple-600 bg-purple-600 text-white hover:bg-purple-700 hover:text-white"
           >
@@ -187,6 +191,7 @@ export function ProfilePage() {
             </div>
           </div>
           <ProfileFormDialog
+            key={user}
             title="Add job"
             triggerClassName="border-teal-600 bg-teal-600 text-white hover:bg-teal-700 hover:text-white"
           >
@@ -234,6 +239,7 @@ export function ProfilePage() {
             </div>
           </div>
           <ProfileFormDialog
+            key={user}
             title="Add certificate"
             triggerClassName="border-orange-600 bg-orange-600 text-white hover:bg-orange-700 hover:text-white"
           >
