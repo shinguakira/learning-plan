@@ -1,4 +1,5 @@
 import { Award, Briefcase, Code, Download, Sparkles } from "lucide-react"
+import { toast } from "sonner"
 import { Button } from "@/components/ui/button"
 import { useDownloadProfileCsv } from "@/hooks/useDownloadProfileCsv"
 import { useMockUser } from "@/hooks/useMockUser"
@@ -105,6 +106,7 @@ export function ProfilePage() {
                 existingNames={skills.map((skill) => skill.name)}
                 onSubmit={(draft) => {
                   addSkill(draft)
+                  toast.success("Skill added successfully.")
                   close()
                 }}
               />
@@ -151,6 +153,7 @@ export function ProfilePage() {
               <StrengthForm
                 onSubmit={(draft) => {
                   addStrength(draft)
+                  toast.success("Strength added successfully.")
                   close()
                 }}
               />
@@ -199,6 +202,7 @@ export function ProfilePage() {
               <JobForm
                 onSubmit={(draft) => {
                   addJob(draft)
+                  toast.success("Job added successfully.")
                   close()
                 }}
               />
@@ -247,6 +251,7 @@ export function ProfilePage() {
               <CertificateForm
                 onSubmit={(draft) => {
                   addCertificate(draft)
+                  toast.success("Certificate added successfully.")
                   close()
                 }}
               />
