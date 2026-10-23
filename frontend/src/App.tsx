@@ -1,4 +1,5 @@
 import { Navigate, Route, Routes } from "react-router-dom"
+import { Toaster } from "@/components/ui/sonner"
 import { AppLayout } from "@/components/layout/AppLayout"
 import { MockUserProvider } from "@/components/layout/MockUserProvider"
 import { ROUTES } from "@/constants/app"
@@ -18,6 +19,7 @@ export function App() {
           <Route path="*" element={<Navigate to={ROUTES.tasks} replace />} />
         </Route>
       </Routes>
+      <Toaster position="top-center" richColors closeButton />
     </MockUserProvider>
   )
 }

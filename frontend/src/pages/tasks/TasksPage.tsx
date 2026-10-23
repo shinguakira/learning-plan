@@ -1,4 +1,5 @@
 import { useRef, useState } from "react"
+import { toast } from "sonner"
 import { useSearchParams } from "react-router-dom"
 import { Download, RotateCcw, Trash2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -155,7 +156,13 @@ export function TasksPage() {
           <DialogHeader>
             <DialogTitle>Add Task</DialogTitle>
           </DialogHeader>
-          <TaskForm key={user} onSubmit={addTask} />
+          <TaskForm
+            key={user}
+            onSubmit={(draft) => {
+              addTask(draft)
+              toast.success("Task added successfully.")
+            }}
+          />
         </DialogContent>
       </Dialog>
 
