@@ -10,35 +10,22 @@ types in `src/types/`, constants in `src/constants/`, hooks in `src/hooks/`, thi
 project's helpers in `src/utils/`, and `src/lib/` only for code that would drop into
 another project unchanged.
 
-`src/api/` holds requests to the backend: chat, profile and task seed endpoints. A folder called `api` whose contents never leave the
-machine is a lie the next reader has to unlearn.
+`src/api/` holds requests to the backend. A folder called `api` whose contents never
+leave the machine is a lie the next reader has to unlearn.
 
 ## Persistence
 
-There is none. `useTasks` owns the task list for the life of the Tasks page and
-seeds it from the backend on every visit. `/api/tasks` returns seed entries with
-day offsets; `createSeedTasks` expands them into local calendar dates. The fetched
-seed is kept for Reload sample data, which restores the plan without another
-request. A failed initial request can be retried with the same control. Tasks
-added during loading survive, and Delete all prevents a late seed response from
-restoring cleared tasks. An earlier version wrote it to `localStorage`, which bought
-a per-browser copy nobody had asked for and brought a storage key to version, a
+There is none. An earlier version wrote it to `localStorage`, which bought a
+per-browser copy nobody had asked for and brought a storage key to version, a
 validation guard for whatever was already in there, and two tests that only proved
 the storage worked.
 
 ## Components and hooks
 
-Each component is one concern. Anything stateful or derived is a hook:
+Each component is one concern. Anything stateful or derived is a hook.
 
-- `useTaskFilters` owns the filter controls and the list they narrow.
-- `useTaskDraft` owns the add-task form and its validation.
-- `useTimeline` derives everything the Gantt needs from the task list.
-- `useAutoScroll` is generic and reusable.
-
-Pure derivations are **not** hooks. `summarizeTasks`, `filterTasks`, `sortTasks`,
-`computeDomain` and `monthSegments` are plain functions in `src/utils/`, because
-there is no state for a hook to own and a wrapper would only make them harder to
-test.
+Pure derivations are **not** hooks but plain functions in `src/utils/`, because there
+is no state for a hook to own and a wrapper would only make them harder to test.
 
 ## Memoisation
 
@@ -86,64 +73,29 @@ Classes are written on the element, never extracted into a named constant. The
 exception is a class chosen by runtime data — `CATEGORY_THEME[task.category]`,
 `STATUS_CHIP[task.status]` — where there is no single element to inline onto.
 
-The colour maps in [`src/constants/task.ts`](../frontend/src/constants/task.ts) are where raw
-palette classes are correct, because there the colour is the data: which category,
-which status, how urgent. A token is still used wherever one carries the meaning —
-`text-muted-foreground` for the neutral end of every scale, `text-destructive` for
-overdue and high priority — and a palette class only for a state the theme has no
-token for, such as in-progress blue and done green. Category colours were validated
-for lightness, chroma, colour-vision separation and surface contrast rather than
-picked by eye; the reasoning is in the comment above them.
+The colour maps in [`src/constants/task.ts`](../frontend/src/constants/task.ts) are
+where raw palette classes are correct, because there the colour is the data: which
+category, which status, how urgent. A token is still used wherever one carries the
+meaning — `text-muted-foreground` for the neutral end of every scale,
+`text-destructive` for overdue and high priority — and a palette class only for a
+state the theme has no token for. Category colours were validated for lightness,
+chroma, colour-vision separation and surface contrast rather than picked by eye; the
+reasoning is in the comment above them.
 
 ESLint's `react-refresh/only-export-components` is switched off for
 `src/components/ui/**`: shadcn exports its cva variants alongside the component by
 design. The rule stays on everywhere else.
 
-## The chat
-
-The browser sends conversation history and the selected mock name to `/api/chat`.
-Fastify validates the body, supplies the system prompt, chooses the configured
-provider and adds its credential. The selected mock name is personalization only.
-The UI and chat history remain local; there is no login or shared state.
-
-Provider credentials live in the backend environment. Browser bundles contain
-only the relative backend URL. Timeouts, body limits, output limits, concurrency
-limits and a request quota bound work per backend process. These are resource
-controls, not authentication or a distributed spending cap. See
-[chat security setup](chat-security.md).
-
-There is no offline fallback. If the endpoint is unset or the request fails, the chat
-says so rather than inventing an answer. An earlier version shipped a keyword bot as
-a fallback, which meant a broken configuration looked like a working product.
-
 ## Tests
 
 End-to-end tests are the main check. Nothing is persisted, so every test starts from
-the same sample plan with no cleanup step. The chat specs stub the endpoint with `page.route`, and the test
-server points at an unresolvable host so a spec that forgets to stub fails loudly
-instead of reaching a real provider.
+the same sample plan with no cleanup step.
 
 Assertions avoid numbers baked into the seed data. They read counts off the page and
-check invariants instead — the status filters and the category filters must each
-partition the whole list — so the specs survive any edit to the sample plan.
+check invariants instead, so the specs survive any edit to the sample plan.
 
-Unit tests cover the pure search pipeline only: `filterTasks` and `sortTasks`. That
-is where a subtle bug hides without anything visibly breaking. Vitest is configured
-in `vite.config.ts` so it shares the `@/` alias, with `include` scoped to `test/unit/`
-so it never picks up the Playwright specs.
+Vitest is configured in `vite.config.ts` so it shares the `@/` alias, with `include`
+scoped to `test/unit/` so it never picks up the Playwright specs.
 
 shadcn's `Select` is a Radix listbox, not a native `<select>`, so the specs open the
 trigger and click an option rather than calling `selectOption`.
-
-## Task analysis in chat
-
-Analysis uses the existing chat request and reply flow. A user message shows
-"Analyze my tasks" while carrying a separate task snapshot in its `context` field.
-The API includes that context in model history, so follow-up questions refer to the
-same plan without displaying its JSON in a bubble. Each analysis starts with a
-fresh `fetchTasks` request to `/api/tasks`, then expands the seed dates and attaches that snapshot. Tasks and Chat make independent
-requests; there is no task Provider or shared task Context. Local task edits are
-not saved to the backend, so they are not part of the review. Loading and cancellation
-cover both the backend fetch and the subsequent model request. Ordinary messages
-do not attach tasks on their own. Chat and analysis share one pending request, its loading indicator, and cancellation. Cancelling
-removes the unfinished user message and ignores late responses.

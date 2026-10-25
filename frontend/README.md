@@ -72,8 +72,6 @@ The backend accepts the OpenAI-style `/chat/completions` format. An HTTPS endpoi
 requires a key; a loopback local runtime may use HTTP and an empty key. Missing
 configuration disables chat while the sample-data routes remain available.
 
-Deployment and key rotation steps are in [chat security setup](../doc/chat-security.md).
-
 ## shadcn/ui
 
 **Every control on both pages comes from shadcn/ui** — buttons, inputs, selects,

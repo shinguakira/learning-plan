@@ -68,7 +68,7 @@ npm run dev
 ```
 
 Serves sample data and `POST /api/chat` on http://localhost:3001. Configure chat
-through `backend/.env`; see [chat security setup](doc/chat-security.md).
+through `backend/.env`.
 
 Node 20.19+, 22.13+ or 24+. The frontend's `engines` field declares the range, so
 `npm install` warns if you are outside it.
