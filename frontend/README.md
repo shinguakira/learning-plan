@@ -4,15 +4,6 @@ The app itself. The [repository README](../README.md) covers both packages and h
 they run together; **[`doc/product.md`](../doc/product.md) explains what the product
 is for** if you want the why rather than the how.
 
-- **Tasks** — add, delete and browse study tasks, with a switch between a list view
-  and a Gantt-style timeline.
-- **Profile** — technical skills for a resume.
-- **AI chat** — a standalone chatbot, unrelated to the other pages. It POSTs to the
-  backend at `/api/chat`.
-
-The backend supplies sample tasks and profile data and handles chat requests.
-Nothing is persisted: page edits and chat history live in memory for the session.
-
 ## Tech stack
 
 | Area            | Choice                               |
@@ -51,8 +42,7 @@ npm run dev
 Run `npm --prefix ../backend install` once, then start
 `npm --prefix ../backend run dev` in another terminal.
 
-Open http://localhost:5173. The sample plan loads on every visit and edits last only
-until you reload (`Reload sample data` restores it, `Delete all` empties the list).
+Open http://localhost:5173.
 
 To run the end-to-end tests, download the browser once first:
 
@@ -63,21 +53,17 @@ npm run test-e2e
 
 ### Chat endpoint
 
-The chat page calls the backend at `/api/chat`. Copy `backend/.env.example` to
-`backend/.env` and configure `CHAT_API_URL`, `CHAT_MODEL` and `CHAT_API_KEY` there.
-The backend development script loads that file. Production reads the same names
-from the backend service environment. Never use `VITE_` for provider credentials.
+Copy `backend/.env.example` to `backend/.env` and configure `CHAT_API_URL`,
+`CHAT_MODEL` and `CHAT_API_KEY` there. The backend development script loads that
+file. Production reads the same names from the backend service environment. Never
+use `VITE_` for provider credentials.
 
 The backend accepts the OpenAI-style `/chat/completions` format. An HTTPS endpoint
-requires a key; a loopback local runtime may use HTTP and an empty key. Missing
-configuration disables chat while the sample-data routes remain available.
-
-Deployment and key rotation steps are in [chat security setup](../doc/chat-security.md).
+requires a key; a loopback local runtime may use HTTP and an empty key.
 
 ## shadcn/ui
 
-**Every control on both pages comes from shadcn/ui** — buttons, inputs, selects,
-labels, cards, badges, the separator and the progress meter. Add more with:
+**Every control comes from shadcn/ui** — add more with:
 
 ```bash
 npx shadcn@latest add <component>
@@ -90,7 +76,7 @@ mirrored into the root [`tsconfig.json`](tsconfig.json) because that is where th
 CLI's resolver looks. Icons come from [lucide](https://lucide.dev), shadcn's
 configured icon library.
 
-Styling conventions are in [`doc/coding.md`](doc/coding.md).
+Styling conventions are in [`doc/coding.md`](../doc/coding.md).
 
 ## Available scripts
 
@@ -116,26 +102,17 @@ Every script defined in [`package.json`](package.json), and nothing else:
 ## Folder structure
 
 ```
-doc/getting-started.md     a tour of this codebase for a first read
-doc/coding.md              why the code is arranged the way it is
-test/unit/                 Vitest specs for the search logic
-test/e2e/                  Playwright specs: tasks, chat, navigation
+test/unit/                 Vitest specs for pure logic
+test/e2e/                  Playwright specs
 playwright.config.ts       starts the dev server, runs Chromium
-src/pages/tasks/           components only: TasksPage, TaskStats, StatTile, TaskForm,
-                           FormField, TaskFilters, SegmentedButton, TaskListView,
-                           TaskRow, StatusToggle, TimelineView, TimelineHeader,
-                           TimelineBar, TimelineLegend, EmptyState
-src/pages/chat/            components only: ChatPage, ChatBubble, ThinkingBubble,
-                           ChatEmpty, ChatComposer, AssistantAvatar, Markdown
+src/pages/<page>/          components only, for that one page
 src/components/ui/         shadcn components, owned by this repo
-src/components/layout/     AppLayout - the shell both routes render inside
-src/components/buttons/    empty for now (.gitkeep)
-src/api/chat.ts            the completions request - the only network call
-src/hooks/                 useTasks, useChat, useTaskFilters, useTaskDraft,
-                           useTimeline, useAutoScroll
-src/types/                 app, chat, date, task, timeline
-src/constants/             app, chat, date, task, timeline
-src/utils/                 date, task, timeline, seed - this project's helpers
+src/components/layout/     the shell every route renders inside
+src/api/                   requests to the backend
+src/hooks/                 hooks
+src/types/                 every type
+src/constants/             every constant
+src/utils/                 this project's helpers
 src/lib/utils.ts           cn - generic, reusable in any project
 components.json            shadcn CLI config
 eslint.config.js           ESLint flat config
