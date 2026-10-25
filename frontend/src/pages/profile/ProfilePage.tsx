@@ -1,7 +1,8 @@
-import { Award, Briefcase, Code, Download, Sparkles } from "lucide-react"
+import { Award, Briefcase, Code, Download, FileText, Sparkles } from "lucide-react"
 import { toast } from "sonner"
 import { Button } from "@/components/ui/button"
 import { useDownloadProfileCsv } from "@/hooks/useDownloadProfileCsv"
+import { useDownloadProfilePdf } from "@/hooks/useDownloadProfilePdf"
 import { useMockUser } from "@/hooks/useMockUser"
 import { useProfile } from "@/hooks/useProfile"
 import { JobForm } from "@/pages/profile/JobForm"
@@ -44,6 +45,12 @@ export function ProfilePage() {
     removeStrength,
   } = useProfile(user)
   const { status: csvStatus, download: downloadCsv } = useDownloadProfileCsv()
+  const { status: pdfStatus, download: downloadPdf } = useDownloadProfilePdf(user, {
+    skills,
+    jobs,
+    certificates,
+    strengths,
+  })
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6">
@@ -55,18 +62,33 @@ export function ProfilePage() {
           </p>
         </div>
         <div>
-          {/* Solid, where the section buttons are tinted: this one acts on the whole page. */}
-          <Button
-            type="button"
-            size="sm"
-            onClick={downloadCsv}
-            disabled={csvStatus === "downloading"}
-          >
-            <Download />
-            Download CSV
-          </Button>
+          {/* Solid, where the section buttons are tinted: these act on the whole page. */}
+          <div className="flex flex-wrap items-center gap-2">
+            <Button
+              type="button"
+              size="sm"
+              onClick={downloadCsv}
+              disabled={csvStatus === "downloading"}
+            >
+              <Download />
+              Download CSV
+            </Button>
+            <Button
+              type="button"
+              size="sm"
+              variant="outline"
+              onClick={downloadPdf}
+              disabled={pdfStatus === "downloading"}
+            >
+              <FileText />
+              Download PDF
+            </Button>
+          </div>
           {csvStatus === "error" && (
             <p className="text-destructive mt-1 text-xs">Could not download the CSV.</p>
+          )}
+          {pdfStatus === "error" && (
+            <p className="text-destructive mt-1 text-xs">Could not download the PDF.</p>
           )}
         </div>
       </div>
