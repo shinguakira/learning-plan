@@ -90,7 +90,7 @@ mirrored into the root [`tsconfig.json`](tsconfig.json) because that is where th
 CLI's resolver looks. Icons come from [lucide](https://lucide.dev), shadcn's
 configured icon library.
 
-Styling conventions are in [`doc/coding.md`](doc/coding.md).
+Styling conventions are in [`doc/coding.md`](../doc/coding.md).
 
 ## Available scripts
 
@@ -116,8 +116,6 @@ Every script defined in [`package.json`](package.json), and nothing else:
 ## Folder structure
 
 ```
-doc/getting-started.md     a tour of this codebase for a first read
-doc/coding.md              why the code is arranged the way it is
 test/unit/                 Vitest specs for the search logic
 test/e2e/                  Playwright specs: tasks, chat, navigation
 playwright.config.ts       starts the dev server, runs Chromium

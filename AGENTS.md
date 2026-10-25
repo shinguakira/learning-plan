@@ -53,7 +53,6 @@ frontend/src/lib/               generic, would drop into another project unchang
 frontend/src/api/               only code that talks to something external
 frontend/test/unit/             Vitest specs for pure logic
 frontend/test/e2e/              Playwright specs
-frontend/doc/                   why this code is arranged as it is
 doc/                            repository and product documentation
 ```
 
@@ -62,8 +61,8 @@ doc/                            repository and product documentation
 - One file per thing, named for the thing.
 - `frontend/src/api/` only when there is real external communication.
 - `doc/product.md` is the product; keep technology out of it.
-- `frontend/doc/coding.md` holds reasoning, not the README.
-- Keep `frontend/doc/getting-started.md` in step with the code when files move.
+- `doc/coding.md` holds reasoning, not the README.
+- Keep `doc/getting-started.md` in step with the code when files move.
 - `doc/branch-naming.md` covers the whole repository.
 
 ## Imports

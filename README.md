@@ -80,8 +80,8 @@ Node 20.19+, 22.13+ or 24+. The frontend's `engines` field declares the range, s
 | [`doc/product.md`](doc/product.md)                                   | What the product is for and who for. No technology                     |
 | [`doc/branch-naming.md`](doc/branch-naming.md)                       | Where branches start, what they are called, how work reaches `develop` |
 | [`frontend/README.md`](frontend/README.md)                           | The frontend's stack, setup and scripts                                |
-| [`frontend/doc/getting-started.md`](frontend/doc/getting-started.md) | A tour of the frontend codebase for a first read                       |
-| [`frontend/doc/coding.md`](frontend/doc/coding.md)                   | Why the frontend code is arranged the way it is                        |
+| [`doc/getting-started.md`](doc/getting-started.md)                   | A tour of the frontend codebase for a first read                       |
+| [`doc/coding.md`](doc/coding.md)                                     | Why the frontend code is arranged the way it is                        |
 | [`AGENTS.md`](AGENTS.md)                                             | The repo's conventions, as a list of rules                             |
 
 ## Working on it
