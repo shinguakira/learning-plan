@@ -8,9 +8,16 @@ import {
 import type { Profile } from '../types/profile.js'
 import type { MockUser } from '../types/user.js'
 
-/** The standard fonts encode WinAnsi only; anything outside it would not render. */
+/**
+ * The standard fonts encode WinAnsi only; anything outside it would not render.
+ * Line breaks are kept, because the strength and job textareas accept them and
+ * pdfkit breaks the line on them.
+ */
 function toWinAnsi(value: string): string {
-  return value.replace(/[^\x20-\x7e\xa0-\xff]/g, '?')
+  return value
+    .replace(/\r\n?/g, '\n')
+    .replace(/\t/g, ' ')
+    .replace(/[^\n\x20-\x7e\xa0-\xff]/g, '?')
 }
 
 /** Render the profile the browser posted, so unsaved page edits are included. */
