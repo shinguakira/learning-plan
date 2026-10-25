@@ -1,14 +1,14 @@
 # Finding your way around
 
 For anyone opening this project for the first time: how to get it running, what the
-tooling around it is doing, and where the code lives. The [frontend README](../README.md) has
+tooling around it is doing, and where the code lives. The [frontend README](../frontend/README.md) has
 the same setup as a short reference; this is the version with the reasons attached.
 
 ## Getting it running
 
 You need **Node** — the runtime the dev server and the build both run on. This
 project wants 20.19+, 22.13+ or 24+, which is written down in `engines` in
-[`package.json`](../package.json), so `npm install` warns you if you are outside it.
+[`package.json`](../frontend/package.json), so `npm install` warns you if you are outside it.
 
 ```bash
 node -v
@@ -34,7 +34,7 @@ belong in the frontend environment.
 
 ## `package.json` and `node_modules`
 
-[`package.json`](../package.json) is the project's definition. It holds the project
+[`package.json`](../frontend/package.json) is the project's definition. It holds the project
 name, the Node range, the list of packages this project uses with an acceptable
 version range for each, and the scripts you can run. It is short, it is hand-edited,
 and it is committed.
@@ -131,8 +131,8 @@ locally either way — it misleads the next person reading the list.
 
 ## Follow one screen down
 
-Start at [`src/main.tsx`](../src/main.tsx). It does one thing: mount
-[`src/App.tsx`](../src/App.tsx) into the page.
+Start at [`src/main.tsx`](../frontend/src/main.tsx). It does one thing: mount
+[`src/App.tsx`](../frontend/src/App.tsx) into the page.
 
 `App.tsx` is the whole routing table:
 
@@ -144,7 +144,7 @@ Start at [`src/main.tsx`](../src/main.tsx). It does one thing: mount
 
 Three URLs, three pages. Everything each page needs sits beside it —
 `src/pages/tasks/`, `src/pages/chat/` and `src/pages/profile/`. Open
-[`TasksPage.tsx`](../src/pages/tasks/TasksPage.tsx) and you can read the entire
+[`TasksPage.tsx`](../frontend/src/pages/tasks/TasksPage.tsx) and you can read the entire
 screen in one go, because it is only composition:
 
 ```tsx
@@ -165,7 +165,7 @@ about; none of them is more than a screenful.
 ## What a component actually is here
 
 A component is a function that takes some data and returns markup. It never
-modifies what it was given. [`StatTile`](../src/pages/tasks/StatTile.tsx) is the
+modifies what it was given. [`StatTile`](../frontend/src/pages/tasks/StatTile.tsx) is the
 clearest example — hand it a label, a number and an icon, get back a tile:
 
 ```tsx
@@ -182,9 +182,9 @@ one thing and holds no state has nothing else to be.
 ## Where the moving parts live
 
 Anything that remembers something, or changes over time, is a **hook** — a function
-whose name starts with `use`. They all live in [`src/hooks/`](../src/hooks).
+whose name starts with `use`. They all live in [`src/hooks/`](../frontend/src/hooks).
 
-[`useTasks`](../src/hooks/useTasks.ts) is the one to read first:
+[`useTasks`](../frontend/src/hooks/useTasks.ts) is the one to read first:
 
 ```ts
 export function useTasks(): TasksApi {
@@ -218,7 +218,7 @@ The other hooks follow the same shape:
 
 A rule that holds throughout: **if it only calculates, it is not a hook.**
 `filterTasks`, `sortTasks` and `summarizeTasks` are plain functions in
-[`src/utils/task.ts`](../src/utils/task.ts) — give them a list, get a list back.
+[`src/utils/task.ts`](../frontend/src/utils/task.ts) — give them a list, get a list back.
 Those are the easiest things to read and the easiest to be sure about, so logic is pushed
 into them wherever it can go.
 
@@ -241,7 +241,7 @@ in `src/constants/`, and only there.
 ## Reading a type before its code
 
 TypeScript here is used to say what things are, so a type is often the fastest
-answer. [`src/types/task.ts`](../src/types/task.ts) tells you exactly what a task
+answer. [`src/types/task.ts`](../frontend/src/types/task.ts) tells you exactly what a task
 is before you open anything that draws one:
 
 ```ts
@@ -256,7 +256,7 @@ export type Task = {
 
 `Category` and `Status` are not free-form text — they are fixed lists, so
 `status: 'archived'` will not compile. Dates use `ISODate`, a string that can only
-come from [`src/utils/date.ts`](../src/utils/date.ts), which stops a timestamp being
+come from [`src/utils/date.ts`](../frontend/src/utils/date.ts), which stops a timestamp being
 passed where a calendar date belongs.
 
 Hovering a name in your editor shows its type. That is usually quicker than reading
@@ -264,7 +264,7 @@ the file it came from.
 
 The fixed lists are wired to the maps that describe them. `STATUS_LABEL`,
 `STATUS_CHIP` and `NEXT_STATUS` in
-[`src/constants/task.ts`](../src/constants/task.ts) are each a `Record<Status, …>`,
+[`src/constants/task.ts`](../frontend/src/constants/task.ts) are each a `Record<Status, …>`,
 so a new status is a build error in every place that has to handle it until it is
 handled. The build report is the list of what is left to do.
 
@@ -283,6 +283,6 @@ code consistent with what is already there.
 
 ## Where to go next
 
-- [`doc/product.md`](../../doc/product.md) — what the app is for, and who for.
+- [`doc/product.md`](product.md) — what the app is for, and who for.
 - [`doc/coding.md`](coding.md) — why the code is arranged this way.
-- [`AGENTS.md`](../../AGENTS.md) — the same decisions as a short list of rules.
+- [`AGENTS.md`](../AGENTS.md) — the same decisions as a short list of rules.

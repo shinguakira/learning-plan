@@ -1,7 +1,7 @@
 # Coding notes
 
 Why the code is arranged the way it is. These are decisions with reasons attached —
-the terse rule form lives in [`AGENTS.md`](../../AGENTS.md).
+the terse rule form lives in [`AGENTS.md`](../AGENTS.md).
 
 ## Where code goes
 
@@ -86,7 +86,7 @@ Classes are written on the element, never extracted into a named constant. The
 exception is a class chosen by runtime data — `CATEGORY_THEME[task.category]`,
 `STATUS_CHIP[task.status]` — where there is no single element to inline onto.
 
-The colour maps in [`src/constants/task.ts`](../src/constants/task.ts) are where raw
+The colour maps in [`src/constants/task.ts`](../frontend/src/constants/task.ts) are where raw
 palette classes are correct, because there the colour is the data: which category,
 which status, how urgent. A token is still used wherever one carries the meaning —
 `text-muted-foreground` for the neutral end of every scale, `text-destructive` for
@@ -110,7 +110,7 @@ Provider credentials live in the backend environment. Browser bundles contain
 only the relative backend URL. Timeouts, body limits, output limits, concurrency
 limits and a request quota bound work per backend process. These are resource
 controls, not authentication or a distributed spending cap. See
-[chat security setup](../../doc/chat-security.md).
+[chat security setup](chat-security.md).
 
 There is no offline fallback. If the endpoint is unset or the request fails, the chat
 says so rather than inventing an answer. An earlier version shipped a keyword bot as
