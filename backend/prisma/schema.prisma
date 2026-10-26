@@ -1,0 +1,29 @@
+// Nothing imports the generated client yet: this is the schema only.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+/// The people the header can switch between, today the four in MOCK_USERS.
+model User {
+  id        String   @id @default(uuid())
+  name      String   @unique
+  createdAt DateTime @default(now())
+
+  @@map("users")
+}
+
+/// The technologies a skill can name, today the list in SkillForm's SKILL_OPTIONS.
+/// "Other" is not one of them - it is the form's escape hatch for free text.
+model Technology {
+  id        String   @id @default(uuid())
+  name      String   @unique
+  createdAt DateTime @default(now())
+
+  @@map("technologies")
+}
