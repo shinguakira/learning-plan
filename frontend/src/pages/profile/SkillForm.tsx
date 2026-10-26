@@ -12,34 +12,11 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { SKILL_LEVELS, SKILL_LEVEL_LABEL, YEARS_OF_EXPERIENCE } from "@/constants/skill"
+import { OTHER_SKILL_OPTION } from "@/constants/technology"
 import { useSkillDraft } from "@/hooks/useSkillDraft"
+import { useTechnologies } from "@/hooks/useTechnologies"
 import { FormField } from "@/components/form/FormField"
 import type { SkillDraft, SkillLevel } from "@/types/skill"
-
-const SKILL_OPTIONS = [
-  "JavaScript",
-  "TypeScript",
-  "React",
-  "Next.js",
-  "Node.js",
-  "HTML / CSS",
-  "Python",
-  "Go",
-  "Rust",
-  "Java",
-  "C#",
-  "SQL",
-  "PostgreSQL",
-  "MongoDB",
-  "Docker",
-  "Kubernetes",
-  "AWS",
-  "Git",
-  "Linux",
-  "Other",
-] as const
-
-const DEFAULT_SKILL: string = SKILL_OPTIONS[0]
 
 export function SkillForm({
   existingNames,
@@ -48,20 +25,23 @@ export function SkillForm({
   existingNames: readonly string[]
   onSubmit: (draft: SkillDraft) => void
 }) {
-  const [selectedOption, setSelectedOption] = useState(DEFAULT_SKILL)
-  const isOther = selectedOption === "Other"
-  const { draft, patch, nameError, touched, submit } = useSkillDraft(existingNames, DEFAULT_SKILL)
+  const { technologies, loading, error } = useTechnologies()
+  const [selectedOption, setSelectedOption] = useState("")
+  const isOther = selectedOption === OTHER_SKILL_OPTION
+  const { draft, patch, nameError, touched, submit } = useSkillDraft(existingNames, "")
+
+  const options = [...technologies.map((technology) => technology.name), OTHER_SKILL_OPTION]
 
   const handleSelect = (value: string) => {
     setSelectedOption(value)
-    patch({ name: value === "Other" ? "" : value })
+    patch({ name: value === OTHER_SKILL_OPTION ? "" : value })
   }
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     const ready = submit()
     if (ready) {
-      setSelectedOption(DEFAULT_SKILL)
+      setSelectedOption("")
       onSubmit(ready)
     }
   }
@@ -74,18 +54,23 @@ export function SkillForm({
           htmlFor="skill-option"
           error={touched && !isOther ? nameError : null}
         >
-          <Select value={selectedOption} onValueChange={handleSelect}>
+          <Select value={selectedOption} onValueChange={handleSelect} disabled={loading}>
             <SelectTrigger id="skill-option" aria-label="Skill" className="w-full">
-              <SelectValue />
+              <SelectValue placeholder={loading ? "Loading skills…" : "Select a skill"} />
             </SelectTrigger>
             <SelectContent>
-              {SKILL_OPTIONS.map((option) => (
+              {options.map((option) => (
                 <SelectItem key={option} value={option}>
                   {option}
                 </SelectItem>
               ))}
             </SelectContent>
           </Select>
+          {error !== null && (
+            <p className="text-muted-foreground mt-1 text-xs">
+              Skill list unavailable. Use {OTHER_SKILL_OPTION} to type one.
+            </p>
+          )}
         </FormField>
 
         {isOther && (
