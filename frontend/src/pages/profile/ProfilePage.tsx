@@ -59,7 +59,8 @@ export function ProfilePage() {
         <div>
           <h1 className="text-lg font-semibold">Profile</h1>
           <p className="text-muted-foreground mt-0.5 text-xs">
-            What goes on your resume. Edits here are not saved.
+            What goes on your resume. Added skills and strengths are saved; other edits stay on this
+            page.
           </p>
         </div>
         <div>
@@ -182,8 +183,9 @@ export function ProfilePage() {
           >
             {(close) => (
               <StrengthForm
-                onSubmit={(draft) => {
-                  addStrength(draft)
+                existingNames={strengths.map((strength) => strength.name)}
+                onSubmit={async (draft) => {
+                  await addStrength(draft)
                   toast.success("Strength added successfully.")
                   close()
                 }}
