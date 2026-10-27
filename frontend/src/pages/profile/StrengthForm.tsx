@@ -1,20 +1,42 @@
-import type { FormEvent } from "react"
-import { Plus } from "lucide-react"
+import { useState, type FormEvent } from "react"
+import { Plus, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { DialogClose } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { FormField } from "@/components/form/FormField"
 import { useStrengthDraft } from "@/hooks/useStrengthDraft"
+import { EMPTY_STRENGTH_DRAFT } from "@/constants/strength"
 import type { StrengthDraft } from "@/types/strength"
 
-export function StrengthForm({ onSubmit }: { onSubmit: (draft: StrengthDraft) => void }) {
-  const { draft, touched, nameError, descriptionError, patch, submit } = useStrengthDraft()
+export function StrengthForm({
+  existingNames,
+  onSubmit,
+}: {
+  existingNames: readonly string[]
+  onSubmit: (draft: StrengthDraft) => Promise<void>
+}) {
+  const [saving, setSaving] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const { draft, touched, nameError, descriptionError, patch, submit } = useStrengthDraft(
+    existingNames,
+    EMPTY_STRENGTH_DRAFT,
+  )
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
+    if (saving) return
     const ready = submit()
-    if (ready) onSubmit(ready)
+    if (ready === null) return
+    setSaving(true)
+    setError(null)
+    try {
+      await onSubmit(ready)
+    } catch (caught: unknown) {
+      setError(caught instanceof Error ? caught.message : "Could not save the strength.")
+    } finally {
+      setSaving(false)
+    }
   }
 
   return (
@@ -41,15 +63,21 @@ export function StrengthForm({ onSubmit }: { onSubmit: (draft: StrengthDraft) =>
           aria-invalid={touched && descriptionError !== null}
         />
       </FormField>
+      {error !== null && (
+        <p role="alert" className="text-destructive text-sm">
+          {error}
+        </p>
+      )}
       <div className="flex justify-end gap-2">
         <DialogClose asChild>
           <Button type="button" variant="outline">
+            <X />
             Cancel
           </Button>
         </DialogClose>
-        <Button type="submit">
+        <Button type="submit" disabled={saving}>
           <Plus />
-          Add strength
+          {saving ? "Saving…" : "Add strength"}
         </Button>
       </div>
     </form>

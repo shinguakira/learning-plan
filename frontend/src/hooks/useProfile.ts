@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react"
 import { fetchProfile } from "@/api/profile"
 import { createSkill, updateSkill } from "@/api/skill"
+import { createStrength } from "@/api/strength"
 import { EMPTY_PROFILE_STATE } from "@/constants/profile"
 import type { ProfileState } from "@/types/profile"
 import type { MockUser } from "@/types/user"
@@ -25,7 +26,7 @@ export type ProfileApi = {
   removeJob: (id: string) => void
   addCertificate: (draft: CertificateDraft) => void
   removeCertificate: (id: string) => void
-  addStrength: (draft: StrengthDraft) => void
+  addStrength: (draft: StrengthDraft) => Promise<void>
   removeStrength: (id: string) => void
 }
 
@@ -50,7 +51,12 @@ export function useProfile(user: MockUser): ProfileApi {
               skills: [...profile.skills, ...seed.skills],
               jobs: [...profile.jobs, ...seed.jobs],
               certificates: [...profile.certificates, ...seed.certificates],
-              strengths: [...profile.strengths, ...seed.strengths],
+              strengths: [
+                ...profile.strengths,
+                ...seed.strengths.filter(
+                  (strength) => !profile.strengths.some((existing) => existing.id === strength.id),
+                ),
+              ],
               loading: false,
               error: null,
             },
@@ -128,13 +134,15 @@ export function useProfile(user: MockUser): ProfileApi {
         certificates: profile.certificates.filter((certificate) => certificate.id !== id),
       }))
     },
-    addStrength: (draft) => {
-      const strength: Strength = {
-        ...draft,
-        id: crypto.randomUUID(),
-        createdAt: new Date().toISOString(),
-      }
-      updateProfile((profile) => ({ ...profile, strengths: [strength, ...profile.strengths] }))
+    addStrength: async (draft) => {
+      const strength = await createStrength(user, draft)
+      updateProfile((profile) => ({
+        ...profile,
+        strengths: [
+          strength,
+          ...profile.strengths.filter((existing) => existing.id !== strength.id),
+        ],
+      }))
     },
     removeStrength: (id) => {
       updateProfile((profile) => ({
