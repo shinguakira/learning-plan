@@ -127,9 +127,64 @@ const STRENGTHS: Record<MockUser, { name: string; description: string }[]> = {
   ],
 }
 
+type SeedCertificate = {
+  name: string
+  issuer: string
+  dateEarned: string
+  credentialUrl?: string
+}
+
+const CERTIFICATES: Record<MockUser, SeedCertificate[]> = {
+  Sanjar: [
+    {
+      name: 'CS50x: Introduction to Computer Science',
+      issuer: 'Harvard University',
+      dateEarned: '2026-01-01',
+      credentialUrl:
+        'https://cs50.harvard.edu/certificates/6d9a7fd7-d5ac-4fa1-ac87-6f1f9f400241',
+    },
+    { name: 'IBM Data Science', issuer: 'IBM', dateEarned: '2026-07-01' },
+    { name: 'Google AI Essentials', issuer: 'Google', dateEarned: '2026-01-15' },
+    {
+      name: 'Python For Everybody',
+      issuer: 'University of Michigan',
+      dateEarned: '2025-06-30',
+    },
+  ],
+  Akira: [
+    {
+      name: 'Certified Kubernetes Administrator',
+      issuer: 'The Linux Foundation',
+      dateEarned: '2024-05-20',
+    },
+    {
+      name: 'AWS Certified Solutions Architect - Associate',
+      issuer: 'Amazon Web Services',
+      dateEarned: '2023-02-10',
+    },
+    {
+      name: 'HashiCorp Certified: Terraform Associate',
+      issuer: 'HashiCorp',
+      dateEarned: '2022-11-04',
+    },
+  ],
+  Mike: [
+    { name: 'Google Data Analytics', issuer: 'Google', dateEarned: '2023-08-12' },
+    {
+      name: 'Databricks Certified Data Engineer Associate',
+      issuer: 'Databricks',
+      dateEarned: '2024-03-22',
+    },
+  ],
+  John: [
+    { name: 'Responsive Web Design', issuer: 'freeCodeCamp', dateEarned: '2024-07-05' },
+  ],
+}
+
 try {
   let skillCount = 0
   let strengthCount = 0
+  let certificateCount = 0
 
   for (const name of MOCK_USERS) {
     const user = await prisma.user.upsert({ where: { name }, update: {}, create: { name } })
@@ -151,6 +206,19 @@ try {
       })
       strengthCount += 1
     }
+
+    for (const certificate of CERTIFICATES[name]) {
+      await prisma.certificate.upsert({
+        where: { userId_name: { userId: user.id, name: certificate.name } },
+        update: {},
+        create: {
+          userId: user.id,
+          ...certificate,
+          dateEarned: new Date(certificate.dateEarned),
+        },
+      })
+      certificateCount += 1
+    }
   }
 
   for (const name of TECHNOLOGIES) {
@@ -158,7 +226,7 @@ try {
   }
 
   console.log(
-    `Seeded ${MOCK_USERS.length} users, ${skillCount} skills, ${strengthCount} strengths and ${TECHNOLOGIES.length} technologies.`,
+    `Seeded ${MOCK_USERS.length} users, ${skillCount} skills, ${strengthCount} strengths, ${certificateCount} certificates and ${TECHNOLOGIES.length} technologies.`,
   )
 } finally {
   await prisma.$disconnect()
