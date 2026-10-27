@@ -1,5 +1,5 @@
 import { SKILL_LEVELS } from "@/constants/skill"
-import type { Skill, SkillLevel } from "@/types/skill"
+import type { Skill, SkillDraft, SkillLevel } from "@/types/skill"
 
 export type SkillGroup = {
   level: SkillLevel
@@ -15,4 +15,9 @@ export function groupSkillsByLevel(skills: readonly Skill[]): SkillGroup[] {
     .reverse()
     .map((level) => ({ level, skills: skills.filter((skill) => skill.level === level) }))
     .filter((group) => group.skills.length > 0)
+}
+
+/** Drops the fields the server owns, so a registered skill can seed the edit form. */
+export function toSkillDraft({ name, level, yearsOfExperience }: Skill): SkillDraft {
+  return { name, level, yearsOfExperience }
 }

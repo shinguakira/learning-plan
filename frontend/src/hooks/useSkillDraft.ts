@@ -1,5 +1,4 @@
 import { useState } from "react"
-import { SKILL_LEVELS } from "@/constants/skill"
 import type { SkillDraft } from "@/types/skill"
 
 export type SkillDraftApi = {
@@ -13,18 +12,12 @@ export type SkillDraftApi = {
   reset: () => void
 }
 
-/** Owns the add-skill form's state and its validation. */
+/** Owns the skill form's state and its validation, for both adding and editing. */
 export function useSkillDraft(
   existingNames: readonly string[],
-  defaultName: string,
+  initial: SkillDraft,
 ): SkillDraftApi {
-  const emptyDraft = (): SkillDraft => ({
-    name: defaultName,
-    level: SKILL_LEVELS[0],
-    yearsOfExperience: 1,
-  })
-
-  const [draft, setDraft] = useState<SkillDraft>(emptyDraft)
+  const [draft, setDraft] = useState<SkillDraft>(initial)
   const [touched, setTouched] = useState(false)
 
   const trimmedName = draft.name.trim()
@@ -36,7 +29,7 @@ export function useSkillDraft(
         : null
 
   const reset = () => {
-    setDraft(emptyDraft())
+    setDraft(initial)
     setTouched(false)
   }
 

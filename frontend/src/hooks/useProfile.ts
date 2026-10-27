@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react"
 import { fetchProfile } from "@/api/profile"
-import { createSkill } from "@/api/skill"
+import { createSkill, updateSkill } from "@/api/skill"
 import { EMPTY_PROFILE_STATE } from "@/constants/profile"
 import type { ProfileState } from "@/types/profile"
 import type { MockUser } from "@/types/user"
@@ -19,6 +19,7 @@ export type ProfileApi = {
   /** Set if the initial seed request failed; all lists still work from empty. */
   error: string | null
   addSkill: (draft: SkillDraft) => Promise<void>
+  editSkill: (id: string, draft: SkillDraft) => Promise<void>
   removeSkill: (id: string) => void
   addJob: (draft: JobDraft) => void
   removeJob: (id: string) => void
@@ -86,6 +87,13 @@ export function useProfile(user: MockUser): ProfileApi {
     addSkill: async (draft) => {
       const skill = await createSkill(user, draft)
       updateProfile((profile) => ({ ...profile, skills: [skill, ...profile.skills] }))
+    },
+    editSkill: async (id, draft) => {
+      const skill = await updateSkill(id, draft)
+      updateProfile((profile) => ({
+        ...profile,
+        skills: profile.skills.map((existing) => (existing.id === id ? skill : existing)),
+      }))
     },
     removeSkill: (id) => {
       updateProfile((profile) => ({
