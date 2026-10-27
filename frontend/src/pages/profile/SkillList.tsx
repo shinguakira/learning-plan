@@ -1,20 +1,26 @@
-import { Award, X } from "lucide-react"
+import { useState } from "react"
+import { Award, Pencil, X } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { cn } from "@/lib/utils"
 import { SKILL_LEVEL_CHIP, SKILL_LEVEL_LABEL, SKILL_LEVEL_TEXT } from "@/constants/skill"
 import { groupSkillsByLevel } from "@/utils/skill"
+import { SkillEditDialog } from "@/pages/profile/SkillEditDialog"
 import { SkillLevelMeter } from "@/pages/profile/SkillLevelMeter"
-import type { Skill } from "@/types/skill"
+import type { Skill, SkillDraft } from "@/types/skill"
 
 export function SkillList({
   skills,
+  onEdit,
   onRemove,
 }: {
   skills: Skill[]
+  onEdit: (id: string, draft: SkillDraft) => Promise<void>
   onRemove: (id: string) => void
 }) {
+  const [editing, setEditing] = useState<Skill | null>(null)
+
   if (skills.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center gap-2 rounded-xl border border-dashed px-6 py-14 text-center">
@@ -49,22 +55,39 @@ export function SkillList({
               <ul className="flex min-w-0 flex-1 flex-wrap gap-1.5">
                 {group.skills.map((skill) => (
                   <li key={skill.id} className="group/skill relative">
-                    <Badge variant="outline" className={cn("h-7", SKILL_LEVEL_CHIP[group.level])}>
+                    {/* The row makes room for the buttons only while they are showing. */}
+                    <Badge
+                      variant="outline"
+                      className={cn(
+                        "h-7 transition-[padding] group-hover/skill:pr-12 group-focus-within/skill:pr-12",
+                        SKILL_LEVEL_CHIP[group.level],
+                      )}
+                    >
                       <span>{skill.name}</span>
                       <span className="text-muted-foreground/80 ml-1.5 font-normal">
                         ({skill.yearsOfExperience} {skill.yearsOfExperience === 1 ? "yr" : "yrs"})
                       </span>
                     </Badge>
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      size="icon-xs"
-                      className="absolute top-1/2 right-0.5 -translate-y-1/2 opacity-0 transition group-hover/skill:opacity-100 focus-visible:opacity-100"
-                      aria-label={`Remove ${skill.name}`}
-                      onClick={() => onRemove(skill.id)}
-                    >
-                      <X />
-                    </Button>
+                    <div className="absolute top-1/2 right-0.5 flex -translate-y-1/2 items-center gap-0.5 opacity-0 transition group-hover/skill:opacity-100 group-focus-within/skill:opacity-100">
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="icon-xs"
+                        aria-label={`Edit ${skill.name}`}
+                        onClick={() => setEditing(skill)}
+                      >
+                        <Pencil />
+                      </Button>
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="icon-xs"
+                        aria-label={`Remove ${skill.name}`}
+                        onClick={() => onRemove(skill.id)}
+                      >
+                        <X />
+                      </Button>
+                    </div>
                   </li>
                 ))}
               </ul>
@@ -72,6 +95,15 @@ export function SkillList({
           </Card>
         </section>
       ))}
+
+      <SkillEditDialog
+        skill={editing}
+        existingNames={skills
+          .filter((skill) => skill.id !== editing?.id)
+          .map((skill) => skill.name)}
+        onEdit={onEdit}
+        onClose={() => setEditing(null)}
+      />
     </div>
   )
 }

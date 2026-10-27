@@ -7,3 +7,9 @@ export type SkillCreateRequest = {
   level: SkillLevel
   yearsOfExperience: number
 }
+
+export type SkillUpdateRequest = {
+  name: string
+  level: SkillLevel
+  yearsOfExperience: number
+}

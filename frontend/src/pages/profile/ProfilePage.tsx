@@ -36,6 +36,7 @@ export function ProfilePage() {
     loading,
     error,
     addSkill,
+    editSkill,
     removeSkill,
     addJob,
     removeJob,
@@ -125,8 +126,9 @@ export function ProfilePage() {
           >
             {(close) => (
               <SkillForm
+                skill={null}
                 existingNames={skills.map((skill) => skill.name)}
-                onSubmit={(draft) => {
+                onSubmit={(draft) =>
                   addSkill(draft)
                     .then(() => {
                       toast.success("Skill added successfully.")
@@ -137,7 +139,7 @@ export function ProfilePage() {
                         error instanceof Error ? error.message : "Could not add the skill.",
                       )
                     })
-                }}
+                }
               />
             )}
           </ProfileFormDialog>
@@ -147,7 +149,7 @@ export function ProfilePage() {
           {loading ? (
             <ProfileSectionLoading label="Loading skills…" />
           ) : (
-            <SkillList skills={skills} onRemove={removeSkill} />
+            <SkillList skills={skills} onEdit={editSkill} onRemove={removeSkill} />
           )}
         </div>
       </section>
