@@ -128,7 +128,7 @@ export function ProfilePage() {
               <SkillForm
                 skill={null}
                 existingNames={skills.map((skill) => skill.name)}
-                onSubmit={(draft) => {
+                onSubmit={(draft) =>
                   addSkill(draft)
                     .then(() => {
                       toast.success("Skill added successfully.")
@@ -139,7 +139,7 @@ export function ProfilePage() {
                         error instanceof Error ? error.message : "Could not add the skill.",
                       )
                     })
-                }}
+                }
               />
             )}
           </ProfileFormDialog>

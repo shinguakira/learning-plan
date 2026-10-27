@@ -32,10 +32,11 @@ export function SkillForm({
 }: {
   skill: Skill | null
   existingNames: readonly string[]
-  onSubmit: (draft: SkillDraft) => void
+  onSubmit: (draft: SkillDraft) => Promise<void>
 }) {
   const { technologies, loading, error } = useTechnologies()
   const [selectedOption, setSelectedOption] = useState("")
+  const [saving, setSaving] = useState(false)
   const isOther = selectedOption === OTHER_SKILL_OPTION
   const { draft, patch, nameError, touched, submit } = useSkillDraft(
     existingNames,
@@ -52,10 +53,10 @@ export function SkillForm({
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     const ready = submit()
-    if (ready) {
-      setSelectedOption("")
-      onSubmit(ready)
-    }
+    if (ready === null) return
+
+    setSaving(true)
+    onSubmit(ready).finally(() => setSaving(false))
   }
 
   return (
@@ -158,7 +159,7 @@ export function SkillForm({
             Cancel
           </Button>
         </DialogClose>
-        <Button type="submit">
+        <Button type="submit" disabled={saving}>
           {skill === null ? <Plus /> : <Save />}
           {skill === null ? "Add skill" : "Save skill"}
         </Button>

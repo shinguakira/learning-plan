@@ -34,7 +34,7 @@ export function SkillEditDialog({
             key={skill.id}
             skill={skill}
             existingNames={existingNames}
-            onSubmit={(draft) => {
+            onSubmit={(draft) =>
               onEdit(skill.id, draft)
                 .then(() => {
                   toast.success("Skill updated successfully.")
@@ -45,7 +45,7 @@ export function SkillEditDialog({
                     error instanceof Error ? error.message : "Could not update the skill.",
                   )
                 })
-            }}
+            }
           />
         )}
       </DialogContent>

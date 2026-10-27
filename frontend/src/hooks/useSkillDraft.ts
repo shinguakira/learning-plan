@@ -9,7 +9,6 @@ export type SkillDraftApi = {
   touched: boolean
   /** Mark as tried; returns the trimmed draft when it is valid, null otherwise. */
   submit: () => SkillDraft | null
-  reset: () => void
 }
 
 /** Owns the skill form's state and its validation, for both adding and editing. */
@@ -28,11 +27,6 @@ export function useSkillDraft(
         ? "Already registered"
         : null
 
-  const reset = () => {
-    setDraft(initial)
-    setTouched(false)
-  }
-
   return {
     draft,
     patch: (next) => setDraft((prev) => ({ ...prev, ...next })),
@@ -41,10 +35,7 @@ export function useSkillDraft(
     submit: () => {
       setTouched(true)
       if (nameError) return null
-      const ready = { ...draft, name: trimmedName }
-      reset()
-      return ready
+      return { ...draft, name: trimmedName }
     },
-    reset,
   }
 }
