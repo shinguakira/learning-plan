@@ -15,6 +15,7 @@ model User {
   name      String   @unique
   createdAt DateTime @default(now())
   skills    Skill[]
+  strengths Strength[]
 
   @@map("users")
 }
@@ -39,6 +40,18 @@ model Skill {
 
   @@unique([userId, name])
   @@map("skills")
+}
+
+model Strength {
+  id          String   @id @default(uuid())
+  userId      String   @map("user_id")
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name        String
+  description String
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  @@unique([userId, name])
+  @@map("strengths")
 }
 
 /// The technologies a skill can name, today the list in SkillForm's SKILL_OPTIONS.

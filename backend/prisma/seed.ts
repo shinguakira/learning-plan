@@ -75,8 +75,61 @@ const SKILLS: Record<MockUser, SeedSkill[]> = {
   ],
 }
 
+const STRENGTHS: Record<MockUser, { name: string; description: string }[]> = {
+  Sanjar: [
+    {
+      name: 'Problem solving',
+      description:
+        'I break complex problems into smaller steps and work through them systematically.',
+    },
+    {
+      name: 'Quick learner',
+      description: 'I learn new tools quickly and apply them in practical projects.',
+    },
+    {
+      name: 'Communication',
+      description: 'I explain my ideas clearly and listen to other perspectives.',
+    },
+  ],
+  Akira: [
+    {
+      name: 'Debugging under pressure',
+      description: 'I stay methodical during incidents and narrow a fault down to one cause.',
+    },
+    {
+      name: 'Writing things down',
+      description: 'I leave a runbook behind so the next person does not repeat the work.',
+    },
+  ],
+  Mike: [
+    {
+      name: 'Asking the right question first',
+      description: 'I find out what decision a number is for before I go and calculate it.',
+    },
+    {
+      name: 'Reproducible work',
+      description: 'I automate a report the second time someone asks for it.',
+    },
+    {
+      name: 'Explaining data to non-engineers',
+      description: 'I describe what a result does and does not support, without the jargon.',
+    },
+  ],
+  John: [
+    {
+      name: 'Attention to detail',
+      description: 'I check a layout against the design at more than one screen width.',
+    },
+    {
+      name: 'Taking feedback',
+      description: 'I treat review comments as the fastest way to learn the codebase.',
+    },
+  ],
+}
+
 try {
   let skillCount = 0
+  let strengthCount = 0
 
   for (const name of MOCK_USERS) {
     const user = await prisma.user.upsert({ where: { name }, update: {}, create: { name } })
@@ -89,6 +142,15 @@ try {
       })
       skillCount += 1
     }
+
+    for (const strength of STRENGTHS[name]) {
+      await prisma.strength.upsert({
+        where: { userId_name: { userId: user.id, name: strength.name } },
+        update: {},
+        create: { userId: user.id, ...strength },
+      })
+      strengthCount += 1
+    }
   }
 
   for (const name of TECHNOLOGIES) {
@@ -96,7 +158,7 @@ try {
   }
 
   console.log(
-    `Seeded ${MOCK_USERS.length} users, ${skillCount} skills and ${TECHNOLOGIES.length} technologies.`,
+    `Seeded ${MOCK_USERS.length} users, ${skillCount} skills, ${strengthCount} strengths and ${TECHNOLOGIES.length} technologies.`,
   )
 } finally {
   await prisma.$disconnect()
