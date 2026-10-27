@@ -14,8 +14,31 @@ model User {
   id        String   @id @default(uuid())
   name      String   @unique
   createdAt DateTime @default(now())
+  skills    Skill[]
 
   @@map("users")
+}
+
+enum SkillLevel {
+  beginner
+  intermediate
+  advanced
+  expert
+
+  @@map("skill_level")
+}
+
+model Skill {
+  id                String     @id @default(uuid())
+  userId            String     @map("user_id")
+  user              User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name              String
+  level             SkillLevel
+  yearsOfExperience Int        @map("years_of_experience")
+  createdAt         DateTime   @default(now()) @map("created_at")
+
+  @@unique([userId, name])
+  @@map("skills")
 }
 
 /// The technologies a skill can name, today the list in SkillForm's SKILL_OPTIONS.
