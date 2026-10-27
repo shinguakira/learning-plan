@@ -1,4 +1,3 @@
-import { seedStrengthsByUser } from '../constants/seedStrengths.js'
 import { seedJobsByUser } from '../constants/seedJobs.js'
 import { seedCertificatesByUser } from '../constants/seedCertificates.js'
 import type { MockUser } from '../types/user.js'
@@ -14,14 +13,14 @@ export const profileService = {
     if (user !== undefined) {
       return {
         skills: await skillService.getSkillsByUser(user),
-        strengths: seedStrengthsByUser[user],
+        strengths: await strengthService.getStrengthsByUser(user),
         jobs: seedJobsByUser[user],
         certificates: seedCertificatesByUser[user],
       }
     }
     return {
       skills: await skillService.getSkills(),
-      strengths: strengthService.getStrengths(),
+      strengths: await strengthService.getStrengths(),
       jobs: jobService.getJobs(),
       certificates: certificateService.getCertificates(),
     }
