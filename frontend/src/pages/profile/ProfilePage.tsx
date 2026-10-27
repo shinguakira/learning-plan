@@ -128,8 +128,15 @@ export function ProfilePage() {
                 existingNames={skills.map((skill) => skill.name)}
                 onSubmit={(draft) => {
                   addSkill(draft)
-                  toast.success("Skill added successfully.")
-                  close()
+                    .then(() => {
+                      toast.success("Skill added successfully.")
+                      close()
+                    })
+                    .catch((error: unknown) => {
+                      toast.error(
+                        error instanceof Error ? error.message : "Could not add the skill.",
+                      )
+                    })
                 }}
               />
             )}
