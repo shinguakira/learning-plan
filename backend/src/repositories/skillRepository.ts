@@ -1,6 +1,6 @@
 import { prisma } from '../lib/prisma.js'
 import type { Skill } from '@prisma/client'
-import type { SkillCreateRequest } from '../types/skillDraft.js'
+import type { SkillCreateRequest, SkillUpdateRequest } from '../types/skillDraft.js'
 
 export const skillRepository = {
   findByUserName(userName: string): Promise<Skill[]> {
@@ -14,6 +14,10 @@ export const skillRepository = {
     return prisma.skill.findMany({ orderBy: { createdAt: 'asc' } })
   },
 
+  findById(id: string): Promise<Skill | null> {
+    return prisma.skill.findUnique({ where: { id } })
+  },
+
   create({ user, name, level, yearsOfExperience }: SkillCreateRequest): Promise<Skill> {
     return prisma.skill.create({
       data: {
@@ -22,6 +26,13 @@ export const skillRepository = {
         yearsOfExperience,
         user: { connect: { name: user } },
       },
+    })
+  },
+
+  update(id: string, { name, level, yearsOfExperience }: SkillUpdateRequest): Promise<Skill> {
+    return prisma.skill.update({
+      where: { id },
+      data: { name, level, yearsOfExperience },
     })
   },
 }
