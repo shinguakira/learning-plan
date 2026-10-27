@@ -26,3 +26,5 @@ export const SKILL_LEVEL_TEXT: Record<SkillLevel, string> = {
   advanced: "text-amber-700 dark:text-amber-400",
   expert: "text-emerald-700 dark:text-emerald-400",
 }
+
+export const SKILLS_API_URL = "/api/skills"
