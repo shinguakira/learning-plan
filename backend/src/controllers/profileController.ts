@@ -21,7 +21,7 @@ export default async function profileController(app: FastifyInstance): Promise<v
     return reply
       .header('Content-Type', 'text/csv; charset=utf-8')
       .header('Content-Disposition', 'attachment; filename="profile.csv"')
-      .send(toCsv(profileService.getProfile()))
+      .send(toCsv(await profileService.getProfile()))
   })
 
   /** POST, not GET: the body carries the profile as the page has it, edits included. */
