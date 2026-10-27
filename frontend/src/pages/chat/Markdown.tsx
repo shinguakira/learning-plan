@@ -53,6 +53,8 @@ function renderInline(text: string, keyPrefix: string): ReactNode[] {
           <Link
             key={key}
             to={taskLink[2]}
+            target="_blank"
+            rel="noopener noreferrer"
             className="text-primary rounded-sm underline underline-offset-4 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
           >
             {renderInline(taskLink[1], key)}
