@@ -1,7 +1,6 @@
-import { prisma } from '../lib/prisma.js'
 import type { Strength } from '@prisma/client'
-import type { Skill } from '@prisma/client'
-import { SkillCreateRequest } from '../types/skillDraft.js'
+import { StrengthCreateRequest } from '../types/strengthDraft.js'
+import { prisma } from '../lib/prisma.js'
 
 export const strengthRepository = {
   findByUserName(userName: string): Promise<Strength[]> {
@@ -15,13 +14,12 @@ export const strengthRepository = {
     return prisma.strength.findMany({ orderBy: { createdAt: 'asc' } })
   },
 
-  create({ user, name, level, yearsOfExperience }: SkillCreateRequest): Promise<Skill> {
-    return prisma.skill.create({
+  create({ user, name, description }: StrengthCreateRequest): Promise<Strength> {
+    return prisma.strength.create({
       data: {
-        name,
-        level,
-        yearsOfExperience,
         user: { connect: { name: user } },
+        name,
+        description
       },
     })
   },

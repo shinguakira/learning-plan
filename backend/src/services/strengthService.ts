@@ -1,9 +1,8 @@
 import { strengthRepository } from '../repositories/strengthRepository.js'
 import type { Strength } from '../types/strength.js'
 import type { MockUser } from '../types/user.js'
-import { Prisma, Skill, type Strength as StrengthRow } from '@prisma/client'
-import { skillRepository } from '../repositories/skillRepository.js'
-import { SkillCreateRequest } from '../types/skillDraft.js'
+import { Prisma, type Strength as StrengthRow } from '@prisma/client'
+import { StrengthCreateRequest } from '../types/strengthDraft.js'
 
 const toStrength = (row: StrengthRow): Strength => ({
   id: row.id,
@@ -21,9 +20,9 @@ export const strengthService = {
     return (await strengthRepository.findByUserName(user)).map(toStrength)
   },
 
-  async addSkill(request: strengthRepository): Promise<Skill | null> {
+  async addStrength(request: StrengthCreateRequest): Promise<Strength | null> {
     try {
-      return toSkill(await strengthRepository.create(request))
+      return toStrength(await strengthRepository.create(request))
     } catch (error: unknown) {
       if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002') {
         return null
