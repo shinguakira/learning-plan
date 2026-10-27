@@ -11,11 +11,12 @@ datasource db {
 
 /// The people the header can switch between, today the four in MOCK_USERS.
 model User {
-  id        String   @id @default(uuid())
-  name      String   @unique
-  createdAt DateTime @default(now())
-  skills    Skill[]
-  strengths Strength[]
+  id           String        @id @default(uuid())
+  name         String        @unique
+  createdAt    DateTime      @default(now())
+  skills       Skill[]
+  strengths    Strength[]
+  certificates Certificate[]
 
   @@map("users")
 }
@@ -52,6 +53,20 @@ model Strength {
 
   @@unique([userId, name])
   @@map("strengths")
+}
+
+model Certificate {
+  id            String   @id @default(uuid())
+  userId        String   @map("user_id")
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name          String
+  issuer        String
+  dateEarned    DateTime @map("date_earned") @db.Date
+  credentialUrl String?  @map("credential_url")
+  createdAt     DateTime @default(now()) @map("created_at")
+
+  @@unique([userId, name])
+  @@map("certificates")
 }
 
 /// The technologies a skill can name, today the list in SkillForm's SKILL_OPTIONS.
