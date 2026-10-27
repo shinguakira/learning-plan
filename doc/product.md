@@ -69,7 +69,8 @@ technical skills you've picked up, each with a level from beginner to expert —
 a running draft of the list a resume or an interview answer would pull from.
 Alongside those skills, record your personal and professional strengths. Each has
 a name and a short explanation or example, so you can describe what you bring to
-a role beyond the technologies you know.
+a role beyond the technologies you know. Added skills and strengths are saved to
+the selected profile and remain available after reloading the page.
 
 ## Who it is for
 
@@ -79,8 +80,8 @@ you are the one deciding what to learn. It does not supply a curriculum, and it 
 not a course.
 
 It is single-user by design. Nothing is shared, nothing is submitted, nobody else
-sees it. Nothing is stored either: the plan lives only for as long as the page is
-open, so this is somewhere to think a plan through rather than somewhere to keep it.
+sees it. The task plan lives only for as long as the page is open; added profile
+skills and strengths are saved.
 
 ## What it deliberately is not
 

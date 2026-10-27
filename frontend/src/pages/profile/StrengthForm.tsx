@@ -1,3 +1,4 @@
+import { useState } from "react"
 import type { FormEvent } from "react"
 import { Plus } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -8,13 +9,16 @@ import { FormField } from "@/components/form/FormField"
 import { useStrengthDraft } from "@/hooks/useStrengthDraft"
 import type { StrengthDraft } from "@/types/strength"
 
-export function StrengthForm({ onSubmit }: { onSubmit: (draft: StrengthDraft) => void }) {
+export function StrengthForm({ onSubmit }: { onSubmit: (draft: StrengthDraft) => Promise<void> }) {
+  const [saving, setSaving] = useState(false)
   const { draft, touched, nameError, descriptionError, patch, submit } = useStrengthDraft()
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     const ready = submit()
-    if (ready) onSubmit(ready)
+    if (ready === null || saving) return
+    setSaving(true)
+    onSubmit(ready).finally(() => setSaving(false))
   }
 
   return (
@@ -47,7 +51,7 @@ export function StrengthForm({ onSubmit }: { onSubmit: (draft: StrengthDraft) =>
             Cancel
           </Button>
         </DialogClose>
-        <Button type="submit">
+        <Button type="submit" disabled={saving}>
           <Plus />
           Add strength
         </Button>

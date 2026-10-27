@@ -17,8 +17,6 @@ export function useStrengthDraft() {
       setTouched(true)
       if (nameError || descriptionError) return null
       const ready = { name: draft.name.trim(), description: draft.description.trim() }
-      setDraft({ name: "", description: "" })
-      setTouched(false)
       return ready
     },
   }
