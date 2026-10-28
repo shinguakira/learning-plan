@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from "react"
-import { Plus, X } from "lucide-react"
+import { Plus, Save, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { DialogClose } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
@@ -7,12 +7,14 @@ import { Textarea } from "@/components/ui/textarea"
 import { FormField } from "@/components/form/FormField"
 import { useStrengthDraft } from "@/hooks/useStrengthDraft"
 import { EMPTY_STRENGTH_DRAFT } from "@/constants/strength"
-import type { StrengthDraft } from "@/types/strength"
+import type { Strength, StrengthDraft } from "@/types/strength"
 
 export function StrengthForm({
+  strength = null,
   existingNames,
   onSubmit,
 }: {
+  strength?: Strength | null
   existingNames: readonly string[]
   onSubmit: (draft: StrengthDraft) => Promise<void>
 }) {
@@ -20,7 +22,9 @@ export function StrengthForm({
   const [error, setError] = useState<string | null>(null)
   const { draft, touched, nameError, descriptionError, patch, submit } = useStrengthDraft(
     existingNames,
-    EMPTY_STRENGTH_DRAFT,
+    strength === null
+      ? EMPTY_STRENGTH_DRAFT
+      : { name: strength.name, description: strength.description },
   )
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
@@ -76,8 +80,8 @@ export function StrengthForm({
           </Button>
         </DialogClose>
         <Button type="submit" disabled={saving}>
-          <Plus />
-          {saving ? "Saving…" : "Add strength"}
+          {strength === null ? <Plus /> : <Save />}
+          {saving ? "Saving…" : strength === null ? "Add strength" : "Save strength"}
         </Button>
       </div>
     </form>
