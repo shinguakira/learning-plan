@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react"
 import { fetchProfile } from "@/api/profile"
 import { createSkill, updateSkill } from "@/api/skill"
-import { createStrength } from "@/api/strength"
+import { createStrength, updateStrength } from "@/api/strength"
 import { EMPTY_PROFILE_STATE } from "@/constants/profile"
 import type { ProfileState } from "@/types/profile"
 import type { MockUser } from "@/types/user"
@@ -27,6 +27,7 @@ export type ProfileApi = {
   addCertificate: (draft: CertificateDraft) => void
   removeCertificate: (id: string) => void
   addStrength: (draft: StrengthDraft) => Promise<void>
+  editStrength: (id: string, draft: StrengthDraft) => Promise<void>
   removeStrength: (id: string) => void
 }
 
@@ -142,6 +143,13 @@ export function useProfile(user: MockUser): ProfileApi {
           strength,
           ...profile.strengths.filter((existing) => existing.id !== strength.id),
         ],
+      }))
+    },
+    editStrength: async (id, draft) => {
+      const strength = await updateStrength(id, draft)
+      updateProfile((profile) => ({
+        ...profile,
+        strengths: profile.strengths.map((existing) => (existing.id === id ? strength : existing)),
       }))
     },
     removeStrength: (id) => {
