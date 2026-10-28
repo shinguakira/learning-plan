@@ -1,5 +1,5 @@
-import type { FormEvent } from "react"
-import { Plus } from "lucide-react"
+import { useState, type FormEvent } from "react"
+import { Plus, X } from "lucide-react"
 import { DialogClose } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -7,13 +7,29 @@ import { FormField } from "@/components/form/FormField"
 import { useCertificateDraft } from "@/hooks/useCertificateDraft"
 import type { CertificateDraft } from "@/types/certificate"
 
-export function CertificateForm({ onSubmit }: { onSubmit: (draft: CertificateDraft) => void }) {
+export function CertificateForm({
+  onSubmit,
+}: {
+  onSubmit: (draft: CertificateDraft) => Promise<void>
+}) {
+  const [saving, setSaving] = useState(false)
+  const [error, setError] = useState<string | null>(null)
   const { draft, patch, touched, nameError, issuerError, dateError, urlError, submit } =
     useCertificateDraft()
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
+    if (saving) return
     const ready = submit()
-    if (ready) onSubmit(ready)
+    if (ready === null) return
+    setSaving(true)
+    setError(null)
+    try {
+      await onSubmit(ready)
+    } catch (caught: unknown) {
+      setError(caught instanceof Error ? caught.message : "Could not save the certificate.")
+    } finally {
+      setSaving(false)
+    }
   }
 
   return (
@@ -75,15 +91,21 @@ export function CertificateForm({ onSubmit }: { onSubmit: (draft: CertificateDra
           Link to your certificate on the issuer’s website.
         </p>
       </FormField>
+      {error !== null && (
+        <p role="alert" className="text-destructive text-sm">
+          {error}
+        </p>
+      )}
       <div className="flex justify-end gap-2">
         <DialogClose asChild>
           <Button type="button" variant="outline">
+            <X />
             Cancel
           </Button>
         </DialogClose>
-        <Button type="submit">
+        <Button type="submit" disabled={saving}>
           <Plus />
-          Add certificate
+          {saving ? "Saving…" : "Add certificate"}
         </Button>
       </div>
     </form>
