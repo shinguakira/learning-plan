@@ -1,5 +1,3 @@
-// Nothing imports the generated client yet: this is the schema only.
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -17,6 +15,7 @@ model User {
   skills       Skill[]
   strengths    Strength[]
   certificates Certificate[]
+  jobs         Job[]
 
   @@map("users")
 }
@@ -28,6 +27,15 @@ enum SkillLevel {
   expert
 
   @@map("skill_level")
+}
+
+enum EmploymentType {
+  full_time  @map("full-time")
+  contract
+  part_time  @map("part-time")
+  internship
+
+  @@map("employment_type")
 }
 
 model Skill {
@@ -67,6 +75,22 @@ model Certificate {
 
   @@unique([userId, name])
   @@map("certificates")
+}
+
+model Job {
+  id             String         @id @default(uuid())
+  userId         String         @map("user_id")
+  user           User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  company        String
+  title          String
+  employmentType EmploymentType @map("employment_type")
+  startDate      DateTime       @map("start_date") @db.Date
+  endDate        DateTime?      @map("end_date") @db.Date
+  summary        String         @default("")
+  createdAt      DateTime       @default(now()) @map("created_at")
+
+  @@index([userId])
+  @@map("jobs")
 }
 
 /// The technologies a skill can name, today the list in SkillForm's SKILL_OPTIONS.
