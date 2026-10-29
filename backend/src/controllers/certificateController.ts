@@ -1,4 +1,5 @@
 import type { FastifyInstance } from "fastify"
+
 import { CERTIFICATE_CREATE_SCHEMA } from "../constants/certificateSchema.js"
 import { certificateService } from "../services/certificateService.js"
 import type { CertificateCreateRequest } from "../types/certificateDraft.js"

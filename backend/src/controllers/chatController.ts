@@ -1,4 +1,5 @@
 import type { FastifyInstance } from "fastify"
+
 import { CHAT_REQUEST_SCHEMA } from "../constants/chatSchema.js"
 import { getChatReply } from "../services/chatService.js"
 import type { ChatRequest } from "../types/chat.js"

@@ -1,4 +1,5 @@
 import type { FastifyInstance } from "fastify"
+
 import { technologyService } from "../services/technologyService.js"
 
 export default async function technologyController(app: FastifyInstance): Promise<void> {

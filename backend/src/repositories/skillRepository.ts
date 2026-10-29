@@ -1,5 +1,6 @@
-import { prisma } from "../lib/prisma.js"
 import type { Skill } from "@prisma/client"
+
+import { prisma } from "../lib/prisma.js"
 import type { SkillCreateRequest, SkillUpdateRequest } from "../types/skillDraft.js"
 
 export const skillRepository = {

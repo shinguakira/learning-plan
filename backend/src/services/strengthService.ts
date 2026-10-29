@@ -1,8 +1,9 @@
+import { Prisma, type Strength as StrengthRow } from "@prisma/client"
+
 import { strengthRepository } from "../repositories/strengthRepository.js"
 import type { Strength } from "../types/strength.js"
-import type { MockUser } from "../types/user.js"
-import { Prisma, type Strength as StrengthRow } from "@prisma/client"
 import type { StrengthCreateRequest, StrengthUpdateRequest } from "../types/strengthDraft.js"
+import type { MockUser } from "../types/user.js"
 
 const toStrength = (row: StrengthRow): Strength => ({
   id: row.id,

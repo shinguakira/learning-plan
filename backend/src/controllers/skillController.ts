@@ -1,4 +1,5 @@
 import type { FastifyInstance, FastifyReply } from "fastify"
+
 import {
   SKILL_CREATE_SCHEMA,
   SKILL_ID_SCHEMA,

@@ -1,7 +1,8 @@
 import type { FastifyInstance } from "fastify"
+
+import { TASK_CSV_COLUMNS } from "../constants/taskCsv.js"
 import { taskService } from "../services/taskService.js"
 import { serializeCsv } from "../utils/csv.js"
-import { TASK_CSV_COLUMNS } from "../constants/taskCsv.js"
 
 export default async function taskController(app: FastifyInstance): Promise<void> {
   app.get("/api/tasks", async () => ({ tasks: taskService.getTasks() }))
