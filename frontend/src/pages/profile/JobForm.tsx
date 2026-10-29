@@ -1,5 +1,5 @@
-import type { FormEvent } from "react"
-import { Plus } from "lucide-react"
+import { useState, type FormEvent } from "react"
+import { Plus, Save, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { DialogClose } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
@@ -14,16 +14,34 @@ import { Textarea } from "@/components/ui/textarea"
 import { EMPLOYMENT_TYPES, EMPLOYMENT_TYPE_LABEL } from "@/constants/job"
 import { useJobDraft } from "@/hooks/useJobDraft"
 import { FormField } from "@/components/form/FormField"
-import type { ISODate } from "@/types/date"
-import type { EmploymentType, JobDraft } from "@/types/job"
+import { parseISODate } from "@/utils/date"
+import type { EmploymentType, Job, JobDraft } from "@/types/job"
 
-export function JobForm({ onSubmit }: { onSubmit: (draft: JobDraft) => void }) {
-  const { draft, patch, companyError, titleError, dateError, touched, submit } = useJobDraft()
+export function JobForm({
+  job = null,
+  onSubmit,
+}: {
+  job?: Job | null
+  onSubmit: (draft: JobDraft) => void | Promise<void>
+}) {
+  const [saving, setSaving] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const { draft, patch, companyError, titleError, dateError, touched, submit } = useJobDraft(job)
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
+    if (saving) return
     const ready = submit()
-    if (ready) onSubmit(ready)
+    if (ready === null) return
+    setSaving(true)
+    setError(null)
+    try {
+      await onSubmit(ready)
+    } catch (caught: unknown) {
+      setError(caught instanceof Error ? caught.message : "Could not save the job.")
+    } finally {
+      setSaving(false)
+    }
   }
 
   return (
@@ -81,7 +99,7 @@ export function JobForm({ onSubmit }: { onSubmit: (draft: JobDraft) => void }) {
             type="date"
             value={draft.startDate}
             onChange={(event) =>
-              patch({ startDate: (event.target.value as ISODate) || draft.startDate })
+              patch({ startDate: parseISODate(event.target.value) ?? draft.startDate })
             }
           />
         </FormField>
@@ -97,7 +115,7 @@ export function JobForm({ onSubmit }: { onSubmit: (draft: JobDraft) => void }) {
             type="date"
             value={draft.endDate ?? ""}
             min={draft.startDate}
-            onChange={(event) => patch({ endDate: (event.target.value as ISODate) || null })}
+            onChange={(event) => patch({ endDate: parseISODate(event.target.value) })}
           />
         </FormField>
       </div>
@@ -111,15 +129,21 @@ export function JobForm({ onSubmit }: { onSubmit: (draft: JobDraft) => void }) {
         />
       </FormField>
 
+      {error !== null && (
+        <p role="alert" className="text-destructive text-sm">
+          {error}
+        </p>
+      )}
       <div className="flex justify-end gap-2">
         <DialogClose asChild>
           <Button type="button" variant="outline">
+            <X />
             Cancel
           </Button>
         </DialogClose>
-        <Button type="submit">
-          <Plus />
-          Add job
+        <Button type="submit" disabled={saving}>
+          {job === null ? <Plus /> : <Save />}
+          {saving ? "Saving…" : job === null ? "Add job" : "Save job"}
         </Button>
       </div>
     </form>
