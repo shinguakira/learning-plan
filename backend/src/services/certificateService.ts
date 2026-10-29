@@ -1,8 +1,9 @@
-import { Prisma, type Certificate as CertificateRow } from "@prisma/client"
+import { type Certificate as CertificateRow, Prisma } from "@prisma/client"
+
 import { certificateRepository } from "../repositories/certificateRepository.js"
 import type { Certificate } from "../types/certificate.js"
-import type { MockUser } from "../types/user.js"
 import type { CertificateCreateRequest } from "../types/certificateDraft.js"
+import type { MockUser } from "../types/user.js"
 
 const toCertificate = (row: CertificateRow): Certificate => ({
   id: row.id,

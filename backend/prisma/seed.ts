@@ -1,6 +1,7 @@
-import { PrismaClient } from "@prisma/client"
-import { MOCK_USERS } from "../src/constants/user.js"
 import type { SkillLevel } from "@prisma/client"
+import { PrismaClient } from "@prisma/client"
+
+import { MOCK_USERS } from "../src/constants/user.js"
 import type { MockUser } from "../src/types/user.js"
 
 /**

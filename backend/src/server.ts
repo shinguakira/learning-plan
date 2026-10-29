@@ -1,8 +1,9 @@
 import path from "node:path"
 import { fileURLToPath } from "node:url"
-import Fastify from "fastify"
+
 import autoload from "@fastify/autoload"
 import cors from "@fastify/cors"
+import Fastify from "fastify"
 
 const ALLOWED_ORIGIN = process.env.ALLOWED_ORIGIN ?? "http://localhost:5173"
 

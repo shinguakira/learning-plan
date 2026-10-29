@@ -1,9 +1,10 @@
+import type { Skill as SkillRow } from "@prisma/client"
 import { Prisma } from "@prisma/client"
+
 import { skillRepository } from "../repositories/skillRepository.js"
 import type { Skill } from "../types/skill.js"
-import type { MockUser } from "../types/user.js"
 import type { SkillCreateRequest, SkillUpdateRequest } from "../types/skillDraft.js"
-import type { Skill as SkillRow } from "@prisma/client"
+import type { MockUser } from "../types/user.js"
 
 const toSkill = (row: SkillRow): Skill => ({
   id: row.id,

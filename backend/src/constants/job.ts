@@ -1,4 +1,5 @@
 import type { EmploymentType as EmploymentTypeRow } from "@prisma/client"
+
 import type { EmploymentType } from "../types/job.js"
 
 export const EMPLOYMENT_TYPE_API = {

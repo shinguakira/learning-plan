@@ -1,11 +1,12 @@
 import type { FastifyInstance, FastifyReply } from "fastify"
-import { profileService } from "../services/profileService.js"
-import { toCsv } from "../utils/csv.js"
-import { toPdf } from "../utils/pdf.js"
-import { MOCK_USERS } from "../constants/user.js"
+
 import { PROFILE_PDF_REQUEST_SCHEMA } from "../constants/profilePdfSchema.js"
+import { MOCK_USERS } from "../constants/user.js"
+import { profileService } from "../services/profileService.js"
 import type { ProfilePdfRequest } from "../types/profilePdf.js"
 import type { MockUser } from "../types/user.js"
+import { toCsv } from "../utils/csv.js"
+import { toPdf } from "../utils/pdf.js"
 
 export default async function profileController(app: FastifyInstance): Promise<void> {
   app.get<{ Querystring: { user?: MockUser } }>(

@@ -1,11 +1,12 @@
 import type { FastifyInstance, FastifyReply } from "fastify"
-import type { StrengthCreateRequest, StrengthUpdateRequest } from "../types/strengthDraft.js"
-import { strengthService } from "../services/strengthService.js"
+
 import {
   STRENGTH_CREATE_SCHEMA,
   STRENGTH_ID_SCHEMA,
   STRENGTH_UPDATE_SCHEMA,
 } from "../constants/strengthSchema.js"
+import { strengthService } from "../services/strengthService.js"
+import type { StrengthCreateRequest, StrengthUpdateRequest } from "../types/strengthDraft.js"
 
 export default async function strengthController(app: FastifyInstance): Promise<void> {
   app.post<{ Body: StrengthCreateRequest }>(

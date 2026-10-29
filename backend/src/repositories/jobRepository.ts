@@ -1,5 +1,6 @@
-import { prisma } from "../lib/prisma.js"
 import type { Job } from "@prisma/client"
+
+import { prisma } from "../lib/prisma.js"
 
 export const jobRepository = {
   findByUserName(userName: string): Promise<Job[]> {
