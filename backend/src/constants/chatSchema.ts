@@ -19,4 +19,4 @@ export const CHAT_REQUEST_SCHEMA = {
       },
     },
   },
-} as const;
+} as const

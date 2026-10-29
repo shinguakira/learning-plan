@@ -1,7 +1,7 @@
-import { CHAT_SYSTEM_PROMPT } from "../constants/chat.js";
-import type { ChatCompletion, ChatRequest, ChatResult } from "../types/chat.js";
-import type { ChatConfig } from "../types/chatConfig.js";
-import { createTaskAnalysisContext } from "../utils/taskAnalysis.js";
+import { CHAT_SYSTEM_PROMPT } from "../constants/chat.js"
+import type { ChatCompletion, ChatRequest, ChatResult } from "../types/chat.js"
+import type { ChatConfig } from "../types/chatConfig.js"
+import { createTaskAnalysisContext } from "../utils/taskAnalysis.js"
 
 /** Only the server chooses the upstream destination, model and credentials. */
 export async function getChatReply(
@@ -10,20 +10,18 @@ export async function getChatReply(
   signal: AbortSignal,
 ): Promise<ChatResult> {
   try {
-    const context = input.analyzeTasks
-      ? createTaskAnalysisContext(input.user)
-      : null;
+    const context = input.analyzeTasks ? createTaskAnalysisContext(input.user) : null
     if (input.analyzeTasks && context === null) {
       return {
         ok: false,
         status: 422,
         message: `No tasks to analyze. No backend tasks are assigned to ${input.user}.`,
-      };
+      }
     }
     const headers: Record<string, string> = {
       "Content-Type": "application/json",
-    };
-    if (config.key !== "") headers.Authorization = `Bearer ${config.key}`;
+    }
+    if (config.key !== "") headers.Authorization = `Bearer ${config.key}`
     const response = await fetch(config.url, {
       method: "POST",
       headers,
@@ -43,30 +41,30 @@ export async function getChatReply(
           ),
         ],
       }),
-    });
+    })
     if (!response.ok) {
-      await response.body?.cancel();
+      await response.body?.cancel()
       return {
         ok: false,
         status: 502,
         message: "The chat provider could not complete the request.",
-      };
+      }
     }
-    const body = (await response.json()) as ChatCompletion | null;
-    const content = body?.choices?.[0]?.message?.content;
+    const body = (await response.json()) as ChatCompletion | null
+    const content = body?.choices?.[0]?.message?.content
     if (typeof content !== "string" || content.trim() === "") {
       return {
         ok: false,
         status: 502,
         message: "The chat provider returned an invalid reply.",
-      };
+      }
     }
-    return { ok: true, content };
+    return { ok: true, content }
   } catch {
     return {
       ok: false,
       status: 502,
       message: "Could not reach the chat provider.",
-    };
+    }
   }
 }

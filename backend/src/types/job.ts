@@ -1,4 +1,4 @@
-export type EmploymentType = 'full-time' | 'contract' | 'part-time' | 'internship'
+export type EmploymentType = "full-time" | "contract" | "part-time" | "internship"
 
 export type Job = {
   id: string

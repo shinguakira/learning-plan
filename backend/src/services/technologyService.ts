@@ -1,5 +1,5 @@
-import { technologyRepository } from '../repositories/technologyRepository.js'
-import type { Technology } from '../types/technology.js'
+import { technologyRepository } from "../repositories/technologyRepository.js"
+import type { Technology } from "../types/technology.js"
 
 export const technologyService = {
   async getTechnologies(): Promise<Technology[]> {

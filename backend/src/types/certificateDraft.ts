@@ -1,4 +1,4 @@
-import type { MockUser } from './user.js'
+import type { MockUser } from "./user.js"
 
 export type CertificateCreateRequest = {
   user: MockUser
