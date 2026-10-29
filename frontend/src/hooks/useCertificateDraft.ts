@@ -1,13 +1,26 @@
 import { useState } from "react"
-import type { CertificateDraft } from "@/types/certificate"
+import type { Certificate, CertificateDraft } from "@/types/certificate"
 import { parseCredentialUrl } from "@/utils/certificate"
 import { parseISODate } from "@/utils/date"
 
 /** Owns certificate input values until they have been validated. */
-export function useCertificateDraft() {
-  const [draft, setDraft] = useState({ name: "", issuer: "", dateEarned: "", credentialUrl: "" })
+export function useCertificateDraft(
+  certificate: Certificate | null = null,
+  existingNames: readonly string[] = [],
+) {
+  const [draft, setDraft] = useState({
+    name: certificate?.name ?? "",
+    issuer: certificate?.issuer ?? "",
+    dateEarned: certificate?.dateEarned ?? "",
+    credentialUrl: certificate?.credentialUrl ?? "",
+  })
   const [touched, setTouched] = useState(false)
-  const nameError = draft.name.trim() === "" ? "Enter a certificate title" : null
+  const nameError =
+    draft.name.trim() === ""
+      ? "Enter a certificate title"
+      : existingNames.some((name) => name.toLowerCase() === draft.name.trim().toLowerCase())
+        ? "Already registered"
+        : null
   const issuerError = draft.issuer.trim() === "" ? "Enter an issuer" : null
   const dateEarned = parseISODate(draft.dateEarned)
   const dateError = dateEarned === null ? "Enter a valid date earned" : null
