@@ -1,21 +1,25 @@
 import { useState, type FormEvent } from "react"
-import { Plus, X } from "lucide-react"
+import { Plus, Save, X } from "lucide-react"
 import { DialogClose } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { FormField } from "@/components/form/FormField"
 import { useCertificateDraft } from "@/hooks/useCertificateDraft"
-import type { CertificateDraft } from "@/types/certificate"
+import type { Certificate, CertificateDraft } from "@/types/certificate"
 
 export function CertificateForm({
+  certificate = null,
+  existingNames = [],
   onSubmit,
 }: {
+  certificate?: Certificate | null
+  existingNames?: readonly string[]
   onSubmit: (draft: CertificateDraft) => Promise<void>
 }) {
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const { draft, patch, touched, nameError, issuerError, dateError, urlError, submit } =
-    useCertificateDraft()
+    useCertificateDraft(certificate, existingNames)
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     if (saving) return
@@ -104,8 +108,8 @@ export function CertificateForm({
           </Button>
         </DialogClose>
         <Button type="submit" disabled={saving}>
-          <Plus />
-          {saving ? "Saving…" : "Add certificate"}
+          {certificate === null ? <Plus /> : <Save />}
+          {saving ? "Saving…" : certificate === null ? "Add certificate" : "Save certificate"}
         </Button>
       </div>
     </form>
