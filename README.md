@@ -86,4 +86,4 @@ npm run test-unit
 npm run test-e2e
 ```
 
-The backend has `npm run type-check`.
+The backend has `npm run format-check` and `npm run type-check`.
