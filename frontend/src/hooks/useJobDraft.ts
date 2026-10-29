@@ -63,7 +63,6 @@ export function useJobDraft(): JobDraftApi {
         title: draft.title.trim(),
         summary: draft.summary.trim(),
       }
-      reset()
       return ready
     },
     reset,

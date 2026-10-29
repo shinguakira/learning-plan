@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react"
 import { fetchProfile } from "@/api/profile"
+import { createJob } from "@/api/job"
 import { createSkill, updateSkill } from "@/api/skill"
 import { createStrength, updateStrength } from "@/api/strength"
 import { createCertificate } from "@/api/certificate"
@@ -23,7 +24,7 @@ export type ProfileApi = {
   addSkill: (draft: SkillDraft) => Promise<void>
   editSkill: (id: string, draft: SkillDraft) => Promise<void>
   removeSkill: (id: string) => void
-  addJob: (draft: JobDraft) => void
+  addJob: (draft: JobDraft) => Promise<void>
   removeJob: (id: string) => void
   addCertificate: (draft: CertificateDraft) => Promise<void>
   removeCertificate: (id: string) => void
@@ -51,7 +52,12 @@ export function useProfile(user: MockUser): ProfileApi {
             ...previous,
             [user]: {
               skills: [...profile.skills, ...seed.skills],
-              jobs: [...profile.jobs, ...seed.jobs],
+              jobs: [
+                ...profile.jobs,
+                ...seed.jobs.filter(
+                  (job) => !profile.jobs.some((existing) => existing.id === job.id),
+                ),
+              ],
               certificates: [
                 ...profile.certificates,
                 ...seed.certificates.filter(
@@ -115,9 +121,12 @@ export function useProfile(user: MockUser): ProfileApi {
         skills: profile.skills.filter((skill) => skill.id !== id),
       }))
     },
-    addJob: (draft) => {
-      const job: Job = { ...draft, id: crypto.randomUUID(), createdAt: new Date().toISOString() }
-      updateProfile((profile) => ({ ...profile, jobs: [job, ...profile.jobs] }))
+    addJob: async (draft) => {
+      const job = await createJob(user, draft)
+      updateProfile((profile) => ({
+        ...profile,
+        jobs: [job, ...profile.jobs.filter((existing) => existing.id !== job.id)],
+      }))
     },
     removeJob: (id) => {
       updateProfile((profile) => ({

@@ -61,7 +61,7 @@ export function ProfilePage() {
           <h1 className="text-lg font-semibold">Profile</h1>
           <p className="text-muted-foreground mt-0.5 text-xs">
             What goes on your resume. Skills and strengths are saved when added or edited.
-            Certificates are saved when added; other changes stay on this page.
+            Certificates and jobs are saved when added; other changes stay on this page.
           </p>
         </div>
         <div>
@@ -239,8 +239,8 @@ export function ProfilePage() {
           >
             {(close) => (
               <JobForm
-                onSubmit={(draft) => {
-                  addJob(draft)
+                onSubmit={async (draft) => {
+                  await addJob(draft)
                   toast.success("Job added successfully.")
                   close()
                 }}
