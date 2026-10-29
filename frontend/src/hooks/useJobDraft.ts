@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { EMPLOYMENT_TYPES } from "@/constants/job"
 import { today } from "@/utils/date"
-import type { JobDraft } from "@/types/job"
+import type { Job, JobDraft } from "@/types/job"
 
 export type JobDraftApi = {
   draft: JobDraft
@@ -29,8 +29,19 @@ function emptyDraft(): JobDraft {
 }
 
 /** Owns the add-job form's state and its validation. */
-export function useJobDraft(): JobDraftApi {
-  const [draft, setDraft] = useState<JobDraft>(emptyDraft)
+export function useJobDraft(job: Job | null = null): JobDraftApi {
+  const [draft, setDraft] = useState<JobDraft>(() =>
+    job === null
+      ? emptyDraft()
+      : {
+          company: job.company,
+          title: job.title,
+          employmentType: job.employmentType,
+          startDate: job.startDate,
+          endDate: job.endDate,
+          summary: job.summary,
+        },
+  )
   const [touched, setTouched] = useState(false)
 
   const companyError = draft.company.trim() === "" ? "Enter a company" : null
