@@ -38,8 +38,25 @@ npm run dev
 
 Serves sample data on http://localhost:3001. Configure chat through `backend/.env`.
 
-Node 20.19+, 22.13+ or 24+. The frontend's `engines` field declares the range, so
-`npm install` warns if you are outside it.
+Node 24 or newer. Both packages declare it in `engines`, so `npm install` warns if
+you are on anything older.
+
+**nvm on macOS**
+
+Install nvm, then reopen the terminal — the installer appends its startup lines to
+your shell profile.
+
+```bash
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.8/install.sh | bash
+```
+
+Install a Node version this repo accepts and make it the default.
+
+```bash
+nvm install 24
+nvm use 24
+nvm alias default 24
+```
 
 ## Documentation
 

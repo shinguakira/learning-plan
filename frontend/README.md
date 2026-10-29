@@ -8,7 +8,7 @@ is for** if you want the why rather than the how.
 
 | Area            | Choice                               |
 | --------------- | ------------------------------------ |
-| Runtime         | Node 20.19+, 22.13+ or 24+           |
+| Runtime         | Node 24+                             |
 | Language        | TypeScript 6                         |
 | Framework       | React 19                             |
 | Routing         | React Router 7                       |
@@ -24,9 +24,9 @@ is for** if you want the why rather than the how.
 
 ## Setup
 
-Requires **Node 20.19+, 22.13+ or 24+** — the range is declared in `engines`, so
-`npm install` warns if you are outside it. Odd-numbered releases such as Node 23 are
-not supported by ESLint 10 and will warn.
+Requires **Node 24 or newer** — declared in `engines`, so `npm install` warns if you
+are on anything older. Odd-numbered releases such as Node 25 are not supported by
+ESLint 10 and will warn.
 
 ```bash
 node -v          # check you are in range
