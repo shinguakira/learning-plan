@@ -3,7 +3,7 @@ import { type Job as JobRow, Prisma } from "@prisma/client"
 import { EMPLOYMENT_TYPE_API } from "../constants/job.js"
 import { jobRepository } from "../repositories/jobRepository.js"
 import type { Job } from "../types/job.js"
-import type { JobUpdateRequest } from "../types/jobDraft.js"
+import type { JobCreateRequest, JobUpdateRequest } from "../types/jobDraft.js"
 import type { MockUser } from "../types/user.js"
 
 const toJob = (row: JobRow): Job => ({
@@ -19,6 +19,10 @@ const toJob = (row: JobRow): Job => ({
 
 /** Owns job history data access and any business rules around it. */
 export const jobService = {
+  async addJob(request: JobCreateRequest): Promise<Job> {
+    return toJob(await jobRepository.create(request))
+  },
+
   async getJobs(): Promise<Job[]> {
     return (await jobRepository.findAll()).map(toJob)
   },

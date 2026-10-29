@@ -22,7 +22,7 @@ export function JobForm({
   onSubmit,
 }: {
   job?: Job | null
-  onSubmit: (draft: JobDraft) => void | Promise<void>
+  onSubmit: (draft: JobDraft) => Promise<void>
 }) {
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
