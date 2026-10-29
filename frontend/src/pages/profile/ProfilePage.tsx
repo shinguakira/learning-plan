@@ -41,6 +41,7 @@ export function ProfilePage() {
     addJob,
     removeJob,
     addCertificate,
+    editCertificate,
     removeCertificate,
     addStrength,
     editStrength,
@@ -60,8 +61,8 @@ export function ProfilePage() {
         <div>
           <h1 className="text-lg font-semibold">Profile</h1>
           <p className="text-muted-foreground mt-0.5 text-xs">
-            What goes on your resume. Skills and strengths are saved when added or edited.
-            Certificates are saved when added; other changes stay on this page.
+            What goes on your resume. Skills, strengths, and certificates are saved when added or
+            edited; other changes stay on this page.
           </p>
         </div>
         <div>
@@ -302,7 +303,12 @@ export function ProfilePage() {
           {loading ? (
             <ProfileSectionLoading label="Loading certificates…" />
           ) : (
-            <CertificateList certificates={certificates} onRemove={removeCertificate} />
+            <CertificateList
+              key={user}
+              certificates={certificates}
+              onEdit={editCertificate}
+              onRemove={removeCertificate}
+            />
           )}
         </div>
       </section>

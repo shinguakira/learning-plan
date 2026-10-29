@@ -7,3 +7,10 @@ export type CertificateCreateRequest = {
   dateEarned: string
   credentialUrl?: string
 }
+
+export type CertificateUpdateRequest = {
+  name: string
+  issuer: string
+  dateEarned: string
+  credentialUrl?: string
+}

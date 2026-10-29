@@ -2,7 +2,10 @@ import { type Certificate as CertificateRow, Prisma } from "@prisma/client"
 
 import { certificateRepository } from "../repositories/certificateRepository.js"
 import type { Certificate } from "../types/certificate.js"
-import type { CertificateCreateRequest } from "../types/certificateDraft.js"
+import type {
+  CertificateCreateRequest,
+  CertificateUpdateRequest,
+} from "../types/certificateDraft.js"
 import type { MockUser } from "../types/user.js"
 
 const toCertificate = (row: CertificateRow): Certificate => ({
@@ -23,9 +26,28 @@ export const certificateService = {
     return (await certificateRepository.findAll()).map(toCertificate)
   },
 
+  async getCertificate(id: string): Promise<Certificate | null> {
+    const row = await certificateRepository.findById(id)
+    return row === null ? null : toCertificate(row)
+  },
+
   async addCertificate(request: CertificateCreateRequest): Promise<Certificate | null> {
     try {
       return toCertificate(await certificateRepository.create(request))
+    } catch (error: unknown) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2002") {
+        return null
+      }
+      throw error
+    }
+  },
+
+  async updateCertificate(
+    id: string,
+    request: CertificateUpdateRequest,
+  ): Promise<Certificate | null> {
+    try {
+      return toCertificate(await certificateRepository.update(id, request))
     } catch (error: unknown) {
       if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2002") {
         return null
