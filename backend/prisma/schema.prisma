@@ -1,0 +1,104 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+/// The people the header can switch between, today the four in MOCK_USERS.
+model User {
+  id           String        @id @default(uuid())
+  name         String        @unique
+  createdAt    DateTime      @default(now())
+  skills       Skill[]
+  strengths    Strength[]
+  certificates Certificate[]
+  jobs         Job[]
+
+  @@map("users")
+}
+
+enum SkillLevel {
+  beginner
+  intermediate
+  advanced
+  expert
+
+  @@map("skill_level")
+}
+
+enum EmploymentType {
+  full_time  @map("full-time")
+  contract
+  part_time  @map("part-time")
+  internship
+
+  @@map("employment_type")
+}
+
+model Skill {
+  id                String     @id @default(uuid())
+  userId            String     @map("user_id")
+  user              User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name              String
+  level             SkillLevel
+  yearsOfExperience Int        @map("years_of_experience")
+  createdAt         DateTime   @default(now()) @map("created_at")
+
+  @@unique([userId, name])
+  @@map("skills")
+}
+
+model Strength {
+  id          String   @id @default(uuid())
+  userId      String   @map("user_id")
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name        String
+  description String
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  @@unique([userId, name])
+  @@map("strengths")
+}
+
+model Certificate {
+  id            String   @id @default(uuid())
+  userId        String   @map("user_id")
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name          String
+  issuer        String
+  dateEarned    DateTime @map("date_earned") @db.Date
+  credentialUrl String?  @map("credential_url")
+  createdAt     DateTime @default(now()) @map("created_at")
+
+  @@unique([userId, name])
+  @@map("certificates")
+}
+
+model Job {
+  id             String         @id @default(uuid())
+  userId         String         @map("user_id")
+  user           User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  company        String
+  title          String
+  employmentType EmploymentType @map("employment_type")
+  startDate      DateTime       @map("start_date") @db.Date
+  endDate        DateTime?      @map("end_date") @db.Date
+  summary        String         @default("")
+  createdAt      DateTime       @default(now()) @map("created_at")
+
+  @@index([userId])
+  @@map("jobs")
+}
+
+/// The technologies a skill can name, today the list in SkillForm's SKILL_OPTIONS.
+/// "Other" is not one of them - it is the form's escape hatch for free text.
+model Technology {
+  id        String   @id @default(uuid())
+  name      String   @unique
+  createdAt DateTime @default(now())
+
+  @@map("technologies")
+}

@@ -1,8 +1,9 @@
 import type { ReactNode } from "react"
+import { Link } from "react-router-dom"
 
 /**
  * A tiny renderer covering the markdown a chat reply usually contains: fenced
- * code blocks, `inline code`, **bold**, and line breaks.
+ * code blocks, `inline code`, **bold**, task links, and line breaks.
  * Swap in a real markdown library the moment more than that is needed.
  */
 
@@ -28,24 +29,40 @@ function parseBlocks(source: string): Block[] {
 }
 
 function renderInline(text: string, keyPrefix: string): ReactNode[] {
-  return text.split(/(\*\*[^*]+\*\*|`[^`]+`)/g).map((part, index) => {
-    const key = `${keyPrefix}-${index}`
-    if (part.startsWith("**") && part.endsWith("**") && part.length > 4) {
-      return (
-        <strong key={key} className="text-foreground font-semibold">
-          {part.slice(2, -2)}
-        </strong>
-      )
-    }
-    if (part.startsWith("`") && part.endsWith("`") && part.length > 2) {
-      return (
-        <code key={key} className="bg-muted rounded px-1 py-0.5 font-mono text-[0.85em]">
-          {part.slice(1, -1)}
-        </code>
-      )
-    }
-    return <span key={key}>{part}</span>
-  })
+  return text
+    .split(/(\*\*[^*]+\*\*|`[^`]+`|\[[^\]\n]+\]\(\/tasks\?taskid=seed-[1-9]\d*\))/g)
+    .map((part, index) => {
+      const key = `${keyPrefix}-${index}`
+      if (part.startsWith("**") && part.endsWith("**") && part.length > 4) {
+        return (
+          <strong key={key} className="text-foreground font-semibold">
+            {renderInline(part.slice(2, -2), key)}
+          </strong>
+        )
+      }
+      if (part.startsWith("`") && part.endsWith("`") && part.length > 2) {
+        return (
+          <code key={key} className="bg-muted rounded px-1 py-0.5 font-mono text-[0.85em]">
+            {part.slice(1, -1)}
+          </code>
+        )
+      }
+      const taskLink = /^\[([^\]\n]+)\]\((\/tasks\?taskid=seed-[1-9]\d*)\)$/.exec(part)
+      if (taskLink?.[1] && taskLink[2]) {
+        return (
+          <Link
+            key={key}
+            to={taskLink[2]}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-primary rounded-sm underline underline-offset-4 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+          >
+            {renderInline(taskLink[1], key)}
+          </Link>
+        )
+      }
+      return <span key={key}>{part}</span>
+    })
 }
 
 export function Markdown({ text }: { text: string }) {

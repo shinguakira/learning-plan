@@ -12,10 +12,8 @@ export async function fetchChatReply(
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       user,
-      messages: history.map(({ role, content, context }) => ({
-        role,
-        content: context ? `${content}\n\n${context}` : content,
-      })),
+      analyzeTasks: history.some((message) => message.analyzeTasks === true),
+      messages: history.map(({ role, content }) => ({ role, content })),
     }),
     signal,
   }

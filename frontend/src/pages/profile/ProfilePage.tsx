@@ -1,6 +1,9 @@
-import { Award, Briefcase, Code, Download, Sparkles } from "lucide-react"
+import { Award, Briefcase, Code, Download, FileText, Sparkles } from "lucide-react"
+import { toast } from "sonner"
 import { Button } from "@/components/ui/button"
 import { useDownloadProfileCsv } from "@/hooks/useDownloadProfileCsv"
+import { useDownloadProfilePdf } from "@/hooks/useDownloadProfilePdf"
+import { useMockUser } from "@/hooks/useMockUser"
 import { useProfile } from "@/hooks/useProfile"
 import { JobForm } from "@/pages/profile/JobForm"
 import { JobList } from "@/pages/profile/JobList"
@@ -24,6 +27,7 @@ import { ProfileFormDialog } from "@/pages/profile/ProfileFormDialog"
  * `EMPLOYMENT_TYPE_CHIP`.
  */
 export function ProfilePage() {
+  const { user } = useMockUser()
   const {
     skills,
     jobs,
@@ -32,15 +36,23 @@ export function ProfilePage() {
     loading,
     error,
     addSkill,
+    editSkill,
     removeSkill,
     addJob,
     removeJob,
     addCertificate,
     removeCertificate,
     addStrength,
+    editStrength,
     removeStrength,
-  } = useProfile()
+  } = useProfile(user)
   const { status: csvStatus, download: downloadCsv } = useDownloadProfileCsv()
+  const { status: pdfStatus, download: downloadPdf } = useDownloadProfilePdf(user, {
+    skills,
+    jobs,
+    certificates,
+    strengths,
+  })
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6">
@@ -48,22 +60,38 @@ export function ProfilePage() {
         <div>
           <h1 className="text-lg font-semibold">Profile</h1>
           <p className="text-muted-foreground mt-0.5 text-xs">
-            What goes on your resume. Edits here are not saved.
+            What goes on your resume. Skills and strengths are saved when added or edited.
+            Certificates are saved when added; other changes stay on this page.
           </p>
         </div>
         <div>
-          {/* Solid, where the section buttons are tinted: this one acts on the whole page. */}
-          <Button
-            type="button"
-            size="sm"
-            onClick={downloadCsv}
-            disabled={csvStatus === "downloading"}
-          >
-            <Download />
-            Download CSV
-          </Button>
+          {/* Solid, where the section buttons are tinted: these act on the whole page. */}
+          <div className="flex flex-wrap items-center gap-2">
+            <Button
+              type="button"
+              size="sm"
+              onClick={downloadCsv}
+              disabled={csvStatus === "downloading"}
+            >
+              <Download />
+              Download CSV
+            </Button>
+            <Button
+              type="button"
+              size="sm"
+              variant="outline"
+              onClick={downloadPdf}
+              disabled={pdfStatus === "downloading"}
+            >
+              <FileText />
+              Download PDF
+            </Button>
+          </div>
           {csvStatus === "error" && (
             <p className="text-destructive mt-1 text-xs">Could not download the CSV.</p>
+          )}
+          {pdfStatus === "error" && (
+            <p className="text-destructive mt-1 text-xs">Could not download the PDF.</p>
           )}
         </div>
       </div>
@@ -94,16 +122,26 @@ export function ProfilePage() {
             </div>
           </div>
           <ProfileFormDialog
+            key={user}
             title="Add skill"
             triggerClassName="border-blue-600 bg-blue-600 text-white hover:bg-blue-700 hover:text-white"
           >
             {(close) => (
               <SkillForm
+                skill={null}
                 existingNames={skills.map((skill) => skill.name)}
-                onSubmit={(draft) => {
+                onSubmit={(draft) =>
                   addSkill(draft)
-                  close()
-                }}
+                    .then(() => {
+                      toast.success("Skill added successfully.")
+                      close()
+                    })
+                    .catch((error: unknown) => {
+                      toast.error(
+                        error instanceof Error ? error.message : "Could not add the skill.",
+                      )
+                    })
+                }
               />
             )}
           </ProfileFormDialog>
@@ -113,7 +151,7 @@ export function ProfilePage() {
           {loading ? (
             <ProfileSectionLoading label="Loading skills…" />
           ) : (
-            <SkillList skills={skills} onRemove={removeSkill} />
+            <SkillList skills={skills} onEdit={editSkill} onRemove={removeSkill} />
           )}
         </div>
       </section>
@@ -140,13 +178,16 @@ export function ProfilePage() {
             </div>
           </div>
           <ProfileFormDialog
+            key={user}
             title="Add strength"
             triggerClassName="border-purple-600 bg-purple-600 text-white hover:bg-purple-700 hover:text-white"
           >
             {(close) => (
               <StrengthForm
-                onSubmit={(draft) => {
-                  addStrength(draft)
+                existingNames={strengths.map((strength) => strength.name)}
+                onSubmit={async (draft) => {
+                  await addStrength(draft)
+                  toast.success("Strength added successfully.")
                   close()
                 }}
               />
@@ -158,7 +199,12 @@ export function ProfilePage() {
           {loading ? (
             <ProfileSectionLoading label="Loading strengths…" />
           ) : (
-            <StrengthList strengths={strengths} onRemove={removeStrength} />
+            <StrengthList
+              key={user}
+              strengths={strengths}
+              onEdit={editStrength}
+              onRemove={removeStrength}
+            />
           )}
         </div>
       </section>
@@ -187,6 +233,7 @@ export function ProfilePage() {
             </div>
           </div>
           <ProfileFormDialog
+            key={user}
             title="Add job"
             triggerClassName="border-teal-600 bg-teal-600 text-white hover:bg-teal-700 hover:text-white"
           >
@@ -194,6 +241,7 @@ export function ProfilePage() {
               <JobForm
                 onSubmit={(draft) => {
                   addJob(draft)
+                  toast.success("Job added successfully.")
                   close()
                 }}
               />
@@ -234,13 +282,15 @@ export function ProfilePage() {
             </div>
           </div>
           <ProfileFormDialog
+            key={user}
             title="Add certificate"
             triggerClassName="border-orange-600 bg-orange-600 text-white hover:bg-orange-700 hover:text-white"
           >
             {(close) => (
               <CertificateForm
-                onSubmit={(draft) => {
-                  addCertificate(draft)
+                onSubmit={async (draft) => {
+                  await addCertificate(draft)
+                  toast.success("Certificate added successfully.")
                   close()
                 }}
               />

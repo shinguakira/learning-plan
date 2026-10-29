@@ -1,8 +1,14 @@
-import type { SkillLevel } from "@/types/skill"
+import type { SkillDraft, SkillLevel } from "@/types/skill"
 
 export const SKILL_LEVELS = ["beginner", "intermediate", "advanced", "expert"] as const
 
 export const YEARS_OF_EXPERIENCE = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] as const
+
+export const EMPTY_SKILL_DRAFT: SkillDraft = {
+  name: "",
+  level: "beginner",
+  yearsOfExperience: 1,
+}
 
 export const SKILL_LEVEL_LABEL: Record<SkillLevel, string> = {
   beginner: "Beginner",
@@ -26,3 +32,5 @@ export const SKILL_LEVEL_TEXT: Record<SkillLevel, string> = {
   advanced: "text-amber-700 dark:text-amber-400",
   expert: "text-emerald-700 dark:text-emerald-400",
 }
+
+export const SKILLS_API_URL = "/api/skills"

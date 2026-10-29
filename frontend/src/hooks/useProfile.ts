@@ -1,5 +1,11 @@
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { fetchProfile } from "@/api/profile"
+import { createSkill, updateSkill } from "@/api/skill"
+import { createStrength, updateStrength } from "@/api/strength"
+import { createCertificate } from "@/api/certificate"
+import { EMPTY_PROFILE_STATE } from "@/constants/profile"
+import type { ProfileState } from "@/types/profile"
+import type { MockUser } from "@/types/user"
 import type { Job, JobDraft } from "@/types/job"
 import type { Skill, SkillDraft } from "@/types/skill"
 import type { Certificate, CertificateDraft } from "@/types/certificate"
@@ -14,95 +20,149 @@ export type ProfileApi = {
   loading: boolean
   /** Set if the initial seed request failed; all lists still work from empty. */
   error: string | null
-  addSkill: (draft: SkillDraft) => void
+  addSkill: (draft: SkillDraft) => Promise<void>
+  editSkill: (id: string, draft: SkillDraft) => Promise<void>
   removeSkill: (id: string) => void
   addJob: (draft: JobDraft) => void
   removeJob: (id: string) => void
-  addCertificate: (draft: CertificateDraft) => void
+  addCertificate: (draft: CertificateDraft) => Promise<void>
   removeCertificate: (id: string) => void
-  addStrength: (draft: StrengthDraft) => void
+  addStrength: (draft: StrengthDraft) => Promise<void>
+  editStrength: (id: string, draft: StrengthDraft) => Promise<void>
   removeStrength: (id: string) => void
 }
 
-export function useProfile(): ProfileApi {
-  const [skills, setSkills] = useState<Skill[]>([])
-  const [jobs, setJobs] = useState<Job[]>([])
-  const [certificates, setCertificates] = useState<Certificate[]>([])
-  const [strengths, setStrengths] = useState<Strength[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
+export function useProfile(user: MockUser): ProfileApi {
+  const [profiles, setProfiles] = useState<Partial<Record<MockUser, ProfileState>>>({})
+  const loaded = useRef(new Set<MockUser>())
 
   useEffect(() => {
+    if (loaded.current.has(user)) return
     let active = true
+    const controller = new AbortController()
 
-    fetchProfile()
+    fetchProfile(user, controller.signal)
       .then((seed) => {
         if (!active) return
-        // The forms work while this is in flight, so anything already added stays
-        // and the seed goes after it. Replacing outright would discard it.
-        setSkills((prev) => [...prev, ...seed.skills])
-        setJobs((prev) => [...prev, ...seed.jobs])
-        setCertificates((prev) => [...prev, ...seed.certificates])
-        setStrengths((prev) => [...prev, ...seed.strengths])
+        loaded.current.add(user)
+        setProfiles((previous) => {
+          const profile = previous[user] ?? EMPTY_PROFILE_STATE
+          return {
+            ...previous,
+            [user]: {
+              skills: [...profile.skills, ...seed.skills],
+              jobs: [...profile.jobs, ...seed.jobs],
+              certificates: [
+                ...profile.certificates,
+                ...seed.certificates.filter(
+                  (certificate) =>
+                    !profile.certificates.some((existing) => existing.id === certificate.id),
+                ),
+              ],
+              strengths: [
+                ...profile.strengths,
+                ...seed.strengths.filter(
+                  (strength) => !profile.strengths.some((existing) => existing.id === strength.id),
+                ),
+              ],
+              loading: false,
+              error: null,
+            },
+          }
+        })
       })
       .catch((caught: unknown) => {
-        if (active) setError(caught instanceof Error ? caught.message : "Failed to load profile.")
-      })
-      .finally(() => {
-        if (active) setLoading(false)
+        if (!active) return
+        setProfiles((previous) => ({
+          ...previous,
+          [user]: {
+            ...(previous[user] ?? EMPTY_PROFILE_STATE),
+            loading: false,
+            error: caught instanceof Error ? caught.message : "Failed to load profile.",
+          },
+        }))
       })
 
     return () => {
       active = false
+      controller.abort()
     }
-  }, [])
+  }, [user])
+
+  const updateProfile = (update: (profile: ProfileState) => ProfileState) => {
+    setProfiles((previous) => ({
+      ...previous,
+      [user]: update(previous[user] ?? EMPTY_PROFILE_STATE),
+    }))
+  }
 
   return {
-    skills,
-    jobs,
-    certificates,
-    strengths,
-    loading,
-    error,
-    addSkill: (draft) => {
-      const skill: Skill = {
-        ...draft,
-        id: crypto.randomUUID(),
-        createdAt: new Date().toISOString(),
-      }
-      setSkills((prev) => [skill, ...prev])
+    ...(profiles[user] ?? EMPTY_PROFILE_STATE),
+    addSkill: async (draft) => {
+      const skill = await createSkill(user, draft)
+      updateProfile((profile) => ({ ...profile, skills: [skill, ...profile.skills] }))
+    },
+    editSkill: async (id, draft) => {
+      const skill = await updateSkill(id, draft)
+      updateProfile((profile) => ({
+        ...profile,
+        skills: profile.skills.map((existing) => (existing.id === id ? skill : existing)),
+      }))
     },
     removeSkill: (id) => {
-      setSkills((prev) => prev.filter((skill) => skill.id !== id))
+      updateProfile((profile) => ({
+        ...profile,
+        skills: profile.skills.filter((skill) => skill.id !== id),
+      }))
     },
     addJob: (draft) => {
       const job: Job = { ...draft, id: crypto.randomUUID(), createdAt: new Date().toISOString() }
-      setJobs((prev) => [job, ...prev])
+      updateProfile((profile) => ({ ...profile, jobs: [job, ...profile.jobs] }))
     },
     removeJob: (id) => {
-      setJobs((prev) => prev.filter((job) => job.id !== id))
+      updateProfile((profile) => ({
+        ...profile,
+        jobs: profile.jobs.filter((job) => job.id !== id),
+      }))
     },
-    addCertificate: (draft) => {
-      const certificate = {
-        ...draft,
-        id: crypto.randomUUID(),
-        createdAt: new Date().toISOString(),
-      }
-      setCertificates((prev) => [certificate, ...prev])
+    addCertificate: async (draft) => {
+      const certificate = await createCertificate(user, draft)
+      updateProfile((profile) => ({
+        ...profile,
+        certificates: [
+          certificate,
+          ...profile.certificates.filter((existing) => existing.id !== certificate.id),
+        ],
+      }))
     },
     removeCertificate: (id) => {
-      setCertificates((prev) => prev.filter((cert) => cert.id !== id))
+      updateProfile((profile) => ({
+        ...profile,
+        certificates: profile.certificates.filter((certificate) => certificate.id !== id),
+      }))
     },
-    addStrength: (draft) => {
-      const strength: Strength = {
-        ...draft,
-        id: crypto.randomUUID(),
-        createdAt: new Date().toISOString(),
-      }
-      setStrengths((prev) => [strength, ...prev])
+    addStrength: async (draft) => {
+      const strength = await createStrength(user, draft)
+      updateProfile((profile) => ({
+        ...profile,
+        strengths: [
+          strength,
+          ...profile.strengths.filter((existing) => existing.id !== strength.id),
+        ],
+      }))
+    },
+    editStrength: async (id, draft) => {
+      const strength = await updateStrength(id, draft)
+      updateProfile((profile) => ({
+        ...profile,
+        strengths: profile.strengths.map((existing) => (existing.id === id ? strength : existing)),
+      }))
     },
     removeStrength: (id) => {
-      setStrengths((prev) => prev.filter((strength) => strength.id !== id))
+      updateProfile((profile) => ({
+        ...profile,
+        strengths: profile.strengths.filter((strength) => strength.id !== id),
+      }))
     },
   }
 }

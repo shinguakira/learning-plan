@@ -1,5 +1,8 @@
+import type { MockUser } from "./user.js";
+
 export type ChatRequest = {
-  user: "Sanjar" | "Akira" | "Mike" | "John";
+  user: MockUser;
+  analyzeTasks?: boolean;
   messages: { role: "user" | "assistant"; content: string }[];
 };
 
@@ -9,4 +12,4 @@ export type ChatCompletion = {
 
 export type ChatResult =
   | { ok: true; content: string }
-  | { ok: false; status: 502; message: string };
+  | { ok: false; status: 422 | 502; message: string };

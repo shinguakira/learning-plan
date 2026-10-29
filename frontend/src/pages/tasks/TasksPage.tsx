@@ -1,4 +1,5 @@
 import { useRef, useState } from "react"
+import { toast } from "sonner"
 import { useSearchParams } from "react-router-dom"
 import { Download, RotateCcw, Trash2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -7,6 +8,7 @@ import { useTasks } from "@/hooks/useTasks"
 import { useDownloadTasksCsv } from "@/hooks/useDownloadTasksCsv"
 import { useMockUser } from "@/hooks/useMockUser"
 import { TASK_ADMIN_USER } from "@/constants/user"
+import { TASK_FILTER_KEYS } from "@/constants/task"
 import { ROUTES } from "@/constants/app"
 import { TaskDetails } from "@/pages/tasks/TaskDetails"
 import { TaskFilters } from "@/pages/tasks/TaskFilters"
@@ -38,10 +40,10 @@ export function TasksPage() {
   const filters = useTaskFilters(tasks)
   const { status: csvStatus, download: downloadCsv } = useDownloadTasksCsv()
 
-  const taskId = searchParams.get("taskid")
+  const taskId = searchParams.get(TASK_FILTER_KEYS.taskId)
   if (taskId !== null) {
     const listParams = new URLSearchParams(searchParams)
-    listParams.delete("taskid")
+    listParams.delete(TASK_FILTER_KEYS.taskId)
     return (
       <TaskDetails
         task={tasks.find((task) => task.id === taskId)}
@@ -154,7 +156,13 @@ export function TasksPage() {
           <DialogHeader>
             <DialogTitle>Add Task</DialogTitle>
           </DialogHeader>
-          <TaskForm key={user} onSubmit={addTask} />
+          <TaskForm
+            key={user}
+            onSubmit={(draft) => {
+              addTask(draft)
+              toast.success("Task added successfully.")
+            }}
+          />
         </DialogContent>
       </Dialog>
 

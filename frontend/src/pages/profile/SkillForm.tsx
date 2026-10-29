@@ -1,6 +1,6 @@
 import { useState } from "react"
 import type { FormEvent } from "react"
-import { Plus } from "lucide-react"
+import { Plus, Save } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { DialogClose } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
@@ -11,84 +11,97 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { SKILL_LEVELS, SKILL_LEVEL_LABEL, YEARS_OF_EXPERIENCE } from "@/constants/skill"
+import {
+  EMPTY_SKILL_DRAFT,
+  SKILL_LEVELS,
+  SKILL_LEVEL_LABEL,
+  YEARS_OF_EXPERIENCE,
+} from "@/constants/skill"
+import { OTHER_SKILL_OPTION } from "@/constants/technology"
 import { useSkillDraft } from "@/hooks/useSkillDraft"
+import { useTechnologies } from "@/hooks/useTechnologies"
+import { toSkillDraft } from "@/utils/skill"
 import { FormField } from "@/components/form/FormField"
-import type { SkillDraft, SkillLevel } from "@/types/skill"
+import type { Skill, SkillDraft, SkillLevel } from "@/types/skill"
 
-const SKILL_OPTIONS = [
-  "JavaScript",
-  "TypeScript",
-  "React",
-  "Next.js",
-  "Node.js",
-  "HTML / CSS",
-  "Python",
-  "Go",
-  "Rust",
-  "Java",
-  "C#",
-  "SQL",
-  "PostgreSQL",
-  "MongoDB",
-  "Docker",
-  "Kubernetes",
-  "AWS",
-  "Git",
-  "Linux",
-  "Other",
-] as const
-
-const DEFAULT_SKILL: string = SKILL_OPTIONS[0]
-
+/** `skill` is the row being edited, or null when the form registers a new one. */
 export function SkillForm({
+  skill,
   existingNames,
   onSubmit,
 }: {
+  skill: Skill | null
   existingNames: readonly string[]
-  onSubmit: (draft: SkillDraft) => void
+  onSubmit: (draft: SkillDraft) => Promise<void>
 }) {
-  const [selectedOption, setSelectedOption] = useState(DEFAULT_SKILL)
-  const isOther = selectedOption === "Other"
-  const { draft, patch, nameError, touched, submit } = useSkillDraft(existingNames, DEFAULT_SKILL)
+  const { technologies, loading, error } = useTechnologies()
+  const [selectedOption, setSelectedOption] = useState("")
+  const [saving, setSaving] = useState(false)
+  const isOther = selectedOption === OTHER_SKILL_OPTION
+  const { draft, patch, nameError, touched, submit } = useSkillDraft(
+    existingNames,
+    skill === null ? EMPTY_SKILL_DRAFT : toSkillDraft(skill),
+  )
+
+  const options = [...technologies.map((technology) => technology.name), OTHER_SKILL_OPTION]
 
   const handleSelect = (value: string) => {
     setSelectedOption(value)
-    patch({ name: value === "Other" ? "" : value })
+    patch({ name: value === OTHER_SKILL_OPTION ? "" : value })
   }
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     const ready = submit()
-    if (ready) {
-      setSelectedOption(DEFAULT_SKILL)
-      onSubmit(ready)
-    }
+    if (ready === null) return
+
+    setSaving(true)
+    onSubmit(ready).finally(() => setSaving(false))
   }
 
   return (
     <form onSubmit={handleSubmit}>
       <div className="grid grid-cols-1 items-end gap-4 sm:grid-cols-2">
-        <FormField
-          label="Skill"
-          htmlFor="skill-option"
-          error={touched && !isOther ? nameError : null}
-        >
-          <Select value={selectedOption} onValueChange={handleSelect}>
-            <SelectTrigger id="skill-option" aria-label="Skill" className="w-full">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              {SKILL_OPTIONS.map((option) => (
-                <SelectItem key={option} value={option}>
-                  {option}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </FormField>
+        {skill === null ? (
+          <FormField
+            label="Skill"
+            htmlFor="skill-option"
+            error={touched && !isOther ? nameError : null}
+          >
+            <Select value={selectedOption} onValueChange={handleSelect} disabled={loading}>
+              <SelectTrigger id="skill-option" aria-label="Skill" className="w-full">
+                <SelectValue placeholder={loading ? "Loading skills…" : "Select a skill"} />
+              </SelectTrigger>
+              <SelectContent>
+                {options.map((option) => (
+                  <SelectItem key={option} value={option}>
+                    {option}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            {error !== null && (
+              <p className="text-muted-foreground mt-1 text-xs">
+                Skill list unavailable. Use {OTHER_SKILL_OPTION} to type one.
+              </p>
+            )}
+          </FormField>
+        ) : (
+          <FormField
+            label="Skill"
+            htmlFor="skill-registered-name"
+            error={touched ? nameError : null}
+            className="min-w-0"
+          >
+            <Input
+              id="skill-registered-name"
+              value={draft.name}
+              onChange={(event) => patch({ name: event.target.value })}
+            />
+          </FormField>
+        )}
 
-        {isOther && (
+        {skill === null && isOther && (
           <FormField
             label="Custom skill"
             htmlFor="skill-name"
@@ -146,9 +159,9 @@ export function SkillForm({
             Cancel
           </Button>
         </DialogClose>
-        <Button type="submit">
-          <Plus />
-          Add skill
+        <Button type="submit" disabled={saving}>
+          {skill === null ? <Plus /> : <Save />}
+          {skill === null ? "Add skill" : "Save skill"}
         </Button>
       </div>
     </form>

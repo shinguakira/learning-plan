@@ -66,13 +66,7 @@ export function ChatPage() {
             ))}
             {pending && (
               <ThinkingBubble
-                label={
-                  phase === "tasks"
-                    ? "Loading tasks for analysis…"
-                    : phase === "analysis"
-                      ? "Analyzing your tasks…"
-                      : "Thinking…"
-                }
+                label={phase === "analysis" ? "Analyzing your tasks…" : "Thinking…"}
               />
             )}
           </>

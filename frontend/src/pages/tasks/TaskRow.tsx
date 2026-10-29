@@ -1,10 +1,11 @@
 import { useState } from "react"
-import { Link } from "react-router-dom"
+import { Link, useSearchParams } from "react-router-dom"
 import { CalendarDays, Clock, Trash2, User } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import {
   CATEGORY_THEME,
+  TASK_FILTER_KEYS,
   DUE_TONE,
   PRIORITY_CHIP,
   PRIORITY_LABEL,
@@ -29,6 +30,9 @@ export function TaskRow({
   onRemove: () => void
 }) {
   const [confirming, setConfirming] = useState(false)
+  const [searchParams] = useSearchParams()
+  const taskParams = new URLSearchParams(searchParams)
+  taskParams.set(TASK_FILTER_KEYS.taskId, task.id)
   const due = describeDue(task.dueDate)
   const theme = CATEGORY_THEME[task.category]
   const finished = task.status === "done"
@@ -47,7 +51,7 @@ export function TaskRow({
           )}
         >
           <Link
-            to={`${ROUTES.tasks}?taskid=${encodeURIComponent(task.id)}`}
+            to={`${ROUTES.tasks}?${taskParams}`}
             className="rounded-sm underline-offset-4 hover:underline focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
           >
             {task.title}

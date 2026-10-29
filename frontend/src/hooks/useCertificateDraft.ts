@@ -35,8 +35,6 @@ export function useCertificateDraft() {
         dateEarned,
         ...(credentialUrl ? { credentialUrl } : {}),
       }
-      setDraft({ name: "", issuer: "", dateEarned: "", credentialUrl: "" })
-      setTouched(false)
       return ready
     },
   }

@@ -32,4 +32,8 @@ export default tseslint.config(
     extends: [js.configs.recommended, tseslint.configs.recommended],
     languageOptions: { globals: globals.node },
   },
+  {
+    files: ["src/**/*.{ts,tsx}", "vite.config.ts", "playwright.config.ts", "test/**/*.ts"],
+    rules: { "@typescript-eslint/consistent-type-definitions": ["error", "type"] },
+  },
 )
