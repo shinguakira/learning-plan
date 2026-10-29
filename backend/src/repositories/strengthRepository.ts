@@ -1,4 +1,5 @@
 import type { Strength } from "@prisma/client"
+
 import { prisma } from "../lib/prisma.js"
 import type { StrengthCreateRequest, StrengthUpdateRequest } from "../types/strengthDraft.js"
 

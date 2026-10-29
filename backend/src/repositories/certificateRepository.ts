@@ -1,4 +1,5 @@
 import type { Certificate } from "@prisma/client"
+
 import { prisma } from "../lib/prisma.js"
 import type {
   CertificateCreateRequest,
