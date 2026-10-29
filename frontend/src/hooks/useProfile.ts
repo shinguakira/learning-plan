@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react"
 import { fetchProfile } from "@/api/profile"
-import { createJob } from "@/api/job"
+import { createJob, updateJob } from "@/api/job"
 import { createSkill, updateSkill } from "@/api/skill"
 import { createStrength, updateStrength } from "@/api/strength"
 import { createCertificate } from "@/api/certificate"
@@ -25,6 +25,7 @@ export type ProfileApi = {
   editSkill: (id: string, draft: SkillDraft) => Promise<void>
   removeSkill: (id: string) => void
   addJob: (draft: JobDraft) => Promise<void>
+  editJob: (id: string, draft: JobDraft) => Promise<void>
   removeJob: (id: string) => void
   addCertificate: (draft: CertificateDraft) => Promise<void>
   removeCertificate: (id: string) => void
@@ -126,6 +127,13 @@ export function useProfile(user: MockUser): ProfileApi {
       updateProfile((profile) => ({
         ...profile,
         jobs: [job, ...profile.jobs.filter((existing) => existing.id !== job.id)],
+      }))
+    },
+    editJob: async (id, draft) => {
+      const job = await updateJob(id, draft)
+      updateProfile((profile) => ({
+        ...profile,
+        jobs: profile.jobs.map((existing) => (existing.id === id ? job : existing)),
       }))
     },
     removeJob: (id) => {

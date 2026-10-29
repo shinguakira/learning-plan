@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from "react"
-import { Plus, X } from "lucide-react"
+import { Plus, Save, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { DialogClose } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
@@ -15,12 +15,18 @@ import { EMPLOYMENT_TYPES, EMPLOYMENT_TYPE_LABEL } from "@/constants/job"
 import { useJobDraft } from "@/hooks/useJobDraft"
 import { FormField } from "@/components/form/FormField"
 import { parseISODate } from "@/utils/date"
-import type { EmploymentType, JobDraft } from "@/types/job"
+import type { EmploymentType, Job, JobDraft } from "@/types/job"
 
-export function JobForm({ onSubmit }: { onSubmit: (draft: JobDraft) => Promise<void> }) {
+export function JobForm({
+  job = null,
+  onSubmit,
+}: {
+  job?: Job | null
+  onSubmit: (draft: JobDraft) => Promise<void>
+}) {
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const { draft, patch, companyError, titleError, dateError, touched, submit } = useJobDraft()
+  const { draft, patch, companyError, titleError, dateError, touched, submit } = useJobDraft(job)
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -136,8 +142,8 @@ export function JobForm({ onSubmit }: { onSubmit: (draft: JobDraft) => Promise<v
           </Button>
         </DialogClose>
         <Button type="submit" disabled={saving}>
-          <Plus />
-          {saving ? "Saving…" : "Add job"}
+          {job === null ? <Plus /> : <Save />}
+          {saving ? "Saving…" : job === null ? "Add job" : "Save job"}
         </Button>
       </div>
     </form>
