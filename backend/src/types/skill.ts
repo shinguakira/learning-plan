@@ -1,4 +1,4 @@
-export type SkillLevel = 'beginner' | 'intermediate' | 'advanced' | 'expert'
+export type SkillLevel = "beginner" | "intermediate" | "advanced" | "expert"
 
 export type Skill = {
   id: string

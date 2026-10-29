@@ -1,7 +1,7 @@
-import { app } from './server.js'
+import { app } from "./server.js"
 
 const PORT = Number(process.env.PORT) || 3001
-const HOST = process.env.HOST ?? '0.0.0.0'
+const HOST = process.env.HOST ?? "0.0.0.0"
 
 app.listen({ port: PORT, host: HOST }, (err) => {
   if (err) {

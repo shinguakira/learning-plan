@@ -1,9 +1,9 @@
-import { Prisma } from '@prisma/client'
-import { skillRepository } from '../repositories/skillRepository.js'
-import type { Skill } from '../types/skill.js'
-import type { MockUser } from '../types/user.js'
-import type { SkillCreateRequest, SkillUpdateRequest } from '../types/skillDraft.js'
-import type { Skill as SkillRow } from '@prisma/client'
+import { Prisma } from "@prisma/client"
+import { skillRepository } from "../repositories/skillRepository.js"
+import type { Skill } from "../types/skill.js"
+import type { MockUser } from "../types/user.js"
+import type { SkillCreateRequest, SkillUpdateRequest } from "../types/skillDraft.js"
+import type { Skill as SkillRow } from "@prisma/client"
 
 const toSkill = (row: SkillRow): Skill => ({
   id: row.id,
@@ -31,7 +31,7 @@ export const skillService = {
     try {
       return toSkill(await skillRepository.create(request))
     } catch (error: unknown) {
-      if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002') {
+      if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2002") {
         return null
       }
       throw error
@@ -42,7 +42,7 @@ export const skillService = {
     try {
       return toSkill(await skillRepository.update(id, request))
     } catch (error: unknown) {
-      if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002') {
+      if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2002") {
         return null
       }
       throw error

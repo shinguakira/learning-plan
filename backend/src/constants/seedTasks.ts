@@ -1,9 +1,8 @@
-import type { SeedTask } from "../types/task.js";
+import type { SeedTask } from "../types/task.js"
 
 export const seedTasks: SeedTask[] = [
   {
-    title:
-      "Write a page with semantic HTML and no div where a real element exists",
+    title: "Write a page with semantic HTML and no div where a real element exists",
     category: "Frontend",
     status: "done",
     priority: "mid",
@@ -23,8 +22,7 @@ export const seedTasks: SeedTask[] = [
     span: 4,
   },
   {
-    title:
-      "Make flexbox alignment automatic: justify, align, and the free-space rules",
+    title: "Make flexbox alignment automatic: justify, align, and the free-space rules",
     category: "Frontend",
     status: "done",
     priority: "high",
@@ -54,8 +52,7 @@ export const seedTasks: SeedTask[] = [
     span: 3,
   },
   {
-    title:
-      "Learn CSS custom properties and where they beat a preprocessor variable",
+    title: "Learn CSS custom properties and where they beat a preprocessor variable",
     category: "Frontend",
     status: "todo",
     priority: "mid",
@@ -95,8 +92,7 @@ export const seedTasks: SeedTask[] = [
     span: 5,
   },
   {
-    title:
-      "Master map, filter, reduce and flatMap, and know when a loop reads better",
+    title: "Master map, filter, reduce and flatMap, and know when a loop reads better",
     category: "Frontend",
     status: "done",
     priority: "high",
@@ -126,8 +122,7 @@ export const seedTasks: SeedTask[] = [
     span: 6,
   },
   {
-    title:
-      "Go from callbacks to Promises to async await, and know why each step happened",
+    title: "Go from callbacks to Promises to async await, and know why each step happened",
     category: "Frontend",
     status: "done",
     priority: "high",
@@ -147,8 +142,7 @@ export const seedTasks: SeedTask[] = [
     span: 3,
   },
   {
-    title:
-      "Learn the DOM API without a framework: query, create, delegate events",
+    title: "Learn the DOM API without a framework: query, create, delegate events",
     category: "Frontend",
     status: "done",
     priority: "mid",
@@ -198,8 +192,7 @@ export const seedTasks: SeedTask[] = [
     span: 6,
   },
   {
-    title:
-      "Learn generics: constraints, inference, and when not to reach for them",
+    title: "Learn generics: constraints, inference, and when not to reach for them",
     category: "Frontend",
     status: "done",
     priority: "high",
@@ -239,8 +232,7 @@ export const seedTasks: SeedTask[] = [
     span: 3,
   },
   {
-    title:
-      "Learn React fundamentals: JSX, props, and UI as a function of state",
+    title: "Learn React fundamentals: JSX, props, and UI as a function of state",
     category: "Frontend",
     status: "done",
     priority: "high",
@@ -350,8 +342,7 @@ export const seedTasks: SeedTask[] = [
     span: 4,
   },
   {
-    title:
-      "Learn form validation and how to show errors without being annoying",
+    title: "Learn form validation and how to show errors without being annoying",
     category: "Frontend",
     status: "done",
     priority: "mid",
@@ -361,8 +352,7 @@ export const seedTasks: SeedTask[] = [
     span: 4,
   },
   {
-    title:
-      "Learn Tailwind properly: the utility model, variants, and when to extract",
+    title: "Learn Tailwind properly: the utility model, variants, and when to extract",
     category: "Frontend",
     status: "todo",
     priority: "mid",
@@ -372,8 +362,7 @@ export const seedTasks: SeedTask[] = [
     span: 5,
   },
   {
-    title:
-      "Build a dark mode that respects prefers-color-scheme and a manual toggle",
+    title: "Build a dark mode that respects prefers-color-scheme and a manual toggle",
     category: "Frontend",
     status: "done",
     priority: "low",
@@ -383,8 +372,7 @@ export const seedTasks: SeedTask[] = [
     span: 4,
   },
   {
-    title:
-      "Learn keyboard accessibility: focus order, focus traps and skip links",
+    title: "Learn keyboard accessibility: focus order, focus traps and skip links",
     category: "Frontend",
     status: "done",
     priority: "high",
@@ -424,8 +412,7 @@ export const seedTasks: SeedTask[] = [
     span: 5,
   },
   {
-    title:
-      "Learn image optimisation: formats, sizing, lazy loading, aspect ratio",
+    title: "Learn image optimisation: formats, sizing, lazy loading, aspect ratio",
     category: "Frontend",
     status: "done",
     priority: "mid",
@@ -475,8 +462,7 @@ export const seedTasks: SeedTask[] = [
     span: 18,
   },
   {
-    title:
-      "Learn state management beyond Context: when a store is actually justified",
+    title: "Learn state management beyond Context: when a store is actually justified",
     category: "Frontend",
     status: "todo",
     priority: "mid",
@@ -486,8 +472,7 @@ export const seedTasks: SeedTask[] = [
     span: 14,
   },
   {
-    title:
-      "Learn data fetching patterns: caching, revalidation, race conditions",
+    title: "Learn data fetching patterns: caching, revalidation, race conditions",
     category: "Frontend",
     status: "todo",
     priority: "high",
@@ -507,8 +492,7 @@ export const seedTasks: SeedTask[] = [
     span: 20,
   },
   {
-    title:
-      "Learn Web Components and shadow DOM well enough to decide against them",
+    title: "Learn Web Components and shadow DOM well enough to decide against them",
     category: "Frontend",
     status: "todo",
     priority: "low",
@@ -520,8 +504,7 @@ export const seedTasks: SeedTask[] = [
 
   // Backend
   {
-    title:
-      "Learn HTTP methods and status codes, and stop returning 200 for errors",
+    title: "Learn HTTP methods and status codes, and stop returning 200 for errors",
     category: "Backend",
     status: "done",
     priority: "high",
@@ -541,8 +524,7 @@ export const seedTasks: SeedTask[] = [
     span: 3,
   },
   {
-    title:
-      "Build a REST API with no framework to see what a framework does for you",
+    title: "Build a REST API with no framework to see what a framework does for you",
     category: "Backend",
     status: "done",
     priority: "high",
@@ -552,8 +534,7 @@ export const seedTasks: SeedTask[] = [
     span: 6,
   },
   {
-    title:
-      "Learn a web framework properly: middleware order and error handling",
+    title: "Learn a web framework properly: middleware order and error handling",
     category: "Backend",
     status: "done",
     priority: "high",
@@ -593,8 +574,7 @@ export const seedTasks: SeedTask[] = [
     span: 5,
   },
   {
-    title:
-      "Learn pagination: offset versus cursor, and why cursor wins at scale",
+    title: "Learn pagination: offset versus cursor, and why cursor wins at scale",
     category: "Backend",
     status: "done",
     priority: "mid",
@@ -624,8 +604,7 @@ export const seedTasks: SeedTask[] = [
     span: 4,
   },
   {
-    title:
-      "Learn password hashing: why bcrypt or argon2 and never a plain digest",
+    title: "Learn password hashing: why bcrypt or argon2 and never a plain digest",
     category: "Backend",
     status: "done",
     priority: "high",
@@ -685,8 +664,7 @@ export const seedTasks: SeedTask[] = [
     span: 8,
   },
   {
-    title:
-      "Learn SQL injection by writing a vulnerable endpoint, then fixing it",
+    title: "Learn SQL injection by writing a vulnerable endpoint, then fixing it",
     category: "Backend",
     status: "done",
     priority: "high",
@@ -696,8 +674,7 @@ export const seedTasks: SeedTask[] = [
     span: 4,
   },
   {
-    title:
-      "Learn rate limiting: token bucket, sliding window, and where to put it",
+    title: "Learn rate limiting: token bucket, sliding window, and where to put it",
     category: "Backend",
     status: "done",
     priority: "mid",
@@ -737,8 +714,7 @@ export const seedTasks: SeedTask[] = [
     span: 7,
   },
   {
-    title:
-      "Learn health checks: liveness versus readiness, and what each should test",
+    title: "Learn health checks: liveness versus readiness, and what each should test",
     category: "Backend",
     status: "done",
     priority: "mid",
@@ -748,8 +724,7 @@ export const seedTasks: SeedTask[] = [
     span: 3,
   },
   {
-    title:
-      "Learn graceful shutdown and stop dropping in-flight requests on deploy",
+    title: "Learn graceful shutdown and stop dropping in-flight requests on deploy",
     category: "Backend",
     status: "done",
     priority: "high",
@@ -759,8 +734,7 @@ export const seedTasks: SeedTask[] = [
     span: 4,
   },
   {
-    title:
-      "Learn connection pooling and why the pool size is not just bigger is better",
+    title: "Learn connection pooling and why the pool size is not just bigger is better",
     category: "Backend",
     status: "done",
     priority: "mid",
@@ -810,8 +784,7 @@ export const seedTasks: SeedTask[] = [
     span: 3,
   },
   {
-    title:
-      "Learn the outbox pattern for writing to a database and a queue atomically",
+    title: "Learn the outbox pattern for writing to a database and a queue atomically",
     category: "Backend",
     status: "done",
     priority: "mid",
@@ -821,8 +794,7 @@ export const seedTasks: SeedTask[] = [
     span: 6,
   },
   {
-    title:
-      "Learn webhooks: signing, verification, replay protection and retries",
+    title: "Learn webhooks: signing, verification, replay protection and retries",
     category: "Backend",
     status: "done",
     priority: "mid",
@@ -852,8 +824,7 @@ export const seedTasks: SeedTask[] = [
     span: 6,
   },
   {
-    title:
-      "Learn API versioning and how to deprecate an endpoint without breaking clients",
+    title: "Learn API versioning and how to deprecate an endpoint without breaking clients",
     category: "Backend",
     status: "done",
     priority: "mid",
@@ -913,8 +884,7 @@ export const seedTasks: SeedTask[] = [
     span: 4,
   },
   {
-    title:
-      "Learn twelve-factor config: environment over files, no secrets in the repo",
+    title: "Learn twelve-factor config: environment over files, no secrets in the repo",
     category: "Backend",
     status: "done",
     priority: "high",
@@ -934,8 +904,7 @@ export const seedTasks: SeedTask[] = [
     span: 5,
   },
   {
-    title:
-      "Learn concurrency in the backend language: goroutines or the event loop",
+    title: "Learn concurrency in the backend language: goroutines or the event loop",
     category: "Backend",
     status: "doing",
     priority: "high",
@@ -965,8 +934,7 @@ export const seedTasks: SeedTask[] = [
     span: 14,
   },
   {
-    title:
-      "Learn database transactions in the service layer, and where to put the boundary",
+    title: "Learn database transactions in the service layer, and where to put the boundary",
     category: "Backend",
     status: "todo",
     priority: "high",
@@ -976,8 +944,7 @@ export const seedTasks: SeedTask[] = [
     span: 12,
   },
   {
-    title:
-      "Learn event-driven design: events versus commands, and at-least-once delivery",
+    title: "Learn event-driven design: events versus commands, and at-least-once delivery",
     category: "Backend",
     status: "todo",
     priority: "mid",
@@ -1017,8 +984,7 @@ export const seedTasks: SeedTask[] = [
     span: 14,
   },
   {
-    title:
-      "Learn load testing and find the actual breaking point of one endpoint",
+    title: "Learn load testing and find the actual breaking point of one endpoint",
     category: "Backend",
     status: "todo",
     priority: "mid",
@@ -1040,8 +1006,7 @@ export const seedTasks: SeedTask[] = [
 
   // Infra / Cloud
   {
-    title:
-      "Learn the Linux command line well enough to stop reaching for a GUI",
+    title: "Learn the Linux command line well enough to stop reaching for a GUI",
     category: "Infra / Cloud",
     status: "done",
     priority: "high",
@@ -1051,8 +1016,7 @@ export const seedTasks: SeedTask[] = [
     span: 8,
   },
   {
-    title:
-      "Learn process management: ps, signals, exit codes and orphaned children",
+    title: "Learn process management: ps, signals, exit codes and orphaned children",
     category: "Infra / Cloud",
     status: "done",
     priority: "mid",
@@ -1072,8 +1036,7 @@ export const seedTasks: SeedTask[] = [
     span: 5,
   },
   {
-    title:
-      "Learn SSH properly: keys, agent forwarding risks, and config aliases",
+    title: "Learn SSH properly: keys, agent forwarding risks, and config aliases",
     category: "Infra / Cloud",
     status: "todo",
     priority: "mid",
@@ -1093,8 +1056,7 @@ export const seedTasks: SeedTask[] = [
     span: 3,
   },
   {
-    title:
-      "Learn Dockerfile layer caching and order the instructions accordingly",
+    title: "Learn Dockerfile layer caching and order the instructions accordingly",
     category: "Infra / Cloud",
     status: "done",
     priority: "high",
@@ -1164,8 +1126,7 @@ export const seedTasks: SeedTask[] = [
     span: 4,
   },
   {
-    title:
-      "Learn git branching for real: rebase, merge, and when each is right",
+    title: "Learn git branching for real: rebase, merge, and when each is right",
     category: "Infra / Cloud",
     status: "done",
     priority: "high",
@@ -1245,8 +1206,7 @@ export const seedTasks: SeedTask[] = [
     span: 8,
   },
   {
-    title:
-      "Build a VPC by hand: subnets, route tables, gateways, security groups",
+    title: "Build a VPC by hand: subnets, route tables, gateways, security groups",
     category: "Infra / Cloud",
     status: "done",
     priority: "high",
@@ -1316,8 +1276,7 @@ export const seedTasks: SeedTask[] = [
     span: 7,
   },
   {
-    title:
-      "Learn ECS or Fargate and deploy a container without managing a server",
+    title: "Learn ECS or Fargate and deploy a container without managing a server",
     category: "Infra / Cloud",
     status: "todo",
     priority: "mid",
@@ -1417,8 +1376,7 @@ export const seedTasks: SeedTask[] = [
     span: 4,
   },
   {
-    title:
-      "Define SLIs and an SLO for one service, and compute the error budget",
+    title: "Define SLIs and an SLO for one service, and compute the error budget",
     category: "Infra / Cloud",
     status: "done",
     priority: "mid",
@@ -1438,8 +1396,7 @@ export const seedTasks: SeedTask[] = [
     span: 5,
   },
   {
-    title:
-      "Run a game day: break something on purpose and practise the recovery",
+    title: "Run a game day: break something on purpose and practise the recovery",
     category: "Infra / Cloud",
     status: "done",
     priority: "mid",
@@ -1571,8 +1528,7 @@ export const seedTasks: SeedTask[] = [
     span: 5,
   },
   {
-    title:
-      "Learn GROUP BY and HAVING, and why WHERE cannot filter an aggregate",
+    title: "Learn GROUP BY and HAVING, and why WHERE cannot filter an aggregate",
     category: "Database",
     status: "done",
     priority: "high",
@@ -1662,8 +1618,7 @@ export const seedTasks: SeedTask[] = [
     span: 4,
   },
   {
-    title:
-      "Model a many-to-many relationship with a join table and extra columns",
+    title: "Model a many-to-many relationship with a join table and extra columns",
     category: "Database",
     status: "done",
     priority: "mid",
@@ -1683,8 +1638,7 @@ export const seedTasks: SeedTask[] = [
     span: 7,
   },
   {
-    title:
-      "Learn EXPLAIN ANALYZE and the gap between estimated and actual rows",
+    title: "Learn EXPLAIN ANALYZE and the gap between estimated and actual rows",
     category: "Database",
     status: "done",
     priority: "high",
@@ -1724,8 +1678,7 @@ export const seedTasks: SeedTask[] = [
     span: 4,
   },
   {
-    title:
-      "Learn what kills an index: functions on columns and leading wildcards",
+    title: "Learn what kills an index: functions on columns and leading wildcards",
     category: "Database",
     status: "done",
     priority: "high",
@@ -1815,8 +1768,7 @@ export const seedTasks: SeedTask[] = [
     span: 4,
   },
   {
-    title:
-      "Learn migrations and write one that is safe to run against live traffic",
+    title: "Learn migrations and write one that is safe to run against live traffic",
     category: "Database",
     status: "done",
     priority: "high",
@@ -1846,8 +1798,7 @@ export const seedTasks: SeedTask[] = [
     span: 5,
   },
   {
-    title:
-      "Learn connection limits and what happens when the pool is exhausted",
+    title: "Learn connection limits and what happens when the pool is exhausted",
     category: "Database",
     status: "done",
     priority: "mid",
@@ -1857,8 +1808,7 @@ export const seedTasks: SeedTask[] = [
     span: 4,
   },
   {
-    title:
-      "Learn backup and restore, and actually restore into a scratch database",
+    title: "Learn backup and restore, and actually restore into a scratch database",
     category: "Database",
     status: "done",
     priority: "high",
@@ -1878,8 +1828,7 @@ export const seedTasks: SeedTask[] = [
     span: 5,
   },
   {
-    title:
-      "Learn read replicas and replication lag, and where lag breaks correctness",
+    title: "Learn read replicas and replication lag, and where lag breaks correctness",
     category: "Database",
     status: "done",
     priority: "mid",
@@ -1889,8 +1838,7 @@ export const seedTasks: SeedTask[] = [
     span: 5,
   },
   {
-    title:
-      "Learn full text search in the database before reaching for a search engine",
+    title: "Learn full text search in the database before reaching for a search engine",
     category: "Database",
     status: "doing",
     priority: "mid",
@@ -1920,8 +1868,7 @@ export const seedTasks: SeedTask[] = [
     span: 6,
   },
   {
-    title:
-      "Learn database-side data types properly: numeric versus float for money",
+    title: "Learn database-side data types properly: numeric versus float for money",
     category: "Database",
     status: "done",
     priority: "high",
@@ -1991,8 +1938,7 @@ export const seedTasks: SeedTask[] = [
     span: 15,
   },
   {
-    title:
-      "Learn when Redis is the wrong tool and a database index is the answer",
+    title: "Learn when Redis is the wrong tool and a database index is the answer",
     category: "Database",
     status: "doing",
     priority: "mid",
@@ -2002,8 +1948,7 @@ export const seedTasks: SeedTask[] = [
     span: 13,
   },
   {
-    title:
-      "Learn document databases and where the schema flexibility actually pays",
+    title: "Learn document databases and where the schema flexibility actually pays",
     category: "Database",
     status: "todo",
     priority: "mid",
@@ -2023,8 +1968,7 @@ export const seedTasks: SeedTask[] = [
     span: 8,
   },
   {
-    title:
-      "Learn eventual consistency and what it means for a read after write",
+    title: "Learn eventual consistency and what it means for a read after write",
     category: "Database",
     status: "todo",
     priority: "mid",
@@ -2076,8 +2020,7 @@ export const seedTasks: SeedTask[] = [
     span: 5,
   },
   {
-    title:
-      "Learn arrays versus linked lists and the cache behaviour behind the difference",
+    title: "Learn arrays versus linked lists and the cache behaviour behind the difference",
     category: "CS Fundamentals",
     status: "done",
     priority: "high",
@@ -2117,8 +2060,7 @@ export const seedTasks: SeedTask[] = [
     span: 3,
   },
   {
-    title:
-      "Learn binary search and get the boundary conditions right every time",
+    title: "Learn binary search and get the boundary conditions right every time",
     category: "CS Fundamentals",
     status: "done",
     priority: "high",
@@ -2228,8 +2170,7 @@ export const seedTasks: SeedTask[] = [
     span: 3,
   },
   {
-    title:
-      "Implement breadth-first search and use it for shortest path on an unweighted graph",
+    title: "Implement breadth-first search and use it for shortest path on an unweighted graph",
     category: "CS Fundamentals",
     status: "done",
     priority: "high",
@@ -2289,8 +2230,7 @@ export const seedTasks: SeedTask[] = [
     span: 5,
   },
   {
-    title:
-      "Learn memoisation and turn an exponential recursion into a linear one",
+    title: "Learn memoisation and turn an exponential recursion into a linear one",
     category: "CS Fundamentals",
     status: "done",
     priority: "high",
@@ -2300,8 +2240,7 @@ export const seedTasks: SeedTask[] = [
     span: 5,
   },
   {
-    title:
-      "Learn dynamic programming: state, transition and order of evaluation",
+    title: "Learn dynamic programming: state, transition and order of evaluation",
     category: "CS Fundamentals",
     status: "todo",
     priority: "high",
@@ -2311,8 +2250,7 @@ export const seedTasks: SeedTask[] = [
     span: 10,
   },
   {
-    title:
-      "Work the classic DP problems: knapsack, edit distance, longest common subsequence",
+    title: "Work the classic DP problems: knapsack, edit distance, longest common subsequence",
     category: "CS Fundamentals",
     status: "done",
     priority: "mid",
@@ -2322,8 +2260,7 @@ export const seedTasks: SeedTask[] = [
     span: 10,
   },
   {
-    title:
-      "Learn greedy algorithms and how to tell when greedy is actually correct",
+    title: "Learn greedy algorithms and how to tell when greedy is actually correct",
     category: "CS Fundamentals",
     status: "todo",
     priority: "mid",
@@ -2423,8 +2360,7 @@ export const seedTasks: SeedTask[] = [
     span: 4,
   },
   {
-    title:
-      "Learn how a filesystem stores a file: inodes, blocks and directories",
+    title: "Learn how a filesystem stores a file: inodes, blocks and directories",
     category: "CS Fundamentals",
     status: "todo",
     priority: "low",
@@ -2454,8 +2390,7 @@ export const seedTasks: SeedTask[] = [
     span: 6,
   },
   {
-    title:
-      "Learn what TLS actually does: key exchange, certificates, and the handshake cost",
+    title: "Learn what TLS actually does: key exchange, certificates, and the handshake cost",
     category: "CS Fundamentals",
     status: "done",
     priority: "mid",
@@ -2465,8 +2400,7 @@ export const seedTasks: SeedTask[] = [
     span: 5,
   },
   {
-    title:
-      "Learn DNS resolution end to end, from stub resolver to authoritative server",
+    title: "Learn DNS resolution end to end, from stub resolver to authoritative server",
     category: "CS Fundamentals",
     status: "done",
     priority: "mid",
@@ -2476,8 +2410,7 @@ export const seedTasks: SeedTask[] = [
     span: 4,
   },
   {
-    title:
-      "Learn hashing versus encryption versus encoding, and stop mixing them up",
+    title: "Learn hashing versus encryption versus encoding, and stop mixing them up",
     category: "CS Fundamentals",
     status: "done",
     priority: "high",
@@ -2527,8 +2460,7 @@ export const seedTasks: SeedTask[] = [
     span: 12,
   },
   {
-    title:
-      "Learn the actor model and message passing as an alternative to locks",
+    title: "Learn the actor model and message passing as an alternative to locks",
     category: "CS Fundamentals",
     status: "todo",
     priority: "low",
@@ -2538,8 +2470,7 @@ export const seedTasks: SeedTask[] = [
     span: 12,
   },
   {
-    title:
-      "Learn consensus at a conceptual level: quorum, leader election, split brain",
+    title: "Learn consensus at a conceptual level: quorum, leader election, split brain",
     category: "CS Fundamentals",
     status: "todo",
     priority: "mid",
@@ -2549,8 +2480,7 @@ export const seedTasks: SeedTask[] = [
     span: 16,
   },
   {
-    title:
-      "Learn idempotency and exactly-once as a distributed systems problem",
+    title: "Learn idempotency and exactly-once as a distributed systems problem",
     category: "CS Fundamentals",
     status: "todo",
     priority: "mid",
@@ -2560,8 +2490,7 @@ export const seedTasks: SeedTask[] = [
     span: 12,
   },
   {
-    title:
-      "Learn regular expressions properly, including catastrophic backtracking",
+    title: "Learn regular expressions properly, including catastrophic backtracking",
     category: "CS Fundamentals",
     status: "todo",
     priority: "mid",
@@ -2571,8 +2500,7 @@ export const seedTasks: SeedTask[] = [
     span: 10,
   },
   {
-    title:
-      "Learn the theory behind property-based testing and try it on a parser",
+    title: "Learn the theory behind property-based testing and try it on a parser",
     category: "CS Fundamentals",
     status: "todo",
     priority: "low",
@@ -2654,8 +2582,7 @@ export const seedTasks: SeedTask[] = [
     span: 4,
   },
   {
-    title:
-      "Run two AWS Cloud Practitioner practice exams and keep a mistake list",
+    title: "Run two AWS Cloud Practitioner practice exams and keep a mistake list",
     category: "Certification",
     status: "done",
     priority: "high",
@@ -2675,8 +2602,7 @@ export const seedTasks: SeedTask[] = [
     span: 1,
   },
   {
-    title:
-      "Read the AWS Solutions Architect Associate exam guide and plan the weeks",
+    title: "Read the AWS Solutions Architect Associate exam guide and plan the weeks",
     category: "Certification",
     status: "done",
     priority: "high",
@@ -2696,8 +2622,7 @@ export const seedTasks: SeedTask[] = [
     span: 11,
   },
   {
-    title:
-      "Study IAM in depth: policies, roles, trust relationships, permission boundaries",
+    title: "Study IAM in depth: policies, roles, trust relationships, permission boundaries",
     category: "Certification",
     status: "done",
     priority: "high",
@@ -2707,8 +2632,7 @@ export const seedTasks: SeedTask[] = [
     span: 10,
   },
   {
-    title:
-      "Study S3 in depth: storage classes, lifecycle, replication, encryption",
+    title: "Study S3 in depth: storage classes, lifecycle, replication, encryption",
     category: "Certification",
     status: "done",
     priority: "high",
@@ -2788,8 +2712,7 @@ export const seedTasks: SeedTask[] = [
     span: 9,
   },
   {
-    title:
-      "Review every wrong answer and write down why the right one was right",
+    title: "Review every wrong answer and write down why the right one was right",
     category: "Certification",
     status: "doing",
     priority: "high",
@@ -2809,8 +2732,7 @@ export const seedTasks: SeedTask[] = [
     span: 1,
   },
   {
-    title:
-      "Read the 基本情報技術者 syllabus and map it to what is already known",
+    title: "Read the 基本情報技術者 syllabus and map it to what is already known",
     category: "Certification",
     status: "done",
     priority: "mid",
@@ -2880,8 +2802,7 @@ export const seedTasks: SeedTask[] = [
     span: 1,
   },
   {
-    title:
-      "Study for the AWS Developer Associate: deployment and CI/CD domains",
+    title: "Study for the AWS Developer Associate: deployment and CI/CD domains",
     category: "Certification",
     status: "done",
     priority: "mid",
@@ -3031,8 +2952,7 @@ export const seedTasks: SeedTask[] = [
     span: 55,
   },
   {
-    title:
-      "Study advanced AWS networking: Transit Gateway, Direct Connect, hybrid DNS",
+    title: "Study advanced AWS networking: Transit Gateway, Direct Connect, hybrid DNS",
     category: "Certification",
     status: "todo",
     priority: "high",
@@ -3042,8 +2962,7 @@ export const seedTasks: SeedTask[] = [
     span: 30,
   },
   {
-    title:
-      "Study AWS multi-account strategy: Organizations, Control Tower, SCPs",
+    title: "Study AWS multi-account strategy: Organizations, Control Tower, SCPs",
     category: "Certification",
     status: "todo",
     priority: "mid",
@@ -3092,4 +3011,4 @@ export const seedTasks: SeedTask[] = [
     offsetStart: 196,
     span: 6,
   },
-];
+]
