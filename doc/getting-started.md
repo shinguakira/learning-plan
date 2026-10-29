@@ -7,7 +7,7 @@ the same setup as a short reference; this is the version with the reasons attach
 ## Getting it running
 
 You need **Node** — the runtime the dev server and the build both run on. This
-project wants 20.19+, 22.13+ or 24+, which is written down in `engines` in
+project wants 24 or newer, which is written down in `engines` in
 [`package.json`](../frontend/package.json), so `npm install` warns you if you are outside it.
 
 ```bash
