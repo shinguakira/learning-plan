@@ -5,6 +5,11 @@
       "inputs": ["prisma/schema.prisma"],
       "cache": false
     },
+    "openapi": {
+      "dependsOn": ["db-generate"],
+      "inputs": ["src/**", "scripts/**"],
+      "outputs": ["openapi.json"]
+    },
     "build": {
       "dependsOn": ["^build", "db-generate"],
       "outputs": ["dist/**"]
