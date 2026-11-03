@@ -7,25 +7,21 @@ the same setup as a short reference; this is the version with the reasons attach
 ## Getting it running
 
 You need **Node** — the runtime the dev server and the build both run on. This
-project wants 24 or newer, which is written down in `engines` in
-[`package.json`](../frontend/package.json), so `npm install` warns you if you are outside it.
+project wants 24 or newer, which is written down in `engines` in the root
+[`package.json`](../package.json), so `npm install` warns you if you are outside it.
+
+The two packages are one npm workspace, so both install together from the repository
+root, and both dev servers start together:
 
 ```bash
 node -v
 npm install
+cp backend/.env.example backend/.env
 npm run dev
 ```
 
 Then open http://localhost:5173. Sample data loads on each visit to Tasks. Task edits
 last until you leave that page or reload.
-
-Install and start the backend too, in another terminal:
-
-```bash
-npm --prefix ../backend install
-cp ../backend/.env.example ../backend/.env
-npm --prefix ../backend run dev
-```
 
 The task page loads its sample plan from the backend. The chat page calls
 `/api/chat` on the same backend. Configure the provider in `backend/.env`; the
