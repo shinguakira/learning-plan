@@ -16,6 +16,7 @@
     "lint-fix": "turbo run lint-fix",
     "type-check": "turbo run type-check",
     "db-generate": "turbo run db-generate",
+    "openapi": "turbo run openapi",
     "test-unit": "turbo run test-unit",
     "test-e2e": "turbo run test-e2e"
   },

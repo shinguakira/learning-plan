@@ -3,7 +3,10 @@ import { fileURLToPath } from "node:url"
 
 import autoload from "@fastify/autoload"
 import cors from "@fastify/cors"
+import swagger from "@fastify/swagger"
 import Fastify from "fastify"
+
+import { OPENAPI_DOCUMENT } from "./constants/openapi.js"
 
 const ALLOWED_ORIGIN = process.env.ALLOWED_ORIGIN ?? "http://localhost:5173"
 
@@ -13,6 +16,9 @@ app.register(cors, {
   origin: ALLOWED_ORIGIN,
   methods: ["GET", "POST", "PUT", "OPTIONS"],
 })
+
+/** Collects each route's schema as it registers, so it has to come before them. */
+app.register(swagger, { openapi: OPENAPI_DOCUMENT })
 
 /** Every file here registers its own route; adding a controller never touches this file. */
 app.register(autoload, {

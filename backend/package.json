@@ -16,7 +16,8 @@
     "start": "node dist/index.js",
     "type-check": "tsc --noEmit",
     "db-studio": "prisma studio",
-    "db-generate": "prisma generate"
+    "db-generate": "prisma generate",
+    "openapi": "tsx scripts/generateOpenapi.ts"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"
@@ -38,6 +39,7 @@
   "dependencies": {
     "@fastify/autoload": "^6.5.0",
     "@fastify/cors": "^11.3.0",
+    "@fastify/swagger": "^9.9.3",
     "@prisma/client": "^6.19.3",
     "fastify": "^5.12.5",
     "pdfkit": "^0.20.2"
