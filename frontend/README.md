@@ -28,21 +28,23 @@ Requires **Node 24 or newer** — declared in `engines`, so `npm install` warns 
 are on anything older. Odd-numbered releases such as Node 25 are not supported by
 ESLint 10 and will warn.
 
+This package is one half of an npm workspace, so dependencies install from the
+repository root:
+
 ```bash
 node -v          # check you are in range
-npm install
+cd .. && npm install
 ```
 
-To run the app:
+`npm run dev` from the root starts this package and the backend together. To start
+only this one, run it from here:
 
 ```bash
 npm run dev
 ```
 
-Run `npm --prefix ../backend install` once, then start
-`npm --prefix ../backend run dev` in another terminal.
-
-Open http://localhost:5173.
+Open http://localhost:5173. Without the backend running, the task and chat pages have
+nothing to call.
 
 To run the end-to-end tests, download the browser once first:
 

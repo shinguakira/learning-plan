@@ -33,3 +33,6 @@ playwright-report
 blob-report
 
 .vercel
+
+# turborepo
+.turbo
