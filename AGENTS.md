@@ -77,7 +77,7 @@ Always the `@/` alias, never relative paths. Wired in `frontend/vite.config.ts`,
 - Unions and branded types over bare `string`. Dates are `ISODate`, minted only by
   `frontend/src/utils/date.ts`.
 - `noUncheckedIndexedAccess` is on. Fix what it reports structurally, never with `!`.
-- ESLint is deliberately not type-aware.
+- oxlint reads syntax only; it is not type-aware.
 
 ## React
 
