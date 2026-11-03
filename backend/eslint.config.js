@@ -9,7 +9,7 @@ export default tseslint.config(
   // No .js is ever linted: only the globs below are, and both are TypeScript.
   { ignores: ["dist", "eslint.config.js"] },
   {
-    files: ["src/**/*.ts", "prisma/**/*.ts"],
+    files: ["src/**/*.ts", "prisma/**/*.ts", "scripts/**/*.ts"],
     extends: [js.configs.recommended, tseslint.configs.recommended],
     languageOptions: { globals: globals.node },
     plugins: { "simple-import-sort": simpleImportSort, "unused-imports": unusedImports },
