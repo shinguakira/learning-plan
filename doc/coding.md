@@ -51,7 +51,7 @@ rather than silenced with `!`. The only `!` in `src/` is `getElementById('root')
 `main.tsx`.
 
 Each check is its own script. `npm run type-check` is `tsc`; `npm run build` only
-builds; ESLint is deliberately not type-aware. No tool reports what another already
+builds; oxlint reads syntax only. No tool reports what another already
 reports.
 
 ## Styling
@@ -82,7 +82,7 @@ state the theme has no token for. Category colours were validated for lightness,
 chroma, colour-vision separation and surface contrast rather than picked by eye; the
 reasoning is in the comment above them.
 
-ESLint's `react-refresh/only-export-components` is switched off for
+oxlint's `react/only-export-components` is switched off for
 `src/components/ui/**`: shadcn exports its cva variants alongside the component by
 design. The rule stays on everywhere else.
 
