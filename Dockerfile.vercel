@@ -1,11 +1,10 @@
 # Production only. Local development is still `npm run dev` with tsx - nothing
 # here is needed to work on the backend.
 #
-# Vercel builds this image and runs it as a Function. See doc/deployment.md.
-#
-# The build context is the repository root, not `backend/`: npm keeps one
-# lockfile for the whole workspace, and `turbo prune` needs it to produce the
-# backend's subset of it.
+# This lives at the repository root because Vercel builds a container service
+# with the entrypoint's own folder as the build context. `turbo prune` needs the
+# root manifest and the single workspace lockfile, so the context has to be the
+# root, so the file has to be here.
 
 FROM node:24-alpine AS prune
 WORKDIR /repo
