@@ -1,4 +1,4 @@
-import { type Job as JobRow, Prisma } from "@prisma/client"
+import { Prisma, type Job as JobRow } from "@prisma/client"
 
 import { EMPLOYMENT_TYPE_API } from "../constants/job.js"
 import { jobRepository } from "../repositories/jobRepository.js"

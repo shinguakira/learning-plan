@@ -1,4 +1,4 @@
-import { type Certificate as CertificateRow, Prisma } from "@prisma/client"
+import { Prisma, type Certificate as CertificateRow } from "@prisma/client"
 
 import { certificateRepository } from "../repositories/certificateRepository.js"
 import type { Certificate } from "../types/certificate.js"
