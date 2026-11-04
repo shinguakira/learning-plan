@@ -64,16 +64,12 @@ export function SkillForm({
       <div className="grid grid-cols-1 items-end gap-4 sm:grid-cols-2">
         {skill === null ? (
           <FormField
-            label="PostApiSkillsResponse"
+            label="Skill"
             htmlFor="skill-option"
             error={touched && !isOther ? nameError : null}
           >
             <Select value={selectedOption} onValueChange={handleSelect} disabled={loading}>
-              <SelectTrigger
-                id="skill-option"
-                aria-label="PostApiSkillsResponse"
-                className="w-full"
-              >
+              <SelectTrigger id="skill-option" aria-label="Skill" className="w-full">
                 <SelectValue placeholder={loading ? "Loading skills…" : "Select a skill"} />
               </SelectTrigger>
               <SelectContent>
@@ -86,13 +82,13 @@ export function SkillForm({
             </Select>
             {error !== null && (
               <p className="text-muted-foreground mt-1 text-xs">
-                PostApiSkillsResponse list unavailable. Use {OTHER_SKILL_OPTION} to type one.
+                Skill list unavailable. Use {OTHER_SKILL_OPTION} to type one.
               </p>
             )}
           </FormField>
         ) : (
           <FormField
-            label="PostApiSkillsResponse"
+            label="Skill"
             htmlFor="skill-registered-name"
             error={touched ? nameError : null}
             className="min-w-0"

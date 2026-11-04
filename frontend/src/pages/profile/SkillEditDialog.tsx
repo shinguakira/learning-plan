@@ -43,7 +43,7 @@ export function SkillEditDialog({
                 .mutateAsync({ path: { id: skill.id }, body: draft })
                 .then((updated) => {
                   onEdited(skill.id, updated)
-                  toast.success("PostApiSkillsResponse updated successfully.")
+                  toast.success("Skill updated successfully.")
                   onClose()
                 })
                 .catch((error: unknown) => {
