@@ -1,19 +1,18 @@
+import type { PostApiSkillsResponse } from "@/api/generated"
 import { useEffect, useRef, useState } from "react"
 import { fetchProfile } from "@/api/profile"
 import { createJob, updateJob } from "@/api/job"
-import { createSkill, updateSkill } from "@/api/skill"
 import { createStrength, updateStrength } from "@/api/strength"
 import { createCertificate, updateCertificate } from "@/api/certificate"
 import { EMPTY_PROFILE_STATE } from "@/constants/profile"
 import type { ProfileState } from "@/types/profile"
 import type { MockUser } from "@/types/user"
 import type { Job, JobDraft } from "@/types/job"
-import type { Skill, SkillDraft } from "@/types/skill"
 import type { Certificate, CertificateDraft } from "@/types/certificate"
 import type { Strength, StrengthDraft } from "@/types/strength"
 
 export type ProfileApi = {
-  skills: Skill[]
+  skills: PostApiSkillsResponse[]
   jobs: Job[]
   certificates: Certificate[]
   strengths: Strength[]
@@ -21,8 +20,8 @@ export type ProfileApi = {
   loading: boolean
   /** Set if the initial seed request failed; all lists still work from empty. */
   error: string | null
-  addSkill: (draft: SkillDraft) => Promise<void>
-  editSkill: (id: string, draft: SkillDraft) => Promise<void>
+  addSkill: (skill: PostApiSkillsResponse) => void
+  editSkill: (id: string, skill: PostApiSkillsResponse) => void
   removeSkill: (id: string) => void
   addJob: (draft: JobDraft) => Promise<void>
   editJob: (id: string, draft: JobDraft) => Promise<void>
@@ -106,12 +105,10 @@ export function useProfile(user: MockUser): ProfileApi {
 
   return {
     ...(profiles[user] ?? EMPTY_PROFILE_STATE),
-    addSkill: async (draft) => {
-      const skill = await createSkill(user, draft)
+    addSkill: (skill) => {
       updateProfile((profile) => ({ ...profile, skills: [skill, ...profile.skills] }))
     },
-    editSkill: async (id, draft) => {
-      const skill = await updateSkill(id, draft)
+    editSkill: (id, skill) => {
       updateProfile((profile) => ({
         ...profile,
         skills: profile.skills.map((existing) => (existing.id === id ? skill : existing)),

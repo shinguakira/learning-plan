@@ -1,3 +1,4 @@
+import type { PostApiSkillsResponse, PutApiSkillsByIdData, SkillLevel } from "@/api/generated"
 import { useState } from "react"
 import type { FormEvent } from "react"
 import { Plus, Save } from "lucide-react"
@@ -22,7 +23,6 @@ import { useSkillDraft } from "@/hooks/useSkillDraft"
 import { useTechnologies } from "@/hooks/useTechnologies"
 import { toSkillDraft } from "@/utils/skill"
 import { FormField } from "@/components/form/FormField"
-import type { Skill, SkillDraft, SkillLevel } from "@/types/skill"
 
 /** `skill` is the row being edited, or null when the form registers a new one. */
 export function SkillForm({
@@ -30,9 +30,9 @@ export function SkillForm({
   existingNames,
   onSubmit,
 }: {
-  skill: Skill | null
+  skill: PostApiSkillsResponse | null
   existingNames: readonly string[]
-  onSubmit: (draft: SkillDraft) => Promise<void>
+  onSubmit: (draft: PutApiSkillsByIdData["body"]) => Promise<void>
 }) {
   const { technologies, loading, error } = useTechnologies()
   const [selectedOption, setSelectedOption] = useState("")
@@ -64,12 +64,16 @@ export function SkillForm({
       <div className="grid grid-cols-1 items-end gap-4 sm:grid-cols-2">
         {skill === null ? (
           <FormField
-            label="Skill"
+            label="PostApiSkillsResponse"
             htmlFor="skill-option"
             error={touched && !isOther ? nameError : null}
           >
             <Select value={selectedOption} onValueChange={handleSelect} disabled={loading}>
-              <SelectTrigger id="skill-option" aria-label="Skill" className="w-full">
+              <SelectTrigger
+                id="skill-option"
+                aria-label="PostApiSkillsResponse"
+                className="w-full"
+              >
                 <SelectValue placeholder={loading ? "Loading skills…" : "Select a skill"} />
               </SelectTrigger>
               <SelectContent>
@@ -82,13 +86,13 @@ export function SkillForm({
             </Select>
             {error !== null && (
               <p className="text-muted-foreground mt-1 text-xs">
-                Skill list unavailable. Use {OTHER_SKILL_OPTION} to type one.
+                PostApiSkillsResponse list unavailable. Use {OTHER_SKILL_OPTION} to type one.
               </p>
             )}
           </FormField>
         ) : (
           <FormField
-            label="Skill"
+            label="PostApiSkillsResponse"
             htmlFor="skill-registered-name"
             error={touched ? nameError : null}
             className="min-w-0"

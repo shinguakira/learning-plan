@@ -1,10 +1,11 @@
-import type { SkillDraft, SkillLevel } from "@/types/skill"
+import { SkillLevel } from "@/api/generated"
+import type { PutApiSkillsByIdData } from "@/api/generated"
 
-export const SKILL_LEVELS = ["beginner", "intermediate", "advanced", "expert"] as const
+export const SKILL_LEVELS = Object.values(SkillLevel)
 
 export const YEARS_OF_EXPERIENCE = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] as const
 
-export const EMPTY_SKILL_DRAFT: SkillDraft = {
+export const EMPTY_SKILL_DRAFT: PutApiSkillsByIdData["body"] = {
   name: "",
   level: "beginner",
   yearsOfExperience: 1,
@@ -32,5 +33,3 @@ export const SKILL_LEVEL_TEXT: Record<SkillLevel, string> = {
   advanced: "text-amber-700 dark:text-amber-400",
   expert: "text-emerald-700 dark:text-emerald-400",
 }
-
-export const SKILLS_API_URL = "/api/skills"
