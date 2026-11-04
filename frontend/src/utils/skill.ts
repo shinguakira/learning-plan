@@ -1,16 +1,16 @@
+import type { PostApiSkillsResponse, PutApiSkillsByIdData, SkillLevel } from "@/api/generated"
 import { SKILL_LEVELS } from "@/constants/skill"
-import type { Skill, SkillDraft, SkillLevel } from "@/types/skill"
 
 export type SkillGroup = {
   level: SkillLevel
-  skills: Skill[]
+  skills: PostApiSkillsResponse[]
 }
 
 /**
  * Bucket skills by level, expert first, each bucket in registration order.
  * A level with nothing registered is left out rather than shown empty.
  */
-export function groupSkillsByLevel(skills: readonly Skill[]): SkillGroup[] {
+export function groupSkillsByLevel(skills: readonly PostApiSkillsResponse[]): SkillGroup[] {
   return [...SKILL_LEVELS]
     .reverse()
     .map((level) => ({ level, skills: skills.filter((skill) => skill.level === level) }))
@@ -18,6 +18,10 @@ export function groupSkillsByLevel(skills: readonly Skill[]): SkillGroup[] {
 }
 
 /** Drops the fields the server owns, so a registered skill can seed the edit form. */
-export function toSkillDraft({ name, level, yearsOfExperience }: Skill): SkillDraft {
+export function toSkillDraft({
+  name,
+  level,
+  yearsOfExperience,
+}: PostApiSkillsResponse): PutApiSkillsByIdData["body"] {
   return { name, level, yearsOfExperience }
 }

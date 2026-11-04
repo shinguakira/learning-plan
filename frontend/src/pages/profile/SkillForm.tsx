@@ -1,3 +1,4 @@
+import type { PostApiSkillsResponse, PutApiSkillsByIdData, SkillLevel } from "@/api/generated"
 import { useState } from "react"
 import type { FormEvent } from "react"
 import { Plus, Save } from "lucide-react"
@@ -22,7 +23,6 @@ import { useSkillDraft } from "@/hooks/useSkillDraft"
 import { useTechnologies } from "@/hooks/useTechnologies"
 import { toSkillDraft } from "@/utils/skill"
 import { FormField } from "@/components/form/FormField"
-import type { Skill, SkillDraft, SkillLevel } from "@/types/skill"
 
 /** `skill` is the row being edited, or null when the form registers a new one. */
 export function SkillForm({
@@ -30,9 +30,9 @@ export function SkillForm({
   existingNames,
   onSubmit,
 }: {
-  skill: Skill | null
+  skill: PostApiSkillsResponse | null
   existingNames: readonly string[]
-  onSubmit: (draft: SkillDraft) => Promise<void>
+  onSubmit: (draft: PutApiSkillsByIdData["body"]) => Promise<void>
 }) {
   const { technologies, loading, error } = useTechnologies()
   const [selectedOption, setSelectedOption] = useState("")

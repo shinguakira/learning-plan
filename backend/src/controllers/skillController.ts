@@ -1,8 +1,10 @@
 import type { FastifyInstance, FastifyReply } from "fastify"
 
+import { ERROR_SCHEMA } from "../constants/errorSchema.js"
 import {
   SKILL_CREATE_SCHEMA,
   SKILL_ID_SCHEMA,
+  SKILL_SCHEMA,
   SKILL_UPDATE_SCHEMA,
 } from "../constants/skillSchema.js"
 import { skillService } from "../services/skillService.js"
@@ -11,7 +13,12 @@ import type { SkillCreateRequest, SkillUpdateRequest } from "../types/skillDraft
 export default async function skillController(app: FastifyInstance): Promise<void> {
   app.post<{ Body: SkillCreateRequest }>(
     "/api/skills",
-    { schema: { body: SKILL_CREATE_SCHEMA } },
+    {
+      schema: {
+        body: SKILL_CREATE_SCHEMA,
+        response: { 201: SKILL_SCHEMA, 409: ERROR_SCHEMA },
+      },
+    },
     async (request, reply: FastifyReply) => {
       const { user, name } = request.body
       const skill = await skillService.addSkill(request.body)
@@ -25,7 +32,13 @@ export default async function skillController(app: FastifyInstance): Promise<voi
 
   app.put<{ Params: { id: string }; Body: SkillUpdateRequest }>(
     "/api/skills/:id",
-    { schema: { params: SKILL_ID_SCHEMA, body: SKILL_UPDATE_SCHEMA } },
+    {
+      schema: {
+        params: SKILL_ID_SCHEMA,
+        body: SKILL_UPDATE_SCHEMA,
+        response: { 200: SKILL_SCHEMA, 404: ERROR_SCHEMA, 409: ERROR_SCHEMA },
+      },
+    },
     async (request, reply: FastifyReply) => {
       const { id } = request.params
       if ((await skillService.getSkill(id)) === null) {

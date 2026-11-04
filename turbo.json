@@ -10,6 +10,11 @@
       "inputs": ["src/**", "scripts/**"],
       "outputs": ["openapi.json"]
     },
+    "generate-api": {
+      "dependsOn": ["learning-plan-backend#openapi"],
+      "inputs": ["openapi-ts.config.ts"],
+      "outputs": ["src/api/generated/**"]
+    },
     "build": {
       "dependsOn": ["^build", "db-generate"],
       "outputs": ["dist/**"]

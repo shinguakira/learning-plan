@@ -17,6 +17,7 @@
     "type-check": "turbo run type-check",
     "db-generate": "turbo run db-generate",
     "openapi": "turbo run openapi",
+    "generate-api": "turbo run generate-api",
     "test-unit": "turbo run test-unit",
     "test-e2e": "turbo run test-e2e"
   },

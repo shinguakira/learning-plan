@@ -1,3 +1,4 @@
+import type { PostApiSkillsResponse } from "@/api/generated"
 import { useState } from "react"
 import { Award, Pencil, X } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
@@ -8,18 +9,17 @@ import { SKILL_LEVEL_CHIP, SKILL_LEVEL_LABEL, SKILL_LEVEL_TEXT } from "@/constan
 import { groupSkillsByLevel } from "@/utils/skill"
 import { SkillEditDialog } from "@/pages/profile/SkillEditDialog"
 import { SkillLevelMeter } from "@/pages/profile/SkillLevelMeter"
-import type { Skill, SkillDraft } from "@/types/skill"
 
 export function SkillList({
   skills,
-  onEdit,
+  onEdited,
   onRemove,
 }: {
-  skills: Skill[]
-  onEdit: (id: string, draft: SkillDraft) => Promise<void>
+  skills: PostApiSkillsResponse[]
+  onEdited: (id: string, skill: PostApiSkillsResponse) => void
   onRemove: (id: string) => void
 }) {
-  const [editing, setEditing] = useState<Skill | null>(null)
+  const [editing, setEditing] = useState<PostApiSkillsResponse | null>(null)
 
   if (skills.length === 0) {
     return (
@@ -101,7 +101,7 @@ export function SkillList({
         existingNames={skills
           .filter((skill) => skill.id !== editing?.id)
           .map((skill) => skill.name)}
-        onEdit={onEdit}
+        onEdited={onEdited}
         onClose={() => setEditing(null)}
       />
     </div>
