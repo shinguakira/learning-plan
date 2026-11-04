@@ -28,3 +28,17 @@ export const SKILL_ID_SCHEMA = {
   required: ["id"],
   properties: { id: { type: "string", minLength: 1 } },
 } as const
+
+/**
+ * What a skill route sends back. Fastify serialises through this, so every field
+ * the client is typed against has to be listed here.
+ */
+export const SKILL_SCHEMA = {
+  type: "object",
+  required: ["id", "name", "level", "yearsOfExperience", "createdAt"],
+  properties: {
+    id: { type: "string" },
+    ...SKILL_FIELDS,
+    createdAt: { type: "string", format: "date-time" },
+  },
+} as const
