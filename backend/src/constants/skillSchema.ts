@@ -1,8 +1,14 @@
 import { MOCK_USERS } from "./user.js"
 
+export const SKILL_LEVEL_SCHEMA = {
+  $id: "skillLevel",
+  type: "string",
+  enum: ["beginner", "intermediate", "advanced", "expert"],
+} as const
+
 const SKILL_FIELDS = {
   name: { type: "string", minLength: 1 },
-  level: { type: "string", enum: ["beginner", "intermediate", "advanced", "expert"] },
+  level: { $ref: "skillLevel#" },
   yearsOfExperience: { type: "integer", minimum: 0 },
 } as const
 
@@ -29,10 +35,6 @@ export const SKILL_ID_SCHEMA = {
   properties: { id: { type: "string", minLength: 1 } },
 } as const
 
-/**
- * What a skill route sends back. Fastify serialises through this, so every field
- * the client is typed against has to be listed here.
- */
 export const SKILL_SCHEMA = {
   type: "object",
   required: ["id", "name", "level", "yearsOfExperience", "createdAt"],

@@ -6,7 +6,17 @@
     "version": "0.0.0"
   },
   "components": {
-    "schemas": {}
+    "schemas": {
+      "skillLevel": {
+        "type": "string",
+        "enum": [
+          "beginner",
+          "intermediate",
+          "advanced",
+          "expert"
+        ]
+      }
+    }
   },
   "paths": {
     "/api/certificate": {
@@ -601,13 +611,7 @@
                     "minLength": 1
                   },
                   "level": {
-                    "type": "string",
-                    "enum": [
-                      "beginner",
-                      "intermediate",
-                      "advanced",
-                      "expert"
-                    ]
+                    "$ref": "#/components/schemas/skillLevel"
                   },
                   "yearsOfExperience": {
                     "type": "integer",
@@ -641,13 +645,7 @@
                       "minLength": 1
                     },
                     "level": {
-                      "type": "string",
-                      "enum": [
-                        "beginner",
-                        "intermediate",
-                        "advanced",
-                        "expert"
-                      ]
+                      "$ref": "#/components/schemas/skillLevel"
                     },
                     "yearsOfExperience": {
                       "type": "integer",
@@ -703,13 +701,7 @@
                     "minLength": 1
                   },
                   "level": {
-                    "type": "string",
-                    "enum": [
-                      "beginner",
-                      "intermediate",
-                      "advanced",
-                      "expert"
-                    ]
+                    "$ref": "#/components/schemas/skillLevel"
                   },
                   "yearsOfExperience": {
                     "type": "integer",
@@ -754,13 +746,7 @@
                       "minLength": 1
                     },
                     "level": {
-                      "type": "string",
-                      "enum": [
-                        "beginner",
-                        "intermediate",
-                        "advanced",
-                        "expert"
-                      ]
+                      "$ref": "#/components/schemas/skillLevel"
                     },
                     "yearsOfExperience": {
                       "type": "integer",

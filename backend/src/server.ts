@@ -7,6 +7,7 @@ import swagger from "@fastify/swagger"
 import Fastify from "fastify"
 
 import { OPENAPI_DOCUMENT } from "./constants/openapi.js"
+import { SKILL_LEVEL_SCHEMA } from "./constants/skillSchema.js"
 
 const ALLOWED_ORIGIN = process.env.ALLOWED_ORIGIN ?? "http://localhost:5173"
 
@@ -18,7 +19,12 @@ app.register(cors, {
 })
 
 /** Collects each route's schema as it registers, so it has to come before them. */
-app.register(swagger, { openapi: OPENAPI_DOCUMENT })
+app.register(swagger, {
+  openapi: OPENAPI_DOCUMENT,
+  refResolver: { buildLocalReference: (json) => String(json.$id) },
+})
+
+app.addSchema(SKILL_LEVEL_SCHEMA)
 
 /** Every file here registers its own route; adding a controller never touches this file. */
 app.register(autoload, {
