@@ -37,7 +37,18 @@ export function StrengthForm({
     try {
       await onSubmit(ready)
     } catch (caught: unknown) {
-      setError(caught instanceof Error ? caught.message : "Could not save the strength.")
+      if (caught instanceof TypeError) {
+        setError("Could not reach the backend. Is it running?")
+      } else if (
+        typeof caught === "object" &&
+        caught !== null &&
+        "message" in caught &&
+        typeof caught.message === "string"
+      ) {
+        setError(caught.message)
+      } else {
+        setError("Could not save the strength.")
+      }
     } finally {
       setSaving(false)
     }

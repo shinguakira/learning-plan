@@ -3,7 +3,7 @@ import { Pencil, Sparkles, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { StrengthEditDialog } from "@/pages/profile/StrengthEditDialog"
-import type { Strength, StrengthDraft } from "@/types/strength"
+import type { Strength } from "@/types/strength"
 
 export function StrengthList({
   strengths,
@@ -11,7 +11,7 @@ export function StrengthList({
   onRemove,
 }: {
   strengths: Strength[]
-  onEdit: (id: string, draft: StrengthDraft) => Promise<void>
+  onEdit: (id: string, strength: Strength) => void
   onRemove: (id: string) => void
 }) {
   const [editingId, setEditingId] = useState<string | null>(null)

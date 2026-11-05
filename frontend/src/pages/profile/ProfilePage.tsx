@@ -1,7 +1,10 @@
 import { useMutation } from "@tanstack/react-query"
 import { Award, Briefcase, Code, Download, FileText, Sparkles } from "lucide-react"
 import { toast } from "sonner"
-import { postApiSkillsMutation } from "@/api/generated/@tanstack/react-query.gen"
+import {
+  postApiSkillsMutation,
+  postApiStrengthMutation,
+} from "@/api/generated/@tanstack/react-query.gen"
 import { Button } from "@/components/ui/button"
 import { useDownloadProfileCsv } from "@/hooks/useDownloadProfileCsv"
 import { useDownloadProfilePdf } from "@/hooks/useDownloadProfilePdf"
@@ -51,6 +54,7 @@ export function ProfilePage() {
     removeStrength,
   } = useProfile(user)
   const createSkill = useMutation(postApiSkillsMutation())
+  const createStrength = useMutation(postApiStrengthMutation())
   const { status: csvStatus, download: downloadCsv } = useDownloadProfileCsv()
   const { status: pdfStatus, download: downloadPdf } = useDownloadProfilePdf(user, {
     skills,
@@ -193,7 +197,8 @@ export function ProfilePage() {
               <StrengthForm
                 existingNames={strengths.map((strength) => strength.name)}
                 onSubmit={async (draft) => {
-                  await addStrength(draft)
+                  const strength = await createStrength.mutateAsync({ body: { user, ...draft } })
+                  addStrength(strength)
                   toast.success("Strength added successfully.")
                   close()
                 }}

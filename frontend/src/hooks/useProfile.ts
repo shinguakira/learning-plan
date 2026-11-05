@@ -2,14 +2,13 @@ import type { PostApiSkillsResponse } from "@/api/generated"
 import { useEffect, useRef, useState } from "react"
 import { fetchProfile } from "@/api/profile"
 import { createJob, updateJob } from "@/api/job"
-import { createStrength, updateStrength } from "@/api/strength"
 import { createCertificate, updateCertificate } from "@/api/certificate"
 import { EMPTY_PROFILE_STATE } from "@/constants/profile"
 import type { ProfileState } from "@/types/profile"
 import type { MockUser } from "@/types/user"
 import type { Job, JobDraft } from "@/types/job"
 import type { Certificate, CertificateDraft } from "@/types/certificate"
-import type { Strength, StrengthDraft } from "@/types/strength"
+import type { Strength } from "@/types/strength"
 
 export type ProfileApi = {
   skills: PostApiSkillsResponse[]
@@ -29,8 +28,8 @@ export type ProfileApi = {
   addCertificate: (draft: CertificateDraft) => Promise<void>
   editCertificate: (id: string, draft: CertificateDraft) => Promise<void>
   removeCertificate: (id: string) => void
-  addStrength: (draft: StrengthDraft) => Promise<void>
-  editStrength: (id: string, draft: StrengthDraft) => Promise<void>
+  addStrength: (strength: Strength) => void
+  editStrength: (id: string, strength: Strength) => void
   removeStrength: (id: string) => void
 }
 
@@ -165,8 +164,7 @@ export function useProfile(user: MockUser): ProfileApi {
         certificates: profile.certificates.filter((certificate) => certificate.id !== id),
       }))
     },
-    addStrength: async (draft) => {
-      const strength = await createStrength(user, draft)
+    addStrength: (strength) => {
       updateProfile((profile) => ({
         ...profile,
         strengths: [
@@ -175,8 +173,7 @@ export function useProfile(user: MockUser): ProfileApi {
         ],
       }))
     },
-    editStrength: async (id, draft) => {
-      const strength = await updateStrength(id, draft)
+    editStrength: (id, strength) => {
       updateProfile((profile) => ({
         ...profile,
         strengths: profile.strengths.map((existing) => (existing.id === id ? strength : existing)),
