@@ -4,6 +4,19 @@ export type ClientOptions = {
     baseUrl: `${string}://${string}` | (string & {});
 };
 
+export type Error = {
+    message: string;
+};
+
+export const MockUser = {
+    SANJAR: 'Sanjar',
+    AKIRA: 'Akira',
+    MIKE: 'Mike',
+    JOHN: 'John'
+} as const;
+
+export type MockUser = typeof MockUser[keyof typeof MockUser];
+
 export const SkillLevel = {
     BEGINNER: 'beginner',
     INTERMEDIATE: 'intermediate',
@@ -13,9 +26,103 @@ export const SkillLevel = {
 
 export type SkillLevel = typeof SkillLevel[keyof typeof SkillLevel];
 
+export const EmploymentType = {
+    FULL_TIME: 'full-time',
+    CONTRACT: 'contract',
+    PART_TIME: 'part-time',
+    INTERNSHIP: 'internship'
+} as const;
+
+export type EmploymentType = typeof EmploymentType[keyof typeof EmploymentType];
+
+export const TaskCategory = {
+    FRONTEND: 'Frontend',
+    BACKEND: 'Backend',
+    INFRA_CLOUD: 'Infra / Cloud',
+    DATABASE: 'Database',
+    CS_FUNDAMENTALS: 'CS Fundamentals',
+    CERTIFICATION: 'Certification'
+} as const;
+
+export type TaskCategory = typeof TaskCategory[keyof typeof TaskCategory];
+
+export const TaskStatus = {
+    TODO: 'todo',
+    DOING: 'doing',
+    DONE: 'done'
+} as const;
+
+export type TaskStatus = typeof TaskStatus[keyof typeof TaskStatus];
+
+export const TaskPriority = {
+    LOW: 'low',
+    MID: 'mid',
+    HIGH: 'high'
+} as const;
+
+export type TaskPriority = typeof TaskPriority[keyof typeof TaskPriority];
+
+export type Skill = {
+    id: string;
+    name: string;
+    level: SkillLevel;
+    yearsOfExperience: number;
+    createdAt: string;
+};
+
+export type Strength = {
+    id: string;
+    name: string;
+    description: string;
+    createdAt: string;
+};
+
+export type Job = {
+    id: string;
+    company: string;
+    title: string;
+    employmentType: EmploymentType;
+    startDate: string;
+    endDate: string | null;
+    summary: string;
+    createdAt: string;
+};
+
+export type Certificate = {
+    id: string;
+    name: string;
+    issuer: string;
+    dateEarned: string;
+    credentialUrl?: string;
+    createdAt: string;
+};
+
+export type Task = {
+    title: string;
+    category: TaskCategory;
+    status: TaskStatus;
+    priority: TaskPriority;
+    estimatedHours: number;
+    note: string;
+    offsetStart: number;
+    span: number;
+};
+
+export type Technology = {
+    id: string;
+    name: string;
+};
+
+export type Profile = {
+    skills: Array<Skill>;
+    strengths: Array<Strength>;
+    jobs: Array<Job>;
+    certificates: Array<Certificate>;
+};
+
 export type PostApiCertificateData = {
     body: {
-        user: 'Sanjar' | 'Akira' | 'Mike' | 'John';
+        user: MockUser;
         name: string;
         issuer: string;
         dateEarned: string;
@@ -26,12 +133,23 @@ export type PostApiCertificateData = {
     url: '/api/certificate';
 };
 
+export type PostApiCertificateErrors = {
+    /**
+     * Default Response
+     */
+    409: Error;
+};
+
+export type PostApiCertificateError = PostApiCertificateErrors[keyof PostApiCertificateErrors];
+
 export type PostApiCertificateResponses = {
     /**
      * Default Response
      */
-    200: unknown;
+    201: Certificate;
 };
+
+export type PostApiCertificateResponse = PostApiCertificateResponses[keyof PostApiCertificateResponses];
 
 export type PutApiCertificateByIdData = {
     body: {
@@ -47,17 +165,32 @@ export type PutApiCertificateByIdData = {
     url: '/api/certificate/{id}';
 };
 
+export type PutApiCertificateByIdErrors = {
+    /**
+     * Default Response
+     */
+    404: Error;
+    /**
+     * Default Response
+     */
+    409: Error;
+};
+
+export type PutApiCertificateByIdError = PutApiCertificateByIdErrors[keyof PutApiCertificateByIdErrors];
+
 export type PutApiCertificateByIdResponses = {
     /**
      * Default Response
      */
-    200: unknown;
+    200: Certificate;
 };
+
+export type PutApiCertificateByIdResponse = PutApiCertificateByIdResponses[keyof PutApiCertificateByIdResponses];
 
 export type PostApiChatData = {
     body: {
         analyzeTasks?: boolean;
-        user: 'Sanjar' | 'Akira' | 'Mike' | 'John';
+        user: MockUser;
         messages: Array<{
             role: 'user' | 'assistant';
             content: string;
@@ -68,19 +201,40 @@ export type PostApiChatData = {
     url: '/api/chat';
 };
 
+export type PostApiChatErrors = {
+    /**
+     * Default Response
+     */
+    422: Error;
+    /**
+     * Default Response
+     */
+    502: Error;
+    /**
+     * Default Response
+     */
+    503: Error;
+};
+
+export type PostApiChatError = PostApiChatErrors[keyof PostApiChatErrors];
+
 export type PostApiChatResponses = {
     /**
      * Default Response
      */
-    200: unknown;
+    200: {
+        content: string;
+    };
 };
+
+export type PostApiChatResponse = PostApiChatResponses[keyof PostApiChatResponses];
 
 export type PostApiJobsData = {
     body: {
-        user: 'Sanjar' | 'Akira' | 'Mike' | 'John';
+        user: MockUser;
         company: string;
         title: string;
-        employmentType: 'full-time' | 'contract' | 'part-time' | 'internship';
+        employmentType: EmploymentType;
         startDate: string;
         endDate: string | null;
         summary: string;
@@ -90,18 +244,29 @@ export type PostApiJobsData = {
     url: '/api/jobs';
 };
 
+export type PostApiJobsErrors = {
+    /**
+     * Default Response
+     */
+    400: Error;
+};
+
+export type PostApiJobsError = PostApiJobsErrors[keyof PostApiJobsErrors];
+
 export type PostApiJobsResponses = {
     /**
      * Default Response
      */
-    200: unknown;
+    201: Job;
 };
+
+export type PostApiJobsResponse = PostApiJobsResponses[keyof PostApiJobsResponses];
 
 export type PutApiJobsByIdData = {
     body: {
         company: string;
         title: string;
-        employmentType: 'full-time' | 'contract' | 'part-time' | 'internship';
+        employmentType: EmploymentType;
         startDate: string;
         endDate: string | null;
         summary: string;
@@ -113,18 +278,33 @@ export type PutApiJobsByIdData = {
     url: '/api/jobs/{id}';
 };
 
+export type PutApiJobsByIdErrors = {
+    /**
+     * Default Response
+     */
+    400: Error;
+    /**
+     * Default Response
+     */
+    404: Error;
+};
+
+export type PutApiJobsByIdError = PutApiJobsByIdErrors[keyof PutApiJobsByIdErrors];
+
 export type PutApiJobsByIdResponses = {
     /**
      * Default Response
      */
-    200: unknown;
+    200: Job;
 };
+
+export type PutApiJobsByIdResponse = PutApiJobsByIdResponses[keyof PutApiJobsByIdResponses];
 
 export type GetApiProfileData = {
     body?: never;
     path?: never;
     query?: {
-        user?: 'Sanjar' | 'Akira' | 'Mike' | 'John';
+        user?: MockUser;
     };
     url: '/api/profile';
 };
@@ -133,8 +313,10 @@ export type GetApiProfileResponses = {
     /**
      * Default Response
      */
-    200: unknown;
+    200: Profile;
 };
+
+export type GetApiProfileResponse = GetApiProfileResponses[keyof GetApiProfileResponses];
 
 export type GetApiProfileCsvData = {
     body?: never;
@@ -147,45 +329,15 @@ export type GetApiProfileCsvResponses = {
     /**
      * Default Response
      */
-    200: unknown;
+    200: string;
 };
+
+export type GetApiProfileCsvResponse = GetApiProfileCsvResponses[keyof GetApiProfileCsvResponses];
 
 export type PostApiProfilePdfData = {
     body: {
-        user: 'Sanjar' | 'Akira' | 'Mike' | 'John';
-        profile: {
-            skills: Array<{
-                id: string;
-                name: string;
-                level: 'beginner' | 'intermediate' | 'advanced' | 'expert';
-                yearsOfExperience: number;
-                createdAt: string;
-            }>;
-            strengths: Array<{
-                id: string;
-                name: string;
-                description: string;
-                createdAt: string;
-            }>;
-            jobs: Array<{
-                id: string;
-                company: string;
-                title: string;
-                employmentType: 'full-time' | 'contract' | 'part-time' | 'internship';
-                startDate: string;
-                endDate: string | null;
-                summary: string;
-                createdAt: string;
-            }>;
-            certificates: Array<{
-                id: string;
-                name: string;
-                issuer: string;
-                dateEarned: string;
-                credentialUrl?: string;
-                createdAt: string;
-            }>;
-        };
+        user: MockUser;
+        profile: Profile;
     };
     path?: never;
     query?: never;
@@ -196,12 +348,14 @@ export type PostApiProfilePdfResponses = {
     /**
      * Default Response
      */
-    200: unknown;
+    200: Blob | File;
 };
+
+export type PostApiProfilePdfResponse = PostApiProfilePdfResponses[keyof PostApiProfilePdfResponses];
 
 export type PostApiSkillsData = {
     body: {
-        user: 'Sanjar' | 'Akira' | 'Mike' | 'John';
+        user: MockUser;
         name: string;
         level: SkillLevel;
         yearsOfExperience: number;
@@ -215,9 +369,7 @@ export type PostApiSkillsErrors = {
     /**
      * Default Response
      */
-    409: {
-        message: string;
-    };
+    409: Error;
 };
 
 export type PostApiSkillsError = PostApiSkillsErrors[keyof PostApiSkillsErrors];
@@ -226,13 +378,7 @@ export type PostApiSkillsResponses = {
     /**
      * Default Response
      */
-    201: {
-        id: string;
-        name: string;
-        level: SkillLevel;
-        yearsOfExperience: number;
-        createdAt: string;
-    };
+    201: Skill;
 };
 
 export type PostApiSkillsResponse = PostApiSkillsResponses[keyof PostApiSkillsResponses];
@@ -254,15 +400,11 @@ export type PutApiSkillsByIdErrors = {
     /**
      * Default Response
      */
-    404: {
-        message: string;
-    };
+    404: Error;
     /**
      * Default Response
      */
-    409: {
-        message: string;
-    };
+    409: Error;
 };
 
 export type PutApiSkillsByIdError = PutApiSkillsByIdErrors[keyof PutApiSkillsByIdErrors];
@@ -271,20 +413,14 @@ export type PutApiSkillsByIdResponses = {
     /**
      * Default Response
      */
-    200: {
-        id: string;
-        name: string;
-        level: SkillLevel;
-        yearsOfExperience: number;
-        createdAt: string;
-    };
+    200: Skill;
 };
 
 export type PutApiSkillsByIdResponse = PutApiSkillsByIdResponses[keyof PutApiSkillsByIdResponses];
 
 export type PostApiStrengthData = {
     body: {
-        user: 'Sanjar' | 'Akira' | 'Mike' | 'John';
+        user: MockUser;
         name: string;
         description: string;
     };
@@ -293,12 +429,23 @@ export type PostApiStrengthData = {
     url: '/api/strength';
 };
 
+export type PostApiStrengthErrors = {
+    /**
+     * Default Response
+     */
+    409: Error;
+};
+
+export type PostApiStrengthError = PostApiStrengthErrors[keyof PostApiStrengthErrors];
+
 export type PostApiStrengthResponses = {
     /**
      * Default Response
      */
-    200: unknown;
+    201: Strength;
 };
+
+export type PostApiStrengthResponse = PostApiStrengthResponses[keyof PostApiStrengthResponses];
 
 export type PutApiStrengthByIdData = {
     body: {
@@ -312,12 +459,27 @@ export type PutApiStrengthByIdData = {
     url: '/api/strength/{id}';
 };
 
+export type PutApiStrengthByIdErrors = {
+    /**
+     * Default Response
+     */
+    404: Error;
+    /**
+     * Default Response
+     */
+    409: Error;
+};
+
+export type PutApiStrengthByIdError = PutApiStrengthByIdErrors[keyof PutApiStrengthByIdErrors];
+
 export type PutApiStrengthByIdResponses = {
     /**
      * Default Response
      */
-    200: unknown;
+    200: Strength;
 };
+
+export type PutApiStrengthByIdResponse = PutApiStrengthByIdResponses[keyof PutApiStrengthByIdResponses];
 
 export type GetApiTasksData = {
     body?: never;
@@ -330,8 +492,12 @@ export type GetApiTasksResponses = {
     /**
      * Default Response
      */
-    200: unknown;
+    200: {
+        tasks: Array<Task>;
+    };
 };
+
+export type GetApiTasksResponse = GetApiTasksResponses[keyof GetApiTasksResponses];
 
 export type GetApiTasksCsvData = {
     body?: never;
@@ -344,8 +510,10 @@ export type GetApiTasksCsvResponses = {
     /**
      * Default Response
      */
-    200: unknown;
+    200: string;
 };
+
+export type GetApiTasksCsvResponse = GetApiTasksCsvResponses[keyof GetApiTasksCsvResponses];
 
 export type GetApiTechnologiesData = {
     body?: never;
@@ -358,5 +526,9 @@ export type GetApiTechnologiesResponses = {
     /**
      * Default Response
      */
-    200: unknown;
+    200: {
+        technologies: Array<Technology>;
+    };
 };
+
+export type GetApiTechnologiesResponse = GetApiTechnologiesResponses[keyof GetApiTechnologiesResponses];

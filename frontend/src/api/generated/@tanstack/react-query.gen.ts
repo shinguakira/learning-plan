@@ -4,10 +4,10 @@ import { type DefaultError, queryOptions, type UseMutationOptions } from '@tanst
 
 import { client } from '../client.gen';
 import { getApiProfile, getApiProfileCsv, getApiTasks, getApiTasksCsv, getApiTechnologies, type Options, postApiCertificate, postApiChat, postApiJobs, postApiProfilePdf, postApiSkills, postApiStrength, putApiCertificateById, putApiJobsById, putApiSkillsById, putApiStrengthById } from '../sdk.gen';
-import type { GetApiProfileCsvData, GetApiProfileData, GetApiTasksCsvData, GetApiTasksData, GetApiTechnologiesData, PostApiCertificateData, PostApiChatData, PostApiJobsData, PostApiProfilePdfData, PostApiSkillsData, PostApiSkillsError, PostApiSkillsResponse, PostApiStrengthData, PutApiCertificateByIdData, PutApiJobsByIdData, PutApiSkillsByIdData, PutApiSkillsByIdError, PutApiSkillsByIdResponse, PutApiStrengthByIdData } from '../types.gen';
+import type { GetApiProfileCsvData, GetApiProfileCsvResponse, GetApiProfileData, GetApiProfileResponse, GetApiTasksCsvData, GetApiTasksCsvResponse, GetApiTasksData, GetApiTasksResponse, GetApiTechnologiesData, GetApiTechnologiesResponse, PostApiCertificateData, PostApiCertificateError, PostApiCertificateResponse, PostApiChatData, PostApiChatError, PostApiChatResponse, PostApiJobsData, PostApiJobsError, PostApiJobsResponse, PostApiProfilePdfData, PostApiProfilePdfResponse, PostApiSkillsData, PostApiSkillsError, PostApiSkillsResponse, PostApiStrengthData, PostApiStrengthError, PostApiStrengthResponse, PutApiCertificateByIdData, PutApiCertificateByIdError, PutApiCertificateByIdResponse, PutApiJobsByIdData, PutApiJobsByIdError, PutApiJobsByIdResponse, PutApiSkillsByIdData, PutApiSkillsByIdError, PutApiSkillsByIdResponse, PutApiStrengthByIdData, PutApiStrengthByIdError, PutApiStrengthByIdResponse } from '../types.gen';
 
-export const postApiCertificateMutation = (options?: Partial<Options<PostApiCertificateData>>): UseMutationOptions<unknown, DefaultError, Options<PostApiCertificateData>> => {
-    const mutationOptions: UseMutationOptions<unknown, DefaultError, Options<PostApiCertificateData>> = {
+export const postApiCertificateMutation = (options?: Partial<Options<PostApiCertificateData>>): UseMutationOptions<PostApiCertificateResponse, PostApiCertificateError, Options<PostApiCertificateData>> => {
+    const mutationOptions: UseMutationOptions<PostApiCertificateResponse, PostApiCertificateError, Options<PostApiCertificateData>> = {
         mutationFn: async (fnOptions) => {
             const { data } = await postApiCertificate({
                 ...options,
@@ -20,8 +20,8 @@ export const postApiCertificateMutation = (options?: Partial<Options<PostApiCert
     return mutationOptions;
 };
 
-export const putApiCertificateByIdMutation = (options?: Partial<Options<PutApiCertificateByIdData>>): UseMutationOptions<unknown, DefaultError, Options<PutApiCertificateByIdData>> => {
-    const mutationOptions: UseMutationOptions<unknown, DefaultError, Options<PutApiCertificateByIdData>> = {
+export const putApiCertificateByIdMutation = (options?: Partial<Options<PutApiCertificateByIdData>>): UseMutationOptions<PutApiCertificateByIdResponse, PutApiCertificateByIdError, Options<PutApiCertificateByIdData>> => {
+    const mutationOptions: UseMutationOptions<PutApiCertificateByIdResponse, PutApiCertificateByIdError, Options<PutApiCertificateByIdData>> = {
         mutationFn: async (fnOptions) => {
             const { data } = await putApiCertificateById({
                 ...options,
@@ -34,8 +34,8 @@ export const putApiCertificateByIdMutation = (options?: Partial<Options<PutApiCe
     return mutationOptions;
 };
 
-export const postApiChatMutation = (options?: Partial<Options<PostApiChatData>>): UseMutationOptions<unknown, DefaultError, Options<PostApiChatData>> => {
-    const mutationOptions: UseMutationOptions<unknown, DefaultError, Options<PostApiChatData>> = {
+export const postApiChatMutation = (options?: Partial<Options<PostApiChatData>>): UseMutationOptions<PostApiChatResponse, PostApiChatError, Options<PostApiChatData>> => {
+    const mutationOptions: UseMutationOptions<PostApiChatResponse, PostApiChatError, Options<PostApiChatData>> = {
         mutationFn: async (fnOptions) => {
             const { data } = await postApiChat({
                 ...options,
@@ -48,8 +48,8 @@ export const postApiChatMutation = (options?: Partial<Options<PostApiChatData>>)
     return mutationOptions;
 };
 
-export const postApiJobsMutation = (options?: Partial<Options<PostApiJobsData>>): UseMutationOptions<unknown, DefaultError, Options<PostApiJobsData>> => {
-    const mutationOptions: UseMutationOptions<unknown, DefaultError, Options<PostApiJobsData>> = {
+export const postApiJobsMutation = (options?: Partial<Options<PostApiJobsData>>): UseMutationOptions<PostApiJobsResponse, PostApiJobsError, Options<PostApiJobsData>> => {
+    const mutationOptions: UseMutationOptions<PostApiJobsResponse, PostApiJobsError, Options<PostApiJobsData>> = {
         mutationFn: async (fnOptions) => {
             const { data } = await postApiJobs({
                 ...options,
@@ -62,8 +62,8 @@ export const postApiJobsMutation = (options?: Partial<Options<PostApiJobsData>>)
     return mutationOptions;
 };
 
-export const putApiJobsByIdMutation = (options?: Partial<Options<PutApiJobsByIdData>>): UseMutationOptions<unknown, DefaultError, Options<PutApiJobsByIdData>> => {
-    const mutationOptions: UseMutationOptions<unknown, DefaultError, Options<PutApiJobsByIdData>> = {
+export const putApiJobsByIdMutation = (options?: Partial<Options<PutApiJobsByIdData>>): UseMutationOptions<PutApiJobsByIdResponse, PutApiJobsByIdError, Options<PutApiJobsByIdData>> => {
+    const mutationOptions: UseMutationOptions<PutApiJobsByIdResponse, PutApiJobsByIdError, Options<PutApiJobsByIdData>> = {
         mutationFn: async (fnOptions) => {
             const { data } = await putApiJobsById({
                 ...options,
@@ -111,7 +111,7 @@ const createQueryKey = <TOptions extends Options>(id: string, options?: TOptions
 
 export const getApiProfileQueryKey = (options?: Options<GetApiProfileData>) => createQueryKey('getApiProfile', options);
 
-export const getApiProfileOptions = (options?: Options<GetApiProfileData>) => queryOptions<unknown, DefaultError, unknown, ReturnType<typeof getApiProfileQueryKey>>({
+export const getApiProfileOptions = (options?: Options<GetApiProfileData>) => queryOptions<GetApiProfileResponse, DefaultError, GetApiProfileResponse, ReturnType<typeof getApiProfileQueryKey>>({
     queryFn: async ({ queryKey, signal }) => {
         const { data } = await getApiProfile({
             ...options,
@@ -126,7 +126,7 @@ export const getApiProfileOptions = (options?: Options<GetApiProfileData>) => qu
 
 export const getApiProfileCsvQueryKey = (options?: Options<GetApiProfileCsvData>) => createQueryKey('getApiProfileCsv', options);
 
-export const getApiProfileCsvOptions = (options?: Options<GetApiProfileCsvData>) => queryOptions<unknown, DefaultError, unknown, ReturnType<typeof getApiProfileCsvQueryKey>>({
+export const getApiProfileCsvOptions = (options?: Options<GetApiProfileCsvData>) => queryOptions<GetApiProfileCsvResponse, DefaultError, GetApiProfileCsvResponse, ReturnType<typeof getApiProfileCsvQueryKey>>({
     queryFn: async ({ queryKey, signal }) => {
         const { data } = await getApiProfileCsv({
             ...options,
@@ -139,8 +139,8 @@ export const getApiProfileCsvOptions = (options?: Options<GetApiProfileCsvData>)
     queryKey: getApiProfileCsvQueryKey(options)
 });
 
-export const postApiProfilePdfMutation = (options?: Partial<Options<PostApiProfilePdfData>>): UseMutationOptions<unknown, DefaultError, Options<PostApiProfilePdfData>> => {
-    const mutationOptions: UseMutationOptions<unknown, DefaultError, Options<PostApiProfilePdfData>> = {
+export const postApiProfilePdfMutation = (options?: Partial<Options<PostApiProfilePdfData>>): UseMutationOptions<PostApiProfilePdfResponse, DefaultError, Options<PostApiProfilePdfData>> => {
+    const mutationOptions: UseMutationOptions<PostApiProfilePdfResponse, DefaultError, Options<PostApiProfilePdfData>> = {
         mutationFn: async (fnOptions) => {
             const { data } = await postApiProfilePdf({
                 ...options,
@@ -181,8 +181,8 @@ export const putApiSkillsByIdMutation = (options?: Partial<Options<PutApiSkillsB
     return mutationOptions;
 };
 
-export const postApiStrengthMutation = (options?: Partial<Options<PostApiStrengthData>>): UseMutationOptions<unknown, DefaultError, Options<PostApiStrengthData>> => {
-    const mutationOptions: UseMutationOptions<unknown, DefaultError, Options<PostApiStrengthData>> = {
+export const postApiStrengthMutation = (options?: Partial<Options<PostApiStrengthData>>): UseMutationOptions<PostApiStrengthResponse, PostApiStrengthError, Options<PostApiStrengthData>> => {
+    const mutationOptions: UseMutationOptions<PostApiStrengthResponse, PostApiStrengthError, Options<PostApiStrengthData>> = {
         mutationFn: async (fnOptions) => {
             const { data } = await postApiStrength({
                 ...options,
@@ -195,8 +195,8 @@ export const postApiStrengthMutation = (options?: Partial<Options<PostApiStrengt
     return mutationOptions;
 };
 
-export const putApiStrengthByIdMutation = (options?: Partial<Options<PutApiStrengthByIdData>>): UseMutationOptions<unknown, DefaultError, Options<PutApiStrengthByIdData>> => {
-    const mutationOptions: UseMutationOptions<unknown, DefaultError, Options<PutApiStrengthByIdData>> = {
+export const putApiStrengthByIdMutation = (options?: Partial<Options<PutApiStrengthByIdData>>): UseMutationOptions<PutApiStrengthByIdResponse, PutApiStrengthByIdError, Options<PutApiStrengthByIdData>> => {
+    const mutationOptions: UseMutationOptions<PutApiStrengthByIdResponse, PutApiStrengthByIdError, Options<PutApiStrengthByIdData>> = {
         mutationFn: async (fnOptions) => {
             const { data } = await putApiStrengthById({
                 ...options,
@@ -211,7 +211,7 @@ export const putApiStrengthByIdMutation = (options?: Partial<Options<PutApiStren
 
 export const getApiTasksQueryKey = (options?: Options<GetApiTasksData>) => createQueryKey('getApiTasks', options);
 
-export const getApiTasksOptions = (options?: Options<GetApiTasksData>) => queryOptions<unknown, DefaultError, unknown, ReturnType<typeof getApiTasksQueryKey>>({
+export const getApiTasksOptions = (options?: Options<GetApiTasksData>) => queryOptions<GetApiTasksResponse, DefaultError, GetApiTasksResponse, ReturnType<typeof getApiTasksQueryKey>>({
     queryFn: async ({ queryKey, signal }) => {
         const { data } = await getApiTasks({
             ...options,
@@ -226,7 +226,7 @@ export const getApiTasksOptions = (options?: Options<GetApiTasksData>) => queryO
 
 export const getApiTasksCsvQueryKey = (options?: Options<GetApiTasksCsvData>) => createQueryKey('getApiTasksCsv', options);
 
-export const getApiTasksCsvOptions = (options?: Options<GetApiTasksCsvData>) => queryOptions<unknown, DefaultError, unknown, ReturnType<typeof getApiTasksCsvQueryKey>>({
+export const getApiTasksCsvOptions = (options?: Options<GetApiTasksCsvData>) => queryOptions<GetApiTasksCsvResponse, DefaultError, GetApiTasksCsvResponse, ReturnType<typeof getApiTasksCsvQueryKey>>({
     queryFn: async ({ queryKey, signal }) => {
         const { data } = await getApiTasksCsv({
             ...options,
@@ -241,7 +241,7 @@ export const getApiTasksCsvOptions = (options?: Options<GetApiTasksCsvData>) => 
 
 export const getApiTechnologiesQueryKey = (options?: Options<GetApiTechnologiesData>) => createQueryKey('getApiTechnologies', options);
 
-export const getApiTechnologiesOptions = (options?: Options<GetApiTechnologiesData>) => queryOptions<unknown, DefaultError, unknown, ReturnType<typeof getApiTechnologiesQueryKey>>({
+export const getApiTechnologiesOptions = (options?: Options<GetApiTechnologiesData>) => queryOptions<GetApiTechnologiesResponse, DefaultError, GetApiTechnologiesResponse, ReturnType<typeof getApiTechnologiesQueryKey>>({
     queryFn: async ({ queryKey, signal }) => {
         const { data } = await getApiTechnologies({
             ...options,
