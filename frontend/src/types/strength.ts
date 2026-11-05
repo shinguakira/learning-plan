@@ -1,8 +1,5 @@
-export type Strength = {
-  id: string
-  name: string
-  description: string
-  createdAt: string
-}
+import type { PostApiStrengthResponse, PutApiStrengthByIdData } from "@/api/generated"
 
-export type StrengthDraft = Omit<Strength, "id" | "createdAt">
+export type Strength = PostApiStrengthResponse
+
+export type StrengthDraft = PutApiStrengthByIdData["body"]
