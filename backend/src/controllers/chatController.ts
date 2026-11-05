@@ -1,6 +1,6 @@
 import type { FastifyInstance } from "fastify"
 
-import { CHAT_REQUEST_SCHEMA } from "../constants/chatSchema.js"
+import { CHAT_REPLY_SCHEMA, CHAT_REQUEST_SCHEMA } from "../constants/chatSchema.js"
 import { getChatReply } from "../services/chatService.js"
 import type { ChatRequest } from "../types/chat.js"
 import { getChatConfig } from "../utils/chatConfig.js"
@@ -11,7 +11,15 @@ export default async function chatController(app: FastifyInstance): Promise<void
   app.post<{ Body: ChatRequest }>(
     "/api/chat",
     {
-      schema: { body: CHAT_REQUEST_SCHEMA },
+      schema: {
+        body: CHAT_REQUEST_SCHEMA,
+        response: {
+          200: CHAT_REPLY_SCHEMA,
+          422: { $ref: "error#" },
+          502: { $ref: "error#" },
+          503: { $ref: "error#" },
+        },
+      },
       onRequest: async (_request, reply) => {
         reply.header("Cache-Control", "no-store")
         if (!config) {

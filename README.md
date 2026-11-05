@@ -6,39 +6,37 @@ you want the why rather than the how.
 
 ## Layout
 
-Two packages, each with its own `package.json` and its own dependencies.
+A Turborepo workspace. One install at the root, one lockfile, two packages.
 
 ```
-frontend/   the app: React, Vite, Tailwind, shadcn/ui
-backend/    Fastify. Serves sample task and profile data
-doc/        documentation about the repo and the product, plus the README images
-vercel.json routes the deployment to frontend/
+frontend/        the app: React, Vite, Tailwind, shadcn/ui
+backend/         Fastify. Serves sample task and profile data
+doc/             documentation about the repo and the product, plus the README images
+package.json     the workspace root: npm workspaces and the turbo scripts
+turbo.json       what each task outputs and which of them are cached
+vercel.json      routes the deployment to the two services
 ```
 
 ## Running it
 
-Each package installs separately.
-
-**Frontend**
+Install once, from the root. That covers both packages.
 
 ```bash
-cd frontend && npm install && npm run dev
+npm install
+cp backend/.env.example backend/.env
 ```
 
-Open http://localhost:5173.
-
-**Backend**
+Then start both dev servers together:
 
 ```bash
-cd backend
-npm install
-cp .env.example .env
 npm run dev
 ```
 
-Serves sample data on http://localhost:3001. Configure chat through `backend/.env`.
+The app is on http://localhost:5173 and the API on http://localhost:3001. Configure
+chat through `backend/.env`. To run one on its own, `npm run dev -w frontend` or
+`npm run dev -w backend`.
 
-Node 24 or newer. Both packages declare it in `engines`, so `npm install` warns if
+Node 24 or newer. The root and both packages declare it in `engines`, so `npm install` warns if
 you are on anything older.
 
 **nvm on macOS**
@@ -76,7 +74,8 @@ Branch from `develop`, never commit to `develop` or `main` directly, and merge
 through a pull request — [`doc/branch-naming.md`](doc/branch-naming.md) has the rule
 and the naming.
 
-Before calling frontend work done, all five must pass from `frontend/`:
+Before calling work done, all of these must pass from the root. Each runs in every
+package that defines it, and turbo skips the ones whose inputs have not changed.
 
 ```bash
 npm run format-check
@@ -86,4 +85,5 @@ npm run test-unit
 npm run test-e2e
 ```
 
-The backend has `npm run format-check`, `npm run lint` and `npm run type-check`.
+`test-unit` and `test-e2e` exist in `frontend/` only. Add `-- --filter=learning-plan-backend`
+to any of them to run it for one package.

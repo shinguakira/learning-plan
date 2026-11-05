@@ -10,33 +10,31 @@
     "dev": "tsx watch --env-file=.env src/index.ts",
     "format": "oxfmt --write .",
     "format-check": "oxfmt --check .",
-    "lint": "eslint .",
-    "lint-fix": "eslint . --fix",
+    "lint": "oxlint .",
+    "lint-fix": "oxlint . --fix",
     "build": "tsc",
     "start": "node dist/index.js",
     "type-check": "tsc --noEmit",
-    "db-studio": "prisma studio"
+    "db-studio": "prisma studio",
+    "db-generate": "prisma generate",
+    "openapi": "tsx scripts/generateOpenapi.ts"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"
   },
   "devDependencies": {
-    "@eslint/js": "^10.0.1",
     "@types/node": "^24.13.3",
     "@types/pdfkit": "^0.17.7",
-    "eslint": "^10.10.0",
-    "eslint-plugin-simple-import-sort": "^14.0.0",
-    "eslint-plugin-unused-imports": "^4.4.1",
-    "globals": "^17.12.0",
     "oxfmt": "0.76.0",
+    "oxlint": "^1.91.0",
     "prisma": "^6.19.3",
     "tsx": "^4.19.2",
-    "typescript": "~6.0.2",
-    "typescript-eslint": "^8.70.0"
+    "typescript": "~6.0.2"
   },
   "dependencies": {
     "@fastify/autoload": "^6.5.0",
     "@fastify/cors": "^11.3.0",
+    "@fastify/swagger": "^9.9.3",
     "@prisma/client": "^6.19.3",
     "fastify": "^5.12.5",
     "pdfkit": "^0.20.2"

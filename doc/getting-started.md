@@ -7,25 +7,21 @@ the same setup as a short reference; this is the version with the reasons attach
 ## Getting it running
 
 You need **Node** — the runtime the dev server and the build both run on. This
-project wants 24 or newer, which is written down in `engines` in
-[`package.json`](../frontend/package.json), so `npm install` warns you if you are outside it.
+project wants 24 or newer, which is written down in `engines` in the root
+[`package.json`](../package.json), so `npm install` warns you if you are outside it.
+
+The two packages are one npm workspace, so both install together from the repository
+root, and both dev servers start together:
 
 ```bash
 node -v
 npm install
+cp backend/.env.example backend/.env
 npm run dev
 ```
 
 Then open http://localhost:5173. Sample data loads on each visit to Tasks. Task edits
 last until you leave that page or reload.
-
-Install and start the backend too, in another terminal:
-
-```bash
-npm --prefix ../backend install
-cp ../backend/.env.example ../backend/.env
-npm --prefix ../backend run dev
-```
 
 The task page loads its sample plan from the backend. The chat page calls
 `/api/chat` on the same backend. Configure the provider in `backend/.env`; the
@@ -65,8 +61,8 @@ Two commands worth understanding:
 | `npm run dev`          | Dev server. Edits appear in the browser as you save   |
 | `npm run format`       | Prettier, rewriting files                             |
 | `npm run format-check` | Prettier, reporting without rewriting                 |
-| `npm run lint`         | ESLint — catches suspect code the type checker allows |
-| `npm run lint-fix`     | The same, applying every fix ESLint can make itself   |
+| `npm run lint`         | oxlint — catches suspect code the type checker allows |
+| `npm run lint-fix`     | The same, applying every fix oxlint can make itself   |
 | `npm run type-check`   | TypeScript — the check you run while working          |
 | `npm run preview`      | Serves a built `dist/` the way a real host would      |
 | `npm run build`        | Builds `dist/`. Only builds — it checks nothing       |
@@ -82,7 +78,7 @@ Both are lists of packages; the split is about **what runs in the browser**.
 - **`dependencies`** — code that ends up inside what a visitor downloads. React is
   running while someone uses the page, so React is here.
 - **`devDependencies`** — tools that run on your machine to produce or check that
-  output, and then have no further part in it. Vite, TypeScript, ESLint and Prettier.
+  output, and then have no further part in it. Vite, TypeScript, oxlint and Prettier.
 
 The line is about the package, not its output. Tailwind is a devDependency and its
 compiled CSS is very much shipped — the compiling happens during `npm run build`, and
@@ -112,22 +108,17 @@ locally either way — it misleads the next person reading the list.
 
 **`devDependencies`**
 
-| Package                                           | For                                                                    |
-| ------------------------------------------------- | ---------------------------------------------------------------------- |
-| `vite`                                            | the dev server and the bundler                                         |
-| `@vitejs/plugin-react`                            | teaches Vite about JSX and hot reloading                               |
-| `tailwindcss`                                     | the CSS framework the class names come from                            |
-| `@tailwindcss/vite`                               | runs Tailwind as part of the Vite build                                |
-| `tw-animate-css`                                  | the animation utilities shadcn's components expect                     |
-| `typescript`                                      | the type checker — the `tsc -b` behind `npm run type-check`            |
-| `@types/react`, `@types/react-dom`, `@types/node` | types for libraries that ship without them                             |
-| `eslint`                                          | the linter                                                             |
-| `@eslint/js`                                      | ESLint's own recommended rules                                         |
-| `typescript-eslint`                               | lets ESLint read TypeScript syntax                                     |
-| `eslint-plugin-react-hooks`                       | catches hooks called conditionally or out of order                     |
-| `eslint-plugin-react-refresh`                     | catches exports that would break hot reloading                         |
-| `globals`                                         | the list of built-in browser globals, so ESLint does not flag `window` |
-| `prettier`                                        | the formatter                                                          |
+| Package                                           | For                                                                  |
+| ------------------------------------------------- | -------------------------------------------------------------------- |
+| `vite`                                            | the dev server and the bundler                                       |
+| `@vitejs/plugin-react`                            | teaches Vite about JSX and hot reloading                             |
+| `tailwindcss`                                     | the CSS framework the class names come from                          |
+| `@tailwindcss/vite`                               | runs Tailwind as part of the Vite build                              |
+| `tw-animate-css`                                  | the animation utilities shadcn's components expect                   |
+| `typescript`                                      | the type checker — the `tsc -b` behind `npm run type-check`          |
+| `@types/react`, `@types/react-dom`, `@types/node` | types for libraries that ship without them                           |
+| `oxlint`                                          | the linter — React and TypeScript rules built in, no plugin packages |
+| `prettier`                                        | the formatter                                                        |
 
 ## Follow one screen down
 

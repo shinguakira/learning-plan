@@ -14,7 +14,12 @@ import type {
 export default async function certificateController(app: FastifyInstance): Promise<void> {
   app.post<{ Body: CertificateCreateRequest }>(
     "/api/certificate",
-    { schema: { body: CERTIFICATE_CREATE_SCHEMA } },
+    {
+      schema: {
+        body: CERTIFICATE_CREATE_SCHEMA,
+        response: { 201: { $ref: "certificate#" }, 409: { $ref: "error#" } },
+      },
+    },
     async (request, reply) => {
       const certificate = await certificateService.addCertificate(request.body)
 
@@ -30,7 +35,17 @@ export default async function certificateController(app: FastifyInstance): Promi
 
   app.put<{ Params: { id: string }; Body: CertificateUpdateRequest }>(
     "/api/certificate/:id",
-    { schema: { params: CERTIFICATE_ID_SCHEMA, body: CERTIFICATE_UPDATE_SCHEMA } },
+    {
+      schema: {
+        params: CERTIFICATE_ID_SCHEMA,
+        body: CERTIFICATE_UPDATE_SCHEMA,
+        response: {
+          200: { $ref: "certificate#" },
+          404: { $ref: "error#" },
+          409: { $ref: "error#" },
+        },
+      },
+    },
     async (request, reply: FastifyReply) => {
       const { id } = request.params
       if ((await certificateService.getCertificate(id)) === null) {

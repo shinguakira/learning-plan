@@ -14,7 +14,7 @@ export function useAutoScroll<T extends HTMLElement>(
     const node = ref.current
     if (node) node.scrollTop = node.scrollHeight
     // The caller decides what counts as new content.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // oxlint-disable-next-line react/exhaustive-deps
   }, deps)
 
   return ref

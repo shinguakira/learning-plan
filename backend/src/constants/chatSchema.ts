@@ -1,10 +1,16 @@
+export const CHAT_REPLY_SCHEMA = {
+  type: "object",
+  required: ["content"],
+  properties: { content: { type: "string" } },
+} as const
+
 export const CHAT_REQUEST_SCHEMA = {
   type: "object",
   additionalProperties: false,
   required: ["user", "messages"],
   properties: {
     analyzeTasks: { type: "boolean" },
-    user: { type: "string", enum: ["Sanjar", "Akira", "Mike", "John"] },
+    user: { $ref: "mockUser#" },
     messages: {
       type: "array",
       minItems: 1,

@@ -1,5 +1,7 @@
+import { useMutation } from "@tanstack/react-query"
 import { Award, Briefcase, Code, Download, FileText, Sparkles } from "lucide-react"
 import { toast } from "sonner"
+import { postApiSkillsMutation } from "@/api/generated/@tanstack/react-query.gen"
 import { Button } from "@/components/ui/button"
 import { useDownloadProfileCsv } from "@/hooks/useDownloadProfileCsv"
 import { useDownloadProfilePdf } from "@/hooks/useDownloadProfilePdf"
@@ -48,6 +50,7 @@ export function ProfilePage() {
     editStrength,
     removeStrength,
   } = useProfile(user)
+  const createSkill = useMutation(postApiSkillsMutation())
   const { status: csvStatus, download: downloadCsv } = useDownloadProfileCsv()
   const { status: pdfStatus, download: downloadPdf } = useDownloadProfilePdf(user, {
     skills,
@@ -133,14 +136,16 @@ export function ProfilePage() {
                 skill={null}
                 existingNames={skills.map((skill) => skill.name)}
                 onSubmit={(draft) =>
-                  addSkill(draft)
-                    .then(() => {
+                  createSkill
+                    .mutateAsync({ body: { user, ...draft } })
+                    .then((skill) => {
+                      addSkill(skill)
                       toast.success("Skill added successfully.")
                       close()
                     })
                     .catch((error: unknown) => {
                       toast.error(
-                        error instanceof Error ? error.message : "Could not add the skill.",
+                        (error as { message?: string }).message ?? "Could not add the skill.",
                       )
                     })
                 }
@@ -153,7 +158,7 @@ export function ProfilePage() {
           {loading ? (
             <ProfileSectionLoading label="Loading skills…" />
           ) : (
-            <SkillList skills={skills} onEdit={editSkill} onRemove={removeSkill} />
+            <SkillList skills={skills} onEdited={editSkill} onRemove={removeSkill} />
           )}
         </div>
       </section>

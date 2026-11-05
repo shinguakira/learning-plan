@@ -1,20 +1,24 @@
+import type { PostApiSkillsResponse } from "@/api/generated"
+import { useMutation } from "@tanstack/react-query"
 import { toast } from "sonner"
+import { putApiSkillsByIdMutation } from "@/api/generated/@tanstack/react-query.gen"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { SkillForm } from "@/pages/profile/SkillForm"
-import type { Skill, SkillDraft } from "@/types/skill"
 
 /** Open for whichever skill `skill` names; closed while it is null. */
 export function SkillEditDialog({
   skill,
   existingNames,
-  onEdit,
+  onEdited,
   onClose,
 }: {
-  skill: Skill | null
+  skill: PostApiSkillsResponse | null
   existingNames: readonly string[]
-  onEdit: (id: string, draft: SkillDraft) => Promise<void>
+  onEdited: (id: string, skill: PostApiSkillsResponse) => void
   onClose: () => void
 }) {
+  const updateSkill = useMutation(putApiSkillsByIdMutation())
+
   return (
     <Dialog
       open={skill !== null}
@@ -35,14 +39,16 @@ export function SkillEditDialog({
             skill={skill}
             existingNames={existingNames}
             onSubmit={(draft) =>
-              onEdit(skill.id, draft)
-                .then(() => {
+              updateSkill
+                .mutateAsync({ path: { id: skill.id }, body: draft })
+                .then((updated) => {
+                  onEdited(skill.id, updated)
                   toast.success("Skill updated successfully.")
                   onClose()
                 })
                 .catch((error: unknown) => {
                   toast.error(
-                    error instanceof Error ? error.message : "Could not update the skill.",
+                    (error as { message?: string }).message ?? "Could not update the skill.",
                   )
                 })
             }

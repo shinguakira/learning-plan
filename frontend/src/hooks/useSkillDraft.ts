@@ -1,22 +1,22 @@
+import type { PutApiSkillsByIdData } from "@/api/generated"
 import { useState } from "react"
-import type { SkillDraft } from "@/types/skill"
 
 export type SkillDraftApi = {
-  draft: SkillDraft
-  patch: (next: Partial<SkillDraft>) => void
+  draft: PutApiSkillsByIdData["body"]
+  patch: (next: Partial<PutApiSkillsByIdData["body"]>) => void
   /** Errors are computed on every render but only shown once submit was tried. */
   nameError: string | null
   touched: boolean
   /** Mark as tried; returns the trimmed draft when it is valid, null otherwise. */
-  submit: () => SkillDraft | null
+  submit: () => PutApiSkillsByIdData["body"] | null
 }
 
 /** Owns the skill form's state and its validation, for both adding and editing. */
 export function useSkillDraft(
   existingNames: readonly string[],
-  initial: SkillDraft,
+  initial: PutApiSkillsByIdData["body"],
 ): SkillDraftApi {
-  const [draft, setDraft] = useState<SkillDraft>(initial)
+  const [draft, setDraft] = useState<PutApiSkillsByIdData["body"]>(initial)
   const [touched, setTouched] = useState(false)
 
   const trimmedName = draft.name.trim()

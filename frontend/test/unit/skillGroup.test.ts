@@ -1,15 +1,16 @@
 import { describe, expect, it } from "vitest"
+import type { PostApiSkillsResponse } from "@/api/generated"
 import { groupSkillsByLevel } from "@/utils/skill"
-import type { Skill } from "@/types/skill"
 
 let nextId = 0
 
-function makeSkill(overrides: Partial<Skill> = {}): Skill {
+function makeSkill(overrides: Partial<PostApiSkillsResponse> = {}): PostApiSkillsResponse {
   nextId += 1
   return {
     id: `s${nextId}`,
     name: "Something",
     level: "beginner",
+    yearsOfExperience: 1,
     createdAt: "2026-01-01T00:00:00.000Z",
     ...overrides,
   }

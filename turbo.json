@@ -1,0 +1,43 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "tasks": {
+    "db-generate": {
+      "inputs": ["prisma/schema.prisma"],
+      "cache": false
+    },
+    "openapi": {
+      "dependsOn": ["db-generate"],
+      "inputs": ["src/**", "scripts/**"],
+      "outputs": ["openapi.json"]
+    },
+    "generate-api": {
+      "dependsOn": ["learning-plan-backend#openapi"],
+      "inputs": ["openapi-ts.config.ts"],
+      "outputs": ["src/api/generated/**"]
+    },
+    "build": {
+      "dependsOn": ["^build", "db-generate"],
+      "outputs": ["dist/**"]
+    },
+    "type-check": {
+      "dependsOn": ["^build", "db-generate"]
+    },
+    "lint": {},
+    "lint-fix": {
+      "cache": false
+    },
+    "format": {
+      "cache": false
+    },
+    "format-check": {},
+    "test-unit": {},
+    "test-e2e": {
+      "cache": false
+    },
+    "dev": {
+      "dependsOn": ["db-generate"],
+      "cache": false,
+      "persistent": true
+    }
+  }
+}

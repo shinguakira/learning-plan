@@ -11,7 +11,12 @@ import type { SkillCreateRequest, SkillUpdateRequest } from "../types/skillDraft
 export default async function skillController(app: FastifyInstance): Promise<void> {
   app.post<{ Body: SkillCreateRequest }>(
     "/api/skills",
-    { schema: { body: SKILL_CREATE_SCHEMA } },
+    {
+      schema: {
+        body: SKILL_CREATE_SCHEMA,
+        response: { 201: { $ref: "skill#" }, 409: { $ref: "error#" } },
+      },
+    },
     async (request, reply: FastifyReply) => {
       const { user, name } = request.body
       const skill = await skillService.addSkill(request.body)
@@ -25,7 +30,17 @@ export default async function skillController(app: FastifyInstance): Promise<voi
 
   app.put<{ Params: { id: string }; Body: SkillUpdateRequest }>(
     "/api/skills/:id",
-    { schema: { params: SKILL_ID_SCHEMA, body: SKILL_UPDATE_SCHEMA } },
+    {
+      schema: {
+        params: SKILL_ID_SCHEMA,
+        body: SKILL_UPDATE_SCHEMA,
+        response: {
+          200: { $ref: "skill#" },
+          404: { $ref: "error#" },
+          409: { $ref: "error#" },
+        },
+      },
+    },
     async (request, reply: FastifyReply) => {
       const { id } = request.params
       if ((await skillService.getSkill(id)) === null) {

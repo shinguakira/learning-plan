@@ -1,6 +1,6 @@
+import type { SkillLevel } from "@/api/generated"
 import { SKILL_LEVELS } from "@/constants/skill"
 import { cn } from "@/lib/utils"
-import type { SkillLevel } from "@/types/skill"
 
 /** Four dots filled up to the given level - reads the colour off its parent via `currentColor`. */
 export function SkillLevelMeter({ level, className }: { level: SkillLevel; className?: string }) {

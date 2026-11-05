@@ -1,8 +1,17 @@
-import { MOCK_USERS } from "./user.js"
-
 const STRENGTH_FIELDS = {
   name: { type: "string", minLength: 1 },
   description: { type: "string", minLength: 1 },
+} as const
+
+export const STRENGTH_SCHEMA = {
+  $id: "strength",
+  type: "object",
+  required: ["id", "name", "description", "createdAt"],
+  properties: {
+    id: { type: "string" },
+    ...STRENGTH_FIELDS,
+    createdAt: { type: "string", format: "date-time" },
+  },
 } as const
 
 export const STRENGTH_CREATE_SCHEMA = {
@@ -10,7 +19,7 @@ export const STRENGTH_CREATE_SCHEMA = {
   additionalProperties: false,
   required: ["user", "name", "description"],
   properties: {
-    user: { type: "string", enum: MOCK_USERS },
+    user: { $ref: "mockUser#" },
     ...STRENGTH_FIELDS,
   },
 } as const

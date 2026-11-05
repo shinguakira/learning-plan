@@ -7,7 +7,12 @@ import type { JobCreateRequest, JobUpdateRequest } from "../types/jobDraft.js"
 export default async function jobController(app: FastifyInstance): Promise<void> {
   app.post<{ Body: JobCreateRequest }>(
     "/api/jobs",
-    { schema: { body: JOB_CREATE_SCHEMA } },
+    {
+      schema: {
+        body: JOB_CREATE_SCHEMA,
+        response: { 201: { $ref: "job#" }, 400: { $ref: "error#" } },
+      },
+    },
     async (request, reply) => {
       const { startDate, endDate } = request.body
       if (endDate !== null && endDate < startDate) {
@@ -19,7 +24,17 @@ export default async function jobController(app: FastifyInstance): Promise<void>
 
   app.put<{ Params: { id: string }; Body: JobUpdateRequest }>(
     "/api/jobs/:id",
-    { schema: { params: JOB_ID_SCHEMA, body: JOB_UPDATE_SCHEMA } },
+    {
+      schema: {
+        params: JOB_ID_SCHEMA,
+        body: JOB_UPDATE_SCHEMA,
+        response: {
+          200: { $ref: "job#" },
+          400: { $ref: "error#" },
+          404: { $ref: "error#" },
+        },
+      },
+    },
     async (request, reply) => {
       const { startDate, endDate } = request.body
       if (endDate !== null && endDate < startDate) {

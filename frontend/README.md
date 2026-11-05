@@ -18,31 +18,32 @@ is for** if you want the why rather than the how.
 | Icons           | [lucide](https://lucide.dev)         |
 | Unit tests      | Vitest 4                             |
 | E2E tests       | Playwright 1.63                      |
-| Lint            | ESLint 10                            |
+| Lint            | oxlint 1                             |
 | Format          | Prettier 3                           |
 | Package manager | npm                                  |
 
 ## Setup
 
 Requires **Node 24 or newer** — declared in `engines`, so `npm install` warns if you
-are on anything older. Odd-numbered releases such as Node 25 are not supported by
-ESLint 10 and will warn.
+are on anything older.
+
+This package is one half of an npm workspace, so dependencies install from the
+repository root:
 
 ```bash
 node -v          # check you are in range
-npm install
+cd .. && npm install
 ```
 
-To run the app:
+`npm run dev` from the root starts this package and the backend together. To start
+only this one, run it from here:
 
 ```bash
 npm run dev
 ```
 
-Run `npm --prefix ../backend install` once, then start
-`npm --prefix ../backend run dev` in another terminal.
-
-Open http://localhost:5173.
+Open http://localhost:5173. Without the backend running, the task and chat pages have
+nothing to call.
 
 To run the end-to-end tests, download the browser once first:
 
@@ -87,8 +88,8 @@ Every script defined in [`package.json`](package.json), and nothing else:
 | `npm run dev`             | Dev server with HMR              |
 | `npm run format`          | Prettier, writing changes        |
 | `npm run format-check`    | Prettier, check only             |
-| `npm run lint`            | ESLint                           |
-| `npm run lint-fix`        | ESLint, applying fixable rules   |
+| `npm run lint`            | oxlint                           |
+| `npm run lint-fix`        | oxlint, applying fixable rules   |
 | `npm run type-check`      | TypeScript                       |
 | `npm run test-unit`       | Vitest unit tests                |
 | `npm run test-unit-watch` | Vitest in watch mode             |
@@ -115,6 +116,6 @@ src/constants/             every constant
 src/utils/                 this project's helpers
 src/lib/utils.ts           cn - generic, reusable in any project
 components.json            shadcn CLI config
-eslint.config.js           ESLint flat config
+.oxlintrc.json             oxlint rules
 .prettierrc.json           Prettier options
 ```
