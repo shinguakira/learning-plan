@@ -1,10 +1,8 @@
 import type { FastifyInstance, FastifyReply } from "fastify"
 
-import { ERROR_SCHEMA } from "../constants/errorSchema.js"
 import {
   SKILL_CREATE_SCHEMA,
   SKILL_ID_SCHEMA,
-  SKILL_SCHEMA,
   SKILL_UPDATE_SCHEMA,
 } from "../constants/skillSchema.js"
 import { skillService } from "../services/skillService.js"
@@ -16,7 +14,7 @@ export default async function skillController(app: FastifyInstance): Promise<voi
     {
       schema: {
         body: SKILL_CREATE_SCHEMA,
-        response: { 201: SKILL_SCHEMA, 409: ERROR_SCHEMA },
+        response: { 201: { $ref: "skill#" }, 409: { $ref: "error#" } },
       },
     },
     async (request, reply: FastifyReply) => {
@@ -36,7 +34,11 @@ export default async function skillController(app: FastifyInstance): Promise<voi
       schema: {
         params: SKILL_ID_SCHEMA,
         body: SKILL_UPDATE_SCHEMA,
-        response: { 200: SKILL_SCHEMA, 404: ERROR_SCHEMA, 409: ERROR_SCHEMA },
+        response: {
+          200: { $ref: "skill#" },
+          404: { $ref: "error#" },
+          409: { $ref: "error#" },
+        },
       },
     },
     async (request, reply: FastifyReply) => {

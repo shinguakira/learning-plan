@@ -11,7 +11,12 @@ import type { StrengthCreateRequest, StrengthUpdateRequest } from "../types/stre
 export default async function strengthController(app: FastifyInstance): Promise<void> {
   app.post<{ Body: StrengthCreateRequest }>(
     "/api/strength",
-    { schema: { body: STRENGTH_CREATE_SCHEMA } },
+    {
+      schema: {
+        body: STRENGTH_CREATE_SCHEMA,
+        response: { 201: { $ref: "strength#" }, 409: { $ref: "error#" } },
+      },
+    },
     async (request, reply: FastifyReply) => {
       const { user, name } = request.body
       const strength = await strengthService.addStrength(request.body)
@@ -25,7 +30,17 @@ export default async function strengthController(app: FastifyInstance): Promise<
 
   app.put<{ Params: { id: string }; Body: StrengthUpdateRequest }>(
     "/api/strength/:id",
-    { schema: { params: STRENGTH_ID_SCHEMA, body: STRENGTH_UPDATE_SCHEMA } },
+    {
+      schema: {
+        params: STRENGTH_ID_SCHEMA,
+        body: STRENGTH_UPDATE_SCHEMA,
+        response: {
+          200: { $ref: "strength#" },
+          404: { $ref: "error#" },
+          409: { $ref: "error#" },
+        },
+      },
+    },
     async (request, reply: FastifyReply) => {
       const { id } = request.params
       if ((await strengthService.getStrength(id)) === null) {

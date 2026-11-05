@@ -7,6 +7,26 @@
   },
   "components": {
     "schemas": {
+      "error": {
+        "type": "object",
+        "required": [
+          "message"
+        ],
+        "properties": {
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "mockUser": {
+        "type": "string",
+        "enum": [
+          "Sanjar",
+          "Akira",
+          "Mike",
+          "John"
+        ]
+      },
       "skillLevel": {
         "type": "string",
         "enum": [
@@ -15,6 +35,278 @@
           "advanced",
           "expert"
         ]
+      },
+      "employmentType": {
+        "type": "string",
+        "enum": [
+          "full-time",
+          "contract",
+          "part-time",
+          "internship"
+        ]
+      },
+      "taskCategory": {
+        "type": "string",
+        "enum": [
+          "Frontend",
+          "Backend",
+          "Infra / Cloud",
+          "Database",
+          "CS Fundamentals",
+          "Certification"
+        ]
+      },
+      "taskStatus": {
+        "type": "string",
+        "enum": [
+          "todo",
+          "doing",
+          "done"
+        ]
+      },
+      "taskPriority": {
+        "type": "string",
+        "enum": [
+          "low",
+          "mid",
+          "high"
+        ]
+      },
+      "skill": {
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "level",
+          "yearsOfExperience",
+          "createdAt"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "level": {
+            "$ref": "#/components/schemas/skillLevel"
+          },
+          "yearsOfExperience": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "strength": {
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "description",
+          "createdAt"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": {
+            "type": "string",
+            "minLength": 1
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "job": {
+        "type": "object",
+        "required": [
+          "id",
+          "company",
+          "title",
+          "employmentType",
+          "startDate",
+          "endDate",
+          "summary",
+          "createdAt"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "company": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S"
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S"
+          },
+          "employmentType": {
+            "$ref": "#/components/schemas/employmentType"
+          },
+          "startDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "endDate": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "summary": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "certificate": {
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "issuer",
+          "dateEarned",
+          "createdAt"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S"
+          },
+          "issuer": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S"
+          },
+          "dateEarned": {
+            "type": "string",
+            "format": "date"
+          },
+          "credentialUrl": {
+            "type": "string",
+            "format": "uri",
+            "pattern": "^https?://"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "task": {
+        "type": "object",
+        "required": [
+          "title",
+          "category",
+          "status",
+          "priority",
+          "estimatedHours",
+          "note",
+          "offsetStart",
+          "span"
+        ],
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "category": {
+            "$ref": "#/components/schemas/taskCategory"
+          },
+          "status": {
+            "$ref": "#/components/schemas/taskStatus"
+          },
+          "priority": {
+            "$ref": "#/components/schemas/taskPriority"
+          },
+          "estimatedHours": {
+            "type": "number"
+          },
+          "note": {
+            "type": "string"
+          },
+          "offsetStart": {
+            "type": "integer"
+          },
+          "span": {
+            "type": "integer"
+          }
+        }
+      },
+      "technology": {
+        "type": "object",
+        "required": [
+          "id",
+          "name"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "profile": {
+        "type": "object",
+        "required": [
+          "skills",
+          "strengths",
+          "jobs",
+          "certificates"
+        ],
+        "properties": {
+          "skills": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/skill"
+            }
+          },
+          "strengths": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/strength"
+            }
+          },
+          "jobs": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/job"
+            }
+          },
+          "certificates": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/certificate"
+            }
+          }
+        }
       }
     }
   },
@@ -36,13 +328,7 @@
                 ],
                 "properties": {
                   "user": {
-                    "type": "string",
-                    "enum": [
-                      "Sanjar",
-                      "Akira",
-                      "Mike",
-                      "John"
-                    ]
+                    "$ref": "#/components/schemas/mockUser"
                   },
                   "name": {
                     "type": "string",
@@ -69,8 +355,25 @@
           }
         },
         "responses": {
-          "200": {
-            "description": "Default Response"
+          "201": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/certificate"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                }
+              }
+            }
           }
         }
       }
@@ -127,7 +430,34 @@
         ],
         "responses": {
           "200": {
-            "description": "Default Response"
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/certificate"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                }
+              }
+            }
           }
         }
       }
@@ -150,13 +480,7 @@
                     "type": "boolean"
                   },
                   "user": {
-                    "type": "string",
-                    "enum": [
-                      "Sanjar",
-                      "Akira",
-                      "Mike",
-                      "John"
-                    ]
+                    "$ref": "#/components/schemas/mockUser"
                   },
                   "messages": {
                     "type": "array",
@@ -190,7 +514,52 @@
         },
         "responses": {
           "200": {
-            "description": "Default Response"
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "content"
+                  ],
+                  "properties": {
+                    "content": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                }
+              }
+            }
           }
         }
       }
@@ -215,13 +584,7 @@
                 ],
                 "properties": {
                   "user": {
-                    "type": "string",
-                    "enum": [
-                      "Sanjar",
-                      "Akira",
-                      "Mike",
-                      "John"
-                    ]
+                    "$ref": "#/components/schemas/mockUser"
                   },
                   "company": {
                     "type": "string",
@@ -234,13 +597,7 @@
                     "pattern": "\\S"
                   },
                   "employmentType": {
-                    "type": "string",
-                    "enum": [
-                      "full-time",
-                      "contract",
-                      "part-time",
-                      "internship"
-                    ]
+                    "$ref": "#/components/schemas/employmentType"
                   },
                   "startDate": {
                     "type": "string",
@@ -266,8 +623,25 @@
           }
         },
         "responses": {
-          "200": {
-            "description": "Default Response"
+          "201": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/job"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                }
+              }
+            }
           }
         }
       }
@@ -301,13 +675,7 @@
                     "pattern": "\\S"
                   },
                   "employmentType": {
-                    "type": "string",
-                    "enum": [
-                      "full-time",
-                      "contract",
-                      "part-time",
-                      "internship"
-                    ]
+                    "$ref": "#/components/schemas/employmentType"
                   },
                   "startDate": {
                     "type": "string",
@@ -345,7 +713,34 @@
         ],
         "responses": {
           "200": {
-            "description": "Default Response"
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/job"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                }
+              }
+            }
           }
         }
       }
@@ -355,13 +750,7 @@
         "parameters": [
           {
             "schema": {
-              "type": "string",
-              "enum": [
-                "Sanjar",
-                "Akira",
-                "Mike",
-                "John"
-              ]
+              "$ref": "#/components/schemas/mockUser"
             },
             "in": "query",
             "name": "user",
@@ -370,7 +759,14 @@
         ],
         "responses": {
           "200": {
-            "description": "Default Response"
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/profile"
+                }
+              }
+            }
           }
         }
       }
@@ -379,7 +775,14 @@
       "get": {
         "responses": {
           "200": {
-            "description": "Default Response"
+            "description": "Default Response",
+            "content": {
+              "text/csv": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
           }
         }
       }
@@ -399,175 +802,10 @@
                 ],
                 "properties": {
                   "user": {
-                    "type": "string",
-                    "enum": [
-                      "Sanjar",
-                      "Akira",
-                      "Mike",
-                      "John"
-                    ]
+                    "$ref": "#/components/schemas/mockUser"
                   },
                   "profile": {
-                    "type": "object",
-                    "additionalProperties": false,
-                    "required": [
-                      "skills",
-                      "strengths",
-                      "jobs",
-                      "certificates"
-                    ],
-                    "properties": {
-                      "skills": {
-                        "type": "array",
-                        "items": {
-                          "type": "object",
-                          "additionalProperties": false,
-                          "required": [
-                            "id",
-                            "name",
-                            "level",
-                            "yearsOfExperience",
-                            "createdAt"
-                          ],
-                          "properties": {
-                            "id": {
-                              "type": "string"
-                            },
-                            "name": {
-                              "type": "string"
-                            },
-                            "level": {
-                              "type": "string",
-                              "enum": [
-                                "beginner",
-                                "intermediate",
-                                "advanced",
-                                "expert"
-                              ]
-                            },
-                            "yearsOfExperience": {
-                              "type": "number"
-                            },
-                            "createdAt": {
-                              "type": "string"
-                            }
-                          }
-                        }
-                      },
-                      "strengths": {
-                        "type": "array",
-                        "items": {
-                          "type": "object",
-                          "additionalProperties": false,
-                          "required": [
-                            "id",
-                            "name",
-                            "description",
-                            "createdAt"
-                          ],
-                          "properties": {
-                            "id": {
-                              "type": "string"
-                            },
-                            "name": {
-                              "type": "string"
-                            },
-                            "description": {
-                              "type": "string"
-                            },
-                            "createdAt": {
-                              "type": "string"
-                            }
-                          }
-                        }
-                      },
-                      "jobs": {
-                        "type": "array",
-                        "items": {
-                          "type": "object",
-                          "additionalProperties": false,
-                          "required": [
-                            "id",
-                            "company",
-                            "title",
-                            "employmentType",
-                            "startDate",
-                            "endDate",
-                            "summary",
-                            "createdAt"
-                          ],
-                          "properties": {
-                            "id": {
-                              "type": "string"
-                            },
-                            "company": {
-                              "type": "string"
-                            },
-                            "title": {
-                              "type": "string"
-                            },
-                            "employmentType": {
-                              "type": "string",
-                              "enum": [
-                                "full-time",
-                                "contract",
-                                "part-time",
-                                "internship"
-                              ]
-                            },
-                            "startDate": {
-                              "type": "string"
-                            },
-                            "endDate": {
-                              "type": [
-                                "string",
-                                "null"
-                              ]
-                            },
-                            "summary": {
-                              "type": "string"
-                            },
-                            "createdAt": {
-                              "type": "string"
-                            }
-                          }
-                        }
-                      },
-                      "certificates": {
-                        "type": "array",
-                        "items": {
-                          "type": "object",
-                          "additionalProperties": false,
-                          "required": [
-                            "id",
-                            "name",
-                            "issuer",
-                            "dateEarned",
-                            "createdAt"
-                          ],
-                          "properties": {
-                            "id": {
-                              "type": "string"
-                            },
-                            "name": {
-                              "type": "string"
-                            },
-                            "issuer": {
-                              "type": "string"
-                            },
-                            "dateEarned": {
-                              "type": "string"
-                            },
-                            "credentialUrl": {
-                              "type": "string"
-                            },
-                            "createdAt": {
-                              "type": "string"
-                            }
-                          }
-                        }
-                      }
-                    }
+                    "$ref": "#/components/schemas/profile"
                   }
                 }
               }
@@ -576,7 +814,15 @@
         },
         "responses": {
           "200": {
-            "description": "Default Response"
+            "description": "Default Response",
+            "content": {
+              "application/pdf": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
           }
         }
       }
@@ -598,13 +844,7 @@
                 ],
                 "properties": {
                   "user": {
-                    "type": "string",
-                    "enum": [
-                      "Sanjar",
-                      "Akira",
-                      "Mike",
-                      "John"
-                    ]
+                    "$ref": "#/components/schemas/mockUser"
                   },
                   "name": {
                     "type": "string",
@@ -628,34 +868,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "required": [
-                    "id",
-                    "name",
-                    "level",
-                    "yearsOfExperience",
-                    "createdAt"
-                  ],
-                  "properties": {
-                    "id": {
-                      "type": "string"
-                    },
-                    "name": {
-                      "type": "string",
-                      "minLength": 1
-                    },
-                    "level": {
-                      "$ref": "#/components/schemas/skillLevel"
-                    },
-                    "yearsOfExperience": {
-                      "type": "integer",
-                      "minimum": 0
-                    },
-                    "createdAt": {
-                      "type": "string",
-                      "format": "date-time"
-                    }
-                  }
+                  "$ref": "#/components/schemas/skill"
                 }
               }
             }
@@ -665,15 +878,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "required": [
-                    "message"
-                  ],
-                  "properties": {
-                    "message": {
-                      "type": "string"
-                    }
-                  }
+                  "$ref": "#/components/schemas/error"
                 }
               }
             }
@@ -729,34 +934,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "required": [
-                    "id",
-                    "name",
-                    "level",
-                    "yearsOfExperience",
-                    "createdAt"
-                  ],
-                  "properties": {
-                    "id": {
-                      "type": "string"
-                    },
-                    "name": {
-                      "type": "string",
-                      "minLength": 1
-                    },
-                    "level": {
-                      "$ref": "#/components/schemas/skillLevel"
-                    },
-                    "yearsOfExperience": {
-                      "type": "integer",
-                      "minimum": 0
-                    },
-                    "createdAt": {
-                      "type": "string",
-                      "format": "date-time"
-                    }
-                  }
+                  "$ref": "#/components/schemas/skill"
                 }
               }
             }
@@ -766,15 +944,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "required": [
-                    "message"
-                  ],
-                  "properties": {
-                    "message": {
-                      "type": "string"
-                    }
-                  }
+                  "$ref": "#/components/schemas/error"
                 }
               }
             }
@@ -784,15 +954,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "required": [
-                    "message"
-                  ],
-                  "properties": {
-                    "message": {
-                      "type": "string"
-                    }
-                  }
+                  "$ref": "#/components/schemas/error"
                 }
               }
             }
@@ -816,13 +978,7 @@
                 ],
                 "properties": {
                   "user": {
-                    "type": "string",
-                    "enum": [
-                      "Sanjar",
-                      "Akira",
-                      "Mike",
-                      "John"
-                    ]
+                    "$ref": "#/components/schemas/mockUser"
                   },
                   "name": {
                     "type": "string",
@@ -838,8 +994,25 @@
           }
         },
         "responses": {
-          "200": {
-            "description": "Default Response"
+          "201": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/strength"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                }
+              }
+            }
           }
         }
       }
@@ -884,7 +1057,34 @@
         ],
         "responses": {
           "200": {
-            "description": "Default Response"
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/strength"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                }
+              }
+            }
           }
         }
       }
@@ -893,7 +1093,25 @@
       "get": {
         "responses": {
           "200": {
-            "description": "Default Response"
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "tasks"
+                  ],
+                  "properties": {
+                    "tasks": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/task"
+                      }
+                    }
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -902,7 +1120,14 @@
       "get": {
         "responses": {
           "200": {
-            "description": "Default Response"
+            "description": "Default Response",
+            "content": {
+              "text/csv": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
           }
         }
       }
@@ -911,7 +1136,25 @@
       "get": {
         "responses": {
           "200": {
-            "description": "Default Response"
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "technologies"
+                  ],
+                  "properties": {
+                    "technologies": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/technology"
+                      }
+                    }
+                  }
+                }
+              }
+            }
           }
         }
       }

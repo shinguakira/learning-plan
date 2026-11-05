@@ -2,7 +2,7 @@
 
 import type { Client, ClientMeta, Options as Options2, RequestResult, TDataShape } from './client';
 import { client } from './client.gen';
-import type { GetApiProfileCsvData, GetApiProfileCsvResponses, GetApiProfileData, GetApiProfileResponses, GetApiTasksCsvData, GetApiTasksCsvResponses, GetApiTasksData, GetApiTasksResponses, GetApiTechnologiesData, GetApiTechnologiesResponses, PostApiCertificateData, PostApiCertificateResponses, PostApiChatData, PostApiChatResponses, PostApiJobsData, PostApiJobsResponses, PostApiProfilePdfData, PostApiProfilePdfResponses, PostApiSkillsData, PostApiSkillsErrors, PostApiSkillsResponses, PostApiStrengthData, PostApiStrengthResponses, PutApiCertificateByIdData, PutApiCertificateByIdResponses, PutApiJobsByIdData, PutApiJobsByIdResponses, PutApiSkillsByIdData, PutApiSkillsByIdErrors, PutApiSkillsByIdResponses, PutApiStrengthByIdData, PutApiStrengthByIdResponses } from './types.gen';
+import type { GetApiProfileCsvData, GetApiProfileCsvResponses, GetApiProfileData, GetApiProfileResponses, GetApiTasksCsvData, GetApiTasksCsvResponses, GetApiTasksData, GetApiTasksResponses, GetApiTechnologiesData, GetApiTechnologiesResponses, PostApiCertificateData, PostApiCertificateErrors, PostApiCertificateResponses, PostApiChatData, PostApiChatErrors, PostApiChatResponses, PostApiJobsData, PostApiJobsErrors, PostApiJobsResponses, PostApiProfilePdfData, PostApiProfilePdfResponses, PostApiSkillsData, PostApiSkillsErrors, PostApiSkillsResponses, PostApiStrengthData, PostApiStrengthErrors, PostApiStrengthResponses, PutApiCertificateByIdData, PutApiCertificateByIdErrors, PutApiCertificateByIdResponses, PutApiJobsByIdData, PutApiJobsByIdErrors, PutApiJobsByIdResponses, PutApiSkillsByIdData, PutApiSkillsByIdErrors, PutApiSkillsByIdResponses, PutApiStrengthByIdData, PutApiStrengthByIdErrors, PutApiStrengthByIdResponses } from './types.gen';
 
 export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean, TResponse = unknown> = Options2<TData, ThrowOnError, TResponse> & {
     /**
@@ -18,7 +18,7 @@ export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends 
     meta?: keyof ClientMeta extends never ? Record<string, unknown> : ClientMeta;
 };
 
-export const postApiCertificate = <ThrowOnError extends boolean = false>(options: Options<PostApiCertificateData, ThrowOnError>): RequestResult<PostApiCertificateResponses, unknown, ThrowOnError> => (options.client ?? client).post<PostApiCertificateResponses, unknown, ThrowOnError>({
+export const postApiCertificate = <ThrowOnError extends boolean = false>(options: Options<PostApiCertificateData, ThrowOnError>): RequestResult<PostApiCertificateResponses, PostApiCertificateErrors, ThrowOnError> => (options.client ?? client).post<PostApiCertificateResponses, PostApiCertificateErrors, ThrowOnError>({
     url: '/api/certificate',
     ...options,
     headers: {
@@ -27,7 +27,7 @@ export const postApiCertificate = <ThrowOnError extends boolean = false>(options
     }
 });
 
-export const putApiCertificateById = <ThrowOnError extends boolean = false>(options: Options<PutApiCertificateByIdData, ThrowOnError>): RequestResult<PutApiCertificateByIdResponses, unknown, ThrowOnError> => (options.client ?? client).put<PutApiCertificateByIdResponses, unknown, ThrowOnError>({
+export const putApiCertificateById = <ThrowOnError extends boolean = false>(options: Options<PutApiCertificateByIdData, ThrowOnError>): RequestResult<PutApiCertificateByIdResponses, PutApiCertificateByIdErrors, ThrowOnError> => (options.client ?? client).put<PutApiCertificateByIdResponses, PutApiCertificateByIdErrors, ThrowOnError>({
     url: '/api/certificate/{id}',
     ...options,
     headers: {
@@ -36,7 +36,7 @@ export const putApiCertificateById = <ThrowOnError extends boolean = false>(opti
     }
 });
 
-export const postApiChat = <ThrowOnError extends boolean = false>(options: Options<PostApiChatData, ThrowOnError>): RequestResult<PostApiChatResponses, unknown, ThrowOnError> => (options.client ?? client).post<PostApiChatResponses, unknown, ThrowOnError>({
+export const postApiChat = <ThrowOnError extends boolean = false>(options: Options<PostApiChatData, ThrowOnError>): RequestResult<PostApiChatResponses, PostApiChatErrors, ThrowOnError> => (options.client ?? client).post<PostApiChatResponses, PostApiChatErrors, ThrowOnError>({
     url: '/api/chat',
     ...options,
     headers: {
@@ -45,7 +45,7 @@ export const postApiChat = <ThrowOnError extends boolean = false>(options: Optio
     }
 });
 
-export const postApiJobs = <ThrowOnError extends boolean = false>(options: Options<PostApiJobsData, ThrowOnError>): RequestResult<PostApiJobsResponses, unknown, ThrowOnError> => (options.client ?? client).post<PostApiJobsResponses, unknown, ThrowOnError>({
+export const postApiJobs = <ThrowOnError extends boolean = false>(options: Options<PostApiJobsData, ThrowOnError>): RequestResult<PostApiJobsResponses, PostApiJobsErrors, ThrowOnError> => (options.client ?? client).post<PostApiJobsResponses, PostApiJobsErrors, ThrowOnError>({
     url: '/api/jobs',
     ...options,
     headers: {
@@ -54,7 +54,7 @@ export const postApiJobs = <ThrowOnError extends boolean = false>(options: Optio
     }
 });
 
-export const putApiJobsById = <ThrowOnError extends boolean = false>(options: Options<PutApiJobsByIdData, ThrowOnError>): RequestResult<PutApiJobsByIdResponses, unknown, ThrowOnError> => (options.client ?? client).put<PutApiJobsByIdResponses, unknown, ThrowOnError>({
+export const putApiJobsById = <ThrowOnError extends boolean = false>(options: Options<PutApiJobsByIdData, ThrowOnError>): RequestResult<PutApiJobsByIdResponses, PutApiJobsByIdErrors, ThrowOnError> => (options.client ?? client).put<PutApiJobsByIdResponses, PutApiJobsByIdErrors, ThrowOnError>({
     url: '/api/jobs/{id}',
     ...options,
     headers: {
@@ -94,7 +94,7 @@ export const putApiSkillsById = <ThrowOnError extends boolean = false>(options: 
     }
 });
 
-export const postApiStrength = <ThrowOnError extends boolean = false>(options: Options<PostApiStrengthData, ThrowOnError>): RequestResult<PostApiStrengthResponses, unknown, ThrowOnError> => (options.client ?? client).post<PostApiStrengthResponses, unknown, ThrowOnError>({
+export const postApiStrength = <ThrowOnError extends boolean = false>(options: Options<PostApiStrengthData, ThrowOnError>): RequestResult<PostApiStrengthResponses, PostApiStrengthErrors, ThrowOnError> => (options.client ?? client).post<PostApiStrengthResponses, PostApiStrengthErrors, ThrowOnError>({
     url: '/api/strength',
     ...options,
     headers: {
@@ -103,7 +103,7 @@ export const postApiStrength = <ThrowOnError extends boolean = false>(options: O
     }
 });
 
-export const putApiStrengthById = <ThrowOnError extends boolean = false>(options: Options<PutApiStrengthByIdData, ThrowOnError>): RequestResult<PutApiStrengthByIdResponses, unknown, ThrowOnError> => (options.client ?? client).put<PutApiStrengthByIdResponses, unknown, ThrowOnError>({
+export const putApiStrengthById = <ThrowOnError extends boolean = false>(options: Options<PutApiStrengthByIdData, ThrowOnError>): RequestResult<PutApiStrengthByIdResponses, PutApiStrengthByIdErrors, ThrowOnError> => (options.client ?? client).put<PutApiStrengthByIdResponses, PutApiStrengthByIdErrors, ThrowOnError>({
     url: '/api/strength/{id}',
     ...options,
     headers: {

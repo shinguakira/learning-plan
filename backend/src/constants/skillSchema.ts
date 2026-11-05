@@ -1,5 +1,3 @@
-import { MOCK_USERS } from "./user.js"
-
 export const SKILL_LEVEL_SCHEMA = {
   $id: "skillLevel",
   type: "string",
@@ -17,7 +15,7 @@ export const SKILL_CREATE_SCHEMA = {
   additionalProperties: false,
   required: ["user", "name", "level", "yearsOfExperience"],
   properties: {
-    user: { type: "string", enum: MOCK_USERS },
+    user: { $ref: "mockUser#" },
     ...SKILL_FIELDS,
   },
 } as const
@@ -36,6 +34,7 @@ export const SKILL_ID_SCHEMA = {
 } as const
 
 export const SKILL_SCHEMA = {
+  $id: "skill",
   type: "object",
   required: ["id", "name", "level", "yearsOfExperience", "createdAt"],
   properties: {
