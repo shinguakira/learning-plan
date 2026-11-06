@@ -10,7 +10,6 @@ import { EMPTY_STRENGTH_DRAFT } from "@/constants/strength"
 import type { StrengthDraft } from "@/types/strength"
 import type { PostApiStrengthResponse } from "@/api/generated"
 
-
 export function StrengthForm({
   strength = null,
   existingNames,

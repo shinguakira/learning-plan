@@ -5,7 +5,6 @@ import { Card, CardContent } from "@/components/ui/card"
 import { StrengthEditDialog } from "@/pages/profile/StrengthEditDialog"
 import type { PostApiStrengthResponse } from "@/api/generated"
 
-
 export function StrengthList({
   strengths,
   onEdit,
