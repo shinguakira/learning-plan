@@ -19,7 +19,7 @@ is for** if you want the why rather than the how.
 | Unit tests      | Vitest 4                             |
 | E2E tests       | Playwright 1.63                      |
 | Lint            | oxlint 1                             |
-| Format          | Prettier 3                           |
+| Format          | oxfmt 0.76                           |
 | Package manager | npm                                  |
 
 ## Setup
@@ -86,8 +86,8 @@ Every script defined in [`package.json`](package.json), and nothing else:
 | Script                    | What it does                     |
 | ------------------------- | -------------------------------- |
 | `npm run dev`             | Dev server with HMR              |
-| `npm run format`          | Prettier, writing changes        |
-| `npm run format-check`    | Prettier, check only             |
+| `npm run format`          | oxfmt, writing changes           |
+| `npm run format-check`    | oxfmt, check only                |
 | `npm run lint`            | oxlint                           |
 | `npm run lint-fix`        | oxlint, applying fixable rules   |
 | `npm run type-check`      | TypeScript                       |
@@ -117,5 +117,5 @@ src/utils/                 this project's helpers
 src/lib/utils.ts           cn - generic, reusable in any project
 components.json            shadcn CLI config
 .oxlintrc.json             oxlint rules
-.prettierrc.json           Prettier options
+.oxfmtrc.json              oxfmt options
 ```
