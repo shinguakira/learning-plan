@@ -1,7 +1,0 @@
-dist
-src/api/generated
-node_modules
-package-lock.json
-playwright-report
-test-results
-blob-report

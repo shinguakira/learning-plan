@@ -50,7 +50,7 @@ Two commands worth understanding:
 - **`npm run <name>`** runs a script from `package.json`. While it runs, npm puts
   `node_modules/.bin/` on the PATH, which is why `npm run dev` can invoke `vite`
   even though `vite` is not installed system-wide.
-- **`npx <tool>`** runs a tool's executable directly — `npx prettier --check .`,
+- **`npx <tool>`** runs a tool's executable directly — `npx oxfmt --check .`,
   `npx shadcn@latest add dialog`. Use it for one-off commands that do not deserve
   their own script.
 
@@ -59,8 +59,8 @@ Two commands worth understanding:
 | Script                 | What it does                                          |
 | ---------------------- | ----------------------------------------------------- |
 | `npm run dev`          | Dev server. Edits appear in the browser as you save   |
-| `npm run format`       | Prettier, rewriting files                             |
-| `npm run format-check` | Prettier, reporting without rewriting                 |
+| `npm run format`       | oxfmt, rewriting files                                |
+| `npm run format-check` | oxfmt, reporting without rewriting                    |
 | `npm run lint`         | oxlint — catches suspect code the type checker allows |
 | `npm run lint-fix`     | The same, applying every fix oxlint can make itself   |
 | `npm run type-check`   | TypeScript — the check you run while working          |
@@ -78,7 +78,7 @@ Both are lists of packages; the split is about **what runs in the browser**.
 - **`dependencies`** — code that ends up inside what a visitor downloads. React is
   running while someone uses the page, so React is here.
 - **`devDependencies`** — tools that run on your machine to produce or check that
-  output, and then have no further part in it. Vite, TypeScript, oxlint and Prettier.
+  output, and then have no further part in it. Vite, TypeScript, oxlint and oxfmt.
 
 The line is about the package, not its output. Tailwind is a devDependency and its
 compiled CSS is very much shipped — the compiling happens during `npm run build`, and
@@ -118,7 +118,7 @@ locally either way — it misleads the next person reading the list.
 | `typescript`                                      | the type checker — the `tsc -b` behind `npm run type-check`          |
 | `@types/react`, `@types/react-dom`, `@types/node` | types for libraries that ship without them                           |
 | `oxlint`                                          | the linter — React and TypeScript rules built in, no plugin packages |
-| `prettier`                                        | the formatter                                                        |
+| `oxfmt`                                           | the formatter                                                        |
 
 ## Follow one screen down
 

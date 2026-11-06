@@ -1,0 +1,17 @@
+{
+  "$schema": "../node_modules/oxfmt/configuration_schema.json",
+  "semi": false,
+  "singleQuote": false,
+  "printWidth": 100,
+  "trailingComma": "all",
+  "sortPackageJson": false,
+  "ignorePatterns": [
+    "dist",
+    "node_modules",
+    "package-lock.json",
+    "playwright-report",
+    "test-results",
+    "blob-report",
+    "src/api/generated"
+  ]
+}
