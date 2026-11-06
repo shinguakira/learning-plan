@@ -7,8 +7,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { FormField } from "@/components/form/FormField"
 import { useStrengthDraft } from "@/hooks/useStrengthDraft"
 import { EMPTY_STRENGTH_DRAFT } from "@/constants/strength"
-import type { StrengthDraft } from "@/types/strength"
-import type { PostApiStrengthResponse } from "@/api/generated"
+import type { PostApiStrengthResponse, PutApiStrengthByIdData } from "@/api/generated"
 
 export function StrengthForm({
   strength = null,
@@ -17,7 +16,7 @@ export function StrengthForm({
 }: {
   strength?: PostApiStrengthResponse | null
   existingNames: readonly string[]
-  onSubmit: (draft: StrengthDraft) => Promise<void>
+  onSubmit: (draft: PutApiStrengthByIdData["body"]) => Promise<void>
 }) {
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
