@@ -3,7 +3,7 @@ import { useMutation } from "@tanstack/react-query"
 import { putApiStrengthByIdMutation } from "@/api/generated/@tanstack/react-query.gen"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { StrengthForm } from "@/pages/profile/StrengthForm"
-import type { Strength } from "@/types/strength"
+import type { PostApiStrengthResponse } from "@/api/generated"
 
 export function StrengthEditDialog({
   strength,
@@ -11,9 +11,9 @@ export function StrengthEditDialog({
   onEdit,
   onClose,
 }: {
-  strength: Strength | null
+  strength: PostApiStrengthResponse | null
   existingNames: readonly string[]
-  onEdit: (id: string, strength: Strength) => void
+  onEdit: (id: string, strength: PostApiStrengthResponse) => void
   onClose: () => void
 }) {
   const updateStrength = useMutation(putApiStrengthByIdMutation())

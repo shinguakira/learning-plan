@@ -7,14 +7,16 @@ import { Textarea } from "@/components/ui/textarea"
 import { FormField } from "@/components/form/FormField"
 import { useStrengthDraft } from "@/hooks/useStrengthDraft"
 import { EMPTY_STRENGTH_DRAFT } from "@/constants/strength"
-import type { Strength, StrengthDraft } from "@/types/strength"
+import type { StrengthDraft } from "@/types/strength"
+import type { PostApiStrengthResponse } from "@/api/generated"
+
 
 export function StrengthForm({
   strength = null,
   existingNames,
   onSubmit,
 }: {
-  strength?: Strength | null
+  strength?: PostApiStrengthResponse | null
   existingNames: readonly string[]
   onSubmit: (draft: StrengthDraft) => Promise<void>
 }) {

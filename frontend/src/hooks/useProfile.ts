@@ -1,4 +1,4 @@
-import type { PostApiSkillsResponse } from "@/api/generated"
+import type { PostApiSkillsResponse, PostApiStrengthResponse } from "@/api/generated"
 import { useEffect, useRef, useState } from "react"
 import { fetchProfile } from "@/api/profile"
 import { createJob, updateJob } from "@/api/job"
@@ -8,13 +8,12 @@ import type { ProfileState } from "@/types/profile"
 import type { MockUser } from "@/types/user"
 import type { Job, JobDraft } from "@/types/job"
 import type { Certificate, CertificateDraft } from "@/types/certificate"
-import type { Strength } from "@/types/strength"
 
 export type ProfileApi = {
   skills: PostApiSkillsResponse[]
   jobs: Job[]
   certificates: Certificate[]
-  strengths: Strength[]
+  strengths: PostApiStrengthResponse[]
   /** True only while the initial seed request from the backend is in flight. */
   loading: boolean
   /** Set if the initial seed request failed; all lists still work from empty. */
@@ -28,8 +27,8 @@ export type ProfileApi = {
   addCertificate: (draft: CertificateDraft) => Promise<void>
   editCertificate: (id: string, draft: CertificateDraft) => Promise<void>
   removeCertificate: (id: string) => void
-  addStrength: (strength: Strength) => void
-  editStrength: (id: string, strength: Strength) => void
+  addStrength: (strength: PostApiStrengthResponse) => void
+  editStrength: (id: string, strength: PostApiStrengthResponse) => void
   removeStrength: (id: string) => void
 }
 
