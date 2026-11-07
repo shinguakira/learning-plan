@@ -1,8 +1,11 @@
 import { useState } from "react"
-import type { StrengthDraft } from "@/types/strength"
+import type { PutApiStrengthByIdData } from "@/api/generated"
 
-export function useStrengthDraft(existingNames: readonly string[], initial: StrengthDraft) {
-  const [draft, setDraft] = useState<StrengthDraft>(initial)
+export function useStrengthDraft(
+  existingNames: readonly string[],
+  initial: PutApiStrengthByIdData["body"],
+) {
+  const [draft, setDraft] = useState<PutApiStrengthByIdData["body"]>(initial)
   const [touched, setTouched] = useState(false)
   const nameError =
     draft.name.trim() === ""
@@ -17,8 +20,9 @@ export function useStrengthDraft(existingNames: readonly string[], initial: Stre
     touched,
     nameError,
     descriptionError,
-    patch: (next: Partial<StrengthDraft>) => setDraft((prev) => ({ ...prev, ...next })),
-    submit: (): StrengthDraft | null => {
+    patch: (next: Partial<PutApiStrengthByIdData["body"]>) =>
+      setDraft((prev) => ({ ...prev, ...next })),
+    submit: (): PutApiStrengthByIdData["body"] | null => {
       setTouched(true)
       if (nameError || descriptionError) return null
       const ready = { name: draft.name.trim(), description: draft.description.trim() }

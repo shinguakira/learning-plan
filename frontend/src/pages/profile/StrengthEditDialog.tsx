@@ -1,7 +1,9 @@
 import { toast } from "sonner"
+import { useMutation } from "@tanstack/react-query"
+import { putApiStrengthByIdMutation } from "@/api/generated/@tanstack/react-query.gen"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { StrengthForm } from "@/pages/profile/StrengthForm"
-import type { Strength, StrengthDraft } from "@/types/strength"
+import type { PostApiStrengthResponse } from "@/api/generated"
 
 export function StrengthEditDialog({
   strength,
@@ -9,11 +11,13 @@ export function StrengthEditDialog({
   onEdit,
   onClose,
 }: {
-  strength: Strength | null
+  strength: PostApiStrengthResponse | null
   existingNames: readonly string[]
-  onEdit: (id: string, draft: StrengthDraft) => Promise<void>
+  onEdit: (id: string, strength: PostApiStrengthResponse) => void
   onClose: () => void
 }) {
+  const updateStrength = useMutation(putApiStrengthByIdMutation())
+
   return (
     <Dialog
       open={strength !== null}
@@ -34,7 +38,11 @@ export function StrengthEditDialog({
             strength={strength}
             existingNames={existingNames}
             onSubmit={async (draft) => {
-              await onEdit(strength.id, draft)
+              const updated = await updateStrength.mutateAsync({
+                path: { id: strength.id },
+                body: draft,
+              })
+              onEdit(strength.id, updated)
               toast.success("Strength updated successfully.")
               onClose()
             }}

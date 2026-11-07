@@ -1,5 +1,3 @@
-import type { StrengthDraft } from "@/types/strength"
+import type { PutApiStrengthByIdData } from "@/api/generated"
 
-export const STRENGTH_API_URL = "/api/strength"
-
-export const EMPTY_STRENGTH_DRAFT: StrengthDraft = { name: "", description: "" }
+export const EMPTY_STRENGTH_DRAFT: PutApiStrengthByIdData["body"] = { name: "", description: "" }

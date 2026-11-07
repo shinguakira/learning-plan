@@ -7,16 +7,16 @@ import { Textarea } from "@/components/ui/textarea"
 import { FormField } from "@/components/form/FormField"
 import { useStrengthDraft } from "@/hooks/useStrengthDraft"
 import { EMPTY_STRENGTH_DRAFT } from "@/constants/strength"
-import type { Strength, StrengthDraft } from "@/types/strength"
+import type { PostApiStrengthResponse, PutApiStrengthByIdData } from "@/api/generated"
 
 export function StrengthForm({
   strength = null,
   existingNames,
   onSubmit,
 }: {
-  strength?: Strength | null
+  strength?: PostApiStrengthResponse | null
   existingNames: readonly string[]
-  onSubmit: (draft: StrengthDraft) => Promise<void>
+  onSubmit: (draft: PutApiStrengthByIdData["body"]) => Promise<void>
 }) {
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -37,7 +37,18 @@ export function StrengthForm({
     try {
       await onSubmit(ready)
     } catch (caught: unknown) {
-      setError(caught instanceof Error ? caught.message : "Could not save the strength.")
+      if (caught instanceof TypeError) {
+        setError("Could not reach the backend. Is it running?")
+      } else if (
+        typeof caught === "object" &&
+        caught !== null &&
+        "message" in caught &&
+        typeof caught.message === "string"
+      ) {
+        setError(caught.message)
+      } else {
+        setError("Could not save the strength.")
+      }
     } finally {
       setSaving(false)
     }
