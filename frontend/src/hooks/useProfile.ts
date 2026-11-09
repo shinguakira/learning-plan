@@ -1,7 +1,7 @@
 import type { PostApiSkillsResponse, PostApiStrengthResponse } from "@/api/generated"
 import { useEffect, useRef, useState } from "react"
 import { fetchProfile } from "@/api/profile"
-import { createJob, updateJob } from "@/api/job"
+import { updateJob } from "@/api/job"
 import { createCertificate, updateCertificate } from "@/api/certificate"
 import { EMPTY_PROFILE_STATE } from "@/constants/profile"
 import type { ProfileState } from "@/types/profile"
@@ -21,7 +21,7 @@ export type ProfileApi = {
   addSkill: (skill: PostApiSkillsResponse) => void
   editSkill: (id: string, skill: PostApiSkillsResponse) => void
   removeSkill: (id: string) => void
-  addJob: (draft: JobDraft) => Promise<void>
+  addJob: (job: Job) => void
   editJob: (id: string, draft: JobDraft) => Promise<void>
   removeJob: (id: string) => void
   addCertificate: (draft: CertificateDraft) => Promise<void>
@@ -118,8 +118,7 @@ export function useProfile(user: MockUser): ProfileApi {
         skills: profile.skills.filter((skill) => skill.id !== id),
       }))
     },
-    addJob: async (draft) => {
-      const job = await createJob(user, draft)
+    addJob: (job) => {
       updateProfile((profile) => ({
         ...profile,
         jobs: [job, ...profile.jobs.filter((existing) => existing.id !== job.id)],
