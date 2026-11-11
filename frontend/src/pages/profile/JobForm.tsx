@@ -38,7 +38,14 @@ export function JobForm({
     try {
       await onSubmit(ready)
     } catch (caught: unknown) {
-      setError(caught instanceof Error ? caught.message : "Could not save the job.")
+      const message =
+        typeof caught === "object" &&
+        caught !== null &&
+        "message" in caught &&
+        typeof caught.message === "string"
+          ? caught.message
+          : "Could not save the job."
+      setError(message)
     } finally {
       setSaving(false)
     }
