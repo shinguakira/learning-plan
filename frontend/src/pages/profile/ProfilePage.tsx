@@ -4,6 +4,7 @@ import { toast } from "sonner"
 import {
   postApiSkillsMutation,
   postApiStrengthMutation,
+  postApiJobsMutation,
 } from "@/api/generated/@tanstack/react-query.gen"
 import { Button } from "@/components/ui/button"
 import { useDownloadProfileCsv } from "@/hooks/useDownloadProfileCsv"
@@ -20,6 +21,8 @@ import { StrengthForm } from "@/pages/profile/StrengthForm"
 import { StrengthList } from "@/pages/profile/StrengthList"
 import { ProfileSectionLoading } from "@/pages/profile/ProfileSectionLoading"
 import { ProfileFormDialog } from "@/pages/profile/ProfileFormDialog"
+import { parseISODate } from "@/utils/date"
+import { jobClient } from "@/api/jobClient"
 
 /**
  * Every section is a stack of the same card, so four of them in a column were
@@ -54,6 +57,7 @@ export function ProfilePage() {
     removeStrength,
   } = useProfile(user)
   const createSkill = useMutation(postApiSkillsMutation())
+  const createJob = useMutation(postApiJobsMutation({ client: jobClient }))
   const createStrength = useMutation(postApiStrengthMutation())
   const { status: csvStatus, download: downloadCsv } = useDownloadProfileCsv()
   const { status: pdfStatus, download: downloadPdf } = useDownloadProfilePdf(user, {
@@ -252,7 +256,18 @@ export function ProfilePage() {
             {(close) => (
               <JobForm
                 onSubmit={async (draft) => {
-                  await addJob(draft)
+                  const job = await createJob.mutateAsync({
+                    body: { user, ...draft },
+                  })
+                  const startDate = parseISODate(job.startDate)
+                  const endDate = job.endDate === null ? null : parseISODate(job.endDate)
+
+                  if (startDate === null || (job.endDate !== null && endDate === null)) {
+                    throw new Error("The server returned an invalid job date.")
+                  }
+
+                  addJob({ ...job, startDate, endDate })
+
                   toast.success("Job added successfully.")
                   close()
                 }}

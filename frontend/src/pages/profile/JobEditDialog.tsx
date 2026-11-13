@@ -1,7 +1,11 @@
 import { toast } from "sonner"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { JobForm } from "@/pages/profile/JobForm"
-import type { Job, JobDraft } from "@/types/job"
+import type { Job } from "@/types/job"
+import { useMutation } from "@tanstack/react-query"
+import { putApiJobsByIdMutation } from "@/api/generated/@tanstack/react-query.gen"
+import { parseISODate } from "@/utils/date"
+import { jobClient } from "@/api/jobClient"
 
 export function JobEditDialog({
   job,
@@ -9,9 +13,11 @@ export function JobEditDialog({
   onClose,
 }: {
   job: Job | null
-  onEdit: (id: string, draft: JobDraft) => Promise<void>
+  onEdit: (id: string, job: Job) => void
   onClose: () => void
 }) {
+  const updateJob = useMutation(putApiJobsByIdMutation({ client: jobClient }))
+
   return (
     <Dialog
       open={job !== null}
@@ -31,7 +37,19 @@ export function JobEditDialog({
             key={job.id}
             job={job}
             onSubmit={async (draft) => {
-              await onEdit(job.id, draft)
+              const updated = await updateJob.mutateAsync({
+                path: { id: job.id },
+                body: draft,
+              })
+
+              const startDate = parseISODate(updated.startDate)
+              const endDate = updated.endDate === null ? null : parseISODate(updated.endDate)
+
+              if (startDate === null || (updated.endDate !== null && endDate === null)) {
+                throw new Error("The server returned an invalid job date.")
+              }
+
+              onEdit(job.id, { ...updated, startDate, endDate })
               toast.success("Job updated successfully.")
               onClose()
             }}
