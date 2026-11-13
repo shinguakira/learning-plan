@@ -1,12 +1,11 @@
 import type { PostApiSkillsResponse, PostApiStrengthResponse } from "@/api/generated"
 import { useEffect, useRef, useState } from "react"
 import { fetchProfile } from "@/api/profile"
-import { updateJob } from "@/api/job"
 import { createCertificate, updateCertificate } from "@/api/certificate"
 import { EMPTY_PROFILE_STATE } from "@/constants/profile"
 import type { ProfileState } from "@/types/profile"
 import type { MockUser } from "@/types/user"
-import type { Job, JobDraft } from "@/types/job"
+import type { Job } from "@/types/job"
 import type { Certificate, CertificateDraft } from "@/types/certificate"
 
 export type ProfileApi = {
@@ -22,7 +21,7 @@ export type ProfileApi = {
   editSkill: (id: string, skill: PostApiSkillsResponse) => void
   removeSkill: (id: string) => void
   addJob: (job: Job) => void
-  editJob: (id: string, draft: JobDraft) => Promise<void>
+  editJob: (id: string, job: Job) => void
   removeJob: (id: string) => void
   addCertificate: (draft: CertificateDraft) => Promise<void>
   editCertificate: (id: string, draft: CertificateDraft) => Promise<void>
@@ -124,8 +123,7 @@ export function useProfile(user: MockUser): ProfileApi {
         jobs: [job, ...profile.jobs.filter((existing) => existing.id !== job.id)],
       }))
     },
-    editJob: async (id, draft) => {
-      const job = await updateJob(id, draft)
+    editJob: (id, job) => {
       updateProfile((profile) => ({
         ...profile,
         jobs: profile.jobs.map((existing) => (existing.id === id ? job : existing)),

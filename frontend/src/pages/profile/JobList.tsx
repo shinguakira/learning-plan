@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils"
 import { today } from "@/utils/date"
 import { formatDuration, formatPeriod, sortJobs } from "@/utils/job"
 import { JobEditDialog } from "@/pages/profile/JobEditDialog"
-import type { Job, JobDraft } from "@/types/job"
+import type { Job } from "@/types/job"
 
 export function JobList({
   jobs,
@@ -16,7 +16,7 @@ export function JobList({
   onRemove,
 }: {
   jobs: Job[]
-  onEdit: (id: string, draft: JobDraft) => Promise<void>
+  onEdit: (id: string, job: Job) => void
   onRemove: (id: string) => void
 }) {
   const [editingId, setEditingId] = useState<string | null>(null)
