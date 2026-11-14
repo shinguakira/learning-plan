@@ -18,7 +18,7 @@ another language is not a request for output in it.
 
 ## UI: shadcn/ui
 
-- Build every screen out of shadcn. Add a component with `npx shadcn@latest add <name>`.
+- Build every screen out of shadcn. Add a component with `pnpm dlx shadcn@latest add <name>`.
 - `frontend/src/components/ui/` is copied source owned by this repo. Editing it is correct.
 - Style through theme tokens (`bg-background`, `text-foreground`, `text-muted-foreground`,
   `bg-primary`, `border`, `bg-card`), not raw palette classes.

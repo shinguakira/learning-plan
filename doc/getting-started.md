@@ -8,16 +8,21 @@ the same setup as a short reference; this is the version with the reasons attach
 
 You need **Node** — the runtime the dev server and the build both run on. This
 project wants 24 or newer, which is written down in `engines` in the root
-[`package.json`](../package.json), so `npm install` warns you if you are outside it.
+[`package.json`](../package.json), so `pnpm install` warns you if you are outside it.
 
-The two packages are one npm workspace, so both install together from the repository
+You also need **pnpm**, the package manager, and Node already ships the way to get it:
+`corepack enable` switches it on once, and from then on `pnpm` runs exactly the
+version the root `package.json` pins in `packageManager`.
+
+The two packages are one pnpm workspace, so both install together from the repository
 root, and both dev servers start together:
 
 ```bash
 node -v
-npm install
+corepack enable
+pnpm install
 cp backend/.env.example backend/.env
-npm run dev
+pnpm run dev
 ```
 
 Then open http://localhost:5173. Sample data loads on each visit to Tasks. Task edits
@@ -35,37 +40,46 @@ name, the Node range, the list of packages this project uses with an acceptable
 version range for each, and the scripts you can run. It is short, it is hand-edited,
 and it is committed.
 
-`node_modules/` is the result of `npm install`: the actual code of every one of those
+`node_modules/` is the result of `pnpm install`: the actual code of every one of those
 packages, plus everything those packages depend on in turn — thousands of folders.
-You never edit it and it is never committed. If it ever seems broken, deleting it and
-running `npm install` again is a normal thing to do, not a last resort.
+pnpm keeps one copy of each package version on your machine and links it in, so a
+package can only import what its own `package.json` lists. You never edit
+`node_modules/` and it is never committed. If it ever seems broken, deleting it and
+running `pnpm install` again is a normal thing to do, not a last resort.
 
-`package-lock.json` sits between the two. `package.json` says "React 19.2 or
+`pnpm-lock.yaml` sits between the two. `package.json` says "React 19.2 or
 compatible"; the lock file records the exact version that was actually installed, so
 everyone who clones the repo gets identical code. It is committed, and it is written
-by npm — leave it alone and let `npm install` update it.
+by pnpm — leave it alone and let `pnpm install` update it.
 
-Two commands worth understanding:
+Some packages run a script of their own when installed. pnpm refuses to run one until
+it is approved under `allowBuilds` in
+[`pnpm-workspace.yaml`](../pnpm-workspace.yaml), and stops the install with
+`ERR_PNPM_IGNORED_BUILDS` until it is. Prisma and esbuild are approved there already.
 
-- **`npm run <name>`** runs a script from `package.json`. While it runs, npm puts
-  `node_modules/.bin/` on the PATH, which is why `npm run dev` can invoke `vite`
+Three commands worth understanding:
+
+- **`pnpm run <name>`** runs a script from `package.json`. While it runs, pnpm puts
+  `node_modules/.bin/` on the PATH, which is why `pnpm run dev` can invoke `vite`
   even though `vite` is not installed system-wide.
-- **`npx <tool>`** runs a tool's executable directly — `npx oxfmt --check .`,
-  `npx shadcn@latest add dialog`. Use it for one-off commands that do not deserve
-  their own script.
+- **`pnpm exec <tool>`** runs a tool this project already installs —
+  `pnpm exec oxfmt --check .`. Use it for one-off commands that do not deserve their
+  own script.
+- **`pnpm dlx <package>`** downloads a package just for the one command and runs it —
+  `pnpm dlx shadcn@latest add dialog`.
 
 ## The scripts
 
-| Script                 | What it does                                          |
-| ---------------------- | ----------------------------------------------------- |
-| `npm run dev`          | Dev server. Edits appear in the browser as you save   |
-| `npm run format`       | oxfmt, rewriting files                                |
-| `npm run format-check` | oxfmt, reporting without rewriting                    |
-| `npm run lint`         | oxlint — catches suspect code the type checker allows |
-| `npm run lint-fix`     | The same, applying every fix oxlint can make itself   |
-| `npm run type-check`   | TypeScript — the check you run while working          |
-| `npm run preview`      | Serves a built `dist/` the way a real host would      |
-| `npm run build`        | Builds `dist/`. Only builds — it checks nothing       |
+| Script                  | What it does                                          |
+| ----------------------- | ----------------------------------------------------- |
+| `pnpm run dev`          | Dev server. Edits appear in the browser as you save   |
+| `pnpm run format`       | oxfmt, rewriting files                                |
+| `pnpm run format-check` | oxfmt, reporting without rewriting                    |
+| `pnpm run lint`         | oxlint — catches suspect code the type checker allows |
+| `pnpm run lint-fix`     | The same, applying every fix oxlint can make itself   |
+| `pnpm run type-check`   | TypeScript — the check you run while working          |
+| `pnpm run preview`      | Serves a built `dist/` the way a real host would      |
+| `pnpm run build`        | Builds `dist/`. Only builds — it checks nothing       |
 
 Each script does one job. `build` produces the bundle and nothing else, so a type
 error is reported by `type-check`, not by a build that happens to run `tsc` on the
@@ -81,10 +95,10 @@ Both are lists of packages; the split is about **what runs in the browser**.
   output, and then have no further part in it. Vite, TypeScript, oxlint and oxfmt.
 
 The line is about the package, not its output. Tailwind is a devDependency and its
-compiled CSS is very much shipped — the compiling happens during `npm run build`, and
+compiled CSS is very much shipped — the compiling happens during `pnpm run build`, and
 `tailwindcss` itself never reaches the browser.
 
-`npm install <pkg>` adds to `dependencies`; `npm install -D <pkg>` adds to
+From `frontend/`, `pnpm add <pkg>` adds to `dependencies`; `pnpm add -D <pkg>` adds to
 `devDependencies`. Getting it wrong will not break the app, since both are installed
 locally either way — it misleads the next person reading the list.
 
@@ -115,7 +129,7 @@ locally either way — it misleads the next person reading the list.
 | `tailwindcss`                                     | the CSS framework the class names come from                          |
 | `@tailwindcss/vite`                               | runs Tailwind as part of the Vite build                              |
 | `tw-animate-css`                                  | the animation utilities shadcn's components expect                   |
-| `typescript`                                      | the type checker — the `tsc -b` behind `npm run type-check`          |
+| `typescript`                                      | the type checker — the `tsc -b` behind `pnpm run type-check`         |
 | `@types/react`, `@types/react-dom`, `@types/node` | types for libraries that ship without them                           |
 | `oxlint`                                          | the linter — React and TypeScript rules built in, no plugin packages |
 | `oxfmt`                                           | the formatter                                                        |
@@ -264,12 +278,12 @@ handled. The build report is the list of what is left to do.
 Three commands while you work, and all three should be silent:
 
 ```bash
-npm run format-check
-npm run lint
-npm run type-check
+pnpm run format-check
+pnpm run lint
+pnpm run type-check
 ```
 
-`npm run type-check` is the one that catches real mistakes; the other two keep the
+`pnpm run type-check` is the one that catches real mistakes; the other two keep the
 code consistent with what is already there.
 
 ## Where to go next
