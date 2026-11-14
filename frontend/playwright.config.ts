@@ -15,12 +15,12 @@ export default defineConfig({
   projects: [{ name: "chromium", use: { ...devices["Desktop Chrome"] } }],
   webServer: [
     {
-      command: "npm --prefix ../backend run dev",
+      command: "pnpm --dir ../backend run dev",
       url: "http://127.0.0.1:3001/api/tasks",
       reuseExistingServer: false,
     },
     {
-      command: "npm run dev",
+      command: "pnpm run dev",
       url: BASE_URL,
       // Point the chat at a host that never resolves, so a spec that forgets to
       // stub the endpoint fails loudly instead of reaching a real provider.
