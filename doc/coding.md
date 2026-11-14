@@ -50,7 +50,7 @@ narrowed index types, an exhaustive `NEXT_STATUS` map, destructuring with defaul
 rather than silenced with `!`. The only `!` in `src/` is `getElementById('root')` in
 `main.tsx`.
 
-Each check is its own script. `npm run type-check` is `tsc`; `npm run build` only
+Each check is its own script. `pnpm run type-check` is `tsc`; `pnpm run build` only
 builds; oxlint reads syntax only. No tool reports what another already
 reports.
 

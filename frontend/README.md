@@ -20,26 +20,27 @@ is for** if you want the why rather than the how.
 | E2E tests       | Playwright 1.63                      |
 | Lint            | oxlint 1                             |
 | Format          | oxfmt 0.76                           |
-| Package manager | npm                                  |
+| Package manager | pnpm 12                              |
 
 ## Setup
 
-Requires **Node 24 or newer** — declared in `engines`, so `npm install` warns if you
+Requires **Node 24 or newer** — declared in `engines`, so `pnpm install` warns if you
 are on anything older.
 
-This package is one half of an npm workspace, so dependencies install from the
-repository root:
+This package is one half of a pnpm workspace, so dependencies install from the
+repository root. `corepack enable` once makes `pnpm` available:
 
 ```bash
 node -v          # check you are in range
-cd .. && npm install
+corepack enable
+cd .. && pnpm install
 ```
 
-`npm run dev` from the root starts this package and the backend together. To start
+`pnpm run dev` from the root starts this package and the backend together. To start
 only this one, run it from here:
 
 ```bash
-npm run dev
+pnpm run dev
 ```
 
 Open http://localhost:5173. Without the backend running, the task and chat pages have
@@ -48,8 +49,8 @@ nothing to call.
 To run the end-to-end tests, download the browser once first:
 
 ```bash
-npx playwright install chromium
-npm run test-e2e
+pnpm exec playwright install chromium
+pnpm run test-e2e
 ```
 
 ### Chat endpoint
@@ -67,7 +68,7 @@ requires a key; a loopback local runtime may use HTTP and an empty key.
 **Every control comes from shadcn/ui** — add more with:
 
 ```bash
-npx shadcn@latest add <component>
+pnpm dlx shadcn@latest add <component>
 ```
 
 Components land in `src/components/ui/` and are **owned by this repo** — copied
@@ -83,20 +84,20 @@ Styling conventions are in [`doc/coding.md`](../doc/coding.md).
 
 Every script defined in [`package.json`](package.json), and nothing else:
 
-| Script                    | What it does                     |
-| ------------------------- | -------------------------------- |
-| `npm run dev`             | Dev server with HMR              |
-| `npm run format`          | oxfmt, writing changes           |
-| `npm run format-check`    | oxfmt, check only                |
-| `npm run lint`            | oxlint                           |
-| `npm run lint-fix`        | oxlint, applying fixable rules   |
-| `npm run type-check`      | TypeScript                       |
-| `npm run test-unit`       | Vitest unit tests                |
-| `npm run test-unit-watch` | Vitest in watch mode             |
-| `npm run test-e2e`        | Playwright end-to-end tests      |
-| `npm run test-e2e-ui`     | Playwright in watch/inspect mode |
-| `npm run preview`         | Serve the production build       |
-| `npm run build`           | Build to `dist/`                 |
+| Script                     | What it does                     |
+| -------------------------- | -------------------------------- |
+| `pnpm run dev`             | Dev server with HMR              |
+| `pnpm run format`          | oxfmt, writing changes           |
+| `pnpm run format-check`    | oxfmt, check only                |
+| `pnpm run lint`            | oxlint                           |
+| `pnpm run lint-fix`        | oxlint, applying fixable rules   |
+| `pnpm run type-check`      | TypeScript                       |
+| `pnpm run test-unit`       | Vitest unit tests                |
+| `pnpm run test-unit-watch` | Vitest in watch mode             |
+| `pnpm run test-e2e`        | Playwright end-to-end tests      |
+| `pnpm run test-e2e-ui`     | Playwright in watch/inspect mode |
+| `pnpm run preview`         | Serve the production build       |
+| `pnpm run build`           | Build to `dist/`                 |
 
 `dist/` is a plain static bundle — host it anywhere that serves files.
 

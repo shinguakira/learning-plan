@@ -40,7 +40,7 @@ need to exist, because Prisma creates it on the first migration.
 From `backend/`:
 
 ```bash
-npx prisma migrate dev --name init
+pnpm exec prisma migrate dev --name init
 ```
 
 That writes `backend/prisma/migrations/<timestamp>_init/migration.sql`, creates
@@ -54,7 +54,7 @@ Skill form's options into `technologies`. Every write is an `upsert` keyed on th
 ## 4. Look at the rows
 
 ```bash
-npm run db-studio
+pnpm run db-studio
 ```
 
 Prisma Studio opens on http://localhost:5555 — browse, filter and edit rows per table. It
@@ -67,15 +67,15 @@ All from `backend/`.
 
 | Command | What it does |
 | --- | --- |
-| `npx prisma migrate dev --name <name>` | Write a migration from schema changes, apply it, seed |
-| `npx prisma migrate deploy` | Apply existing migrations. The production path. Never seeds |
-| `npx prisma migrate reset` | Drop everything, re-apply every migration, seed |
-| `npx prisma db seed` | Run the seed script on its own |
-| `npx prisma db push` | Sync the schema with no migration file. Prototyping only |
-| `npx prisma validate` | Check the schema parses |
-| `npm run db-studio` | Open the row browser |
+| `pnpm exec prisma migrate dev --name <name>` | Write a migration from schema changes, apply it, seed |
+| `pnpm exec prisma migrate deploy` | Apply existing migrations. The production path. Never seeds |
+| `pnpm exec prisma migrate reset` | Drop everything, re-apply every migration, seed |
+| `pnpm exec prisma db seed` | Run the seed script on its own |
+| `pnpm exec prisma db push` | Sync the schema with no migration file. Prototyping only |
+| `pnpm exec prisma validate` | Check the schema parses |
+| `pnpm run db-studio` | Open the row browser |
 
-`npx` runs the CLI from `backend/node_modules/.bin`; `prisma` is a devDependency, not a
+`pnpm exec` runs the CLI from `backend/node_modules/.bin`; `prisma` is a devDependency, not a
 global install.
 
 ## What creates what
