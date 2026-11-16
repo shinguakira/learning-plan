@@ -1,4 +1,4 @@
-# Production only. Local development is still `npm run dev` with tsx - nothing
+# Production only. Local development is still `pnpm run dev` with tsx - nothing
 # here is needed to work on the backend.
 #
 # This lives at the repository root because Vercel builds a container service
@@ -8,32 +8,41 @@
 
 FROM node:24-alpine AS prune
 WORKDIR /repo
-RUN npm install -g turbo@2.11.10
+ENV COREPACK_ENABLE_DOWNLOAD_PROMPT=0
+RUN corepack enable
 COPY . .
-RUN turbo prune learning-plan-backend --docker
+RUN pnpm dlx turbo@2.11.10 prune learning-plan-backend --docker
 
 FROM node:24-alpine AS build
 WORKDIR /repo
+ENV COREPACK_ENABLE_DOWNLOAD_PROMPT=0
+RUN corepack enable
 # Manifests and the pruned lockfile first, so the install layer survives a
 # source-only change.
 COPY --from=prune /repo/out/json/ ./
-RUN npm ci
+# Hoisted, unlike local installs: pnpm's default layout puts the generated
+# Prisma client under node_modules/.pnpm/<hashed dir>, and the final stage
+# needs it at node_modules/.prisma to copy it across.
+RUN pnpm install --frozen-lockfile --config.node-linker=hoisted
 COPY --from=prune /repo/out/full/ ./
-RUN npm run db-generate --workspace learning-plan-backend
-RUN npm run build --workspace learning-plan-backend
+RUN pnpm --filter learning-plan-backend run db-generate
+RUN pnpm --filter learning-plan-backend run build
 
 FROM node:24-alpine
 WORKDIR /repo
 ENV NODE_ENV=production
+ENV COREPACK_ENABLE_DOWNLOAD_PROMPT=0
+RUN corepack enable
 
 # Vercel routes to port 80 unless PORT says otherwise. Setting it here rather
-# than changing the code's fallback keeps `npm run dev` on 3001 locally.
+# than changing the code's fallback keeps `pnpm run dev` on 3001 locally.
 ENV PORT=80
 
 COPY --from=prune /repo/out/json/ ./
 # The Prisma CLI is a dev dependency, so it cannot generate anything here. The
 # client generated in the build stage is copied in instead.
-RUN npm ci --omit=dev && npm cache clean --force
+RUN pnpm install --frozen-lockfile --prod --config.node-linker=hoisted \
+  && rm -rf "$(pnpm store path)"
 COPY --from=build /repo/node_modules/.prisma ./node_modules/.prisma
 COPY --from=build /repo/backend/dist ./backend/dist
 

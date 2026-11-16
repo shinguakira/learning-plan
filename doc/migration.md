@@ -9,7 +9,7 @@ From `backend/`.
 2. **Write the migration file, without applying it.**
 
    ```bash
-   npx prisma migrate dev --create-only
+   pnpm exec prisma migrate dev --create-only
    ```
 
    Writes `prisma/migrations/<timestamp>_<label>/migration.sql` and stops. Read the SQL
@@ -18,7 +18,7 @@ From `backend/`.
 3. **Apply it.**
 
    ```bash
-   npx prisma migrate deploy
+   pnpm exec prisma migrate deploy
    ```
 
    Applies every pending migration, in order. Never a single file by name.
@@ -26,7 +26,7 @@ From `backend/`.
 4. **Generate the client.**
 
    ```bash
-   npx prisma generate
+   pnpm exec prisma generate
    ```
 
    Separate from applying. The client is code, the migration is the database.
@@ -39,7 +39,7 @@ From `backend/`.
 
 ## Optional
 
-- Add rows to `prisma/seed.ts` and run `npx prisma db seed`.
+- Add rows to `prisma/seed.ts` and run `pnpm exec prisma db seed`.
 - Delete the seed constant in `src/constants/` once nothing reads it.
 
 ## Notes
