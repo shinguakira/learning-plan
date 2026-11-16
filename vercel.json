@@ -9,7 +9,7 @@
       "root": ".",
       "runtime": "container",
       "entrypoint": "Dockerfile.vercel",
-      "ignoreCommand": "[ -n \"$VERCEL_GIT_PREVIOUS_SHA\" ] && git diff --quiet $VERCEL_GIT_PREVIOUS_SHA $VERCEL_GIT_COMMIT_SHA -- :/backend :/Dockerfile.vercel :/vercel.json :/package.json :/package-lock.json :/turbo.json"
+      "ignoreCommand": "[ -n \"$VERCEL_GIT_PREVIOUS_SHA\" ] && git diff --quiet $VERCEL_GIT_PREVIOUS_SHA $VERCEL_GIT_COMMIT_SHA -- :/backend :/Dockerfile.vercel :/vercel.json :/package.json :/pnpm-lock.yaml :/pnpm-workspace.yaml :/turbo.json"
     }
   },
   "rewrites": [

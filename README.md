@@ -9,34 +9,38 @@ you want the why rather than the how.
 A Turborepo workspace. One install at the root, one lockfile, two packages.
 
 ```
-frontend/        the app: React, Vite, Tailwind, shadcn/ui
-backend/         Fastify. Serves sample task and profile data
-doc/             documentation about the repo and the product, plus the README images
-package.json     the workspace root: npm workspaces and the turbo scripts
-turbo.json       what each task outputs and which of them are cached
-vercel.json      routes the deployment to the two services
+frontend/             the app: React, Vite, Tailwind, shadcn/ui
+backend/              Fastify. Serves sample task and profile data
+doc/                  documentation about the repo and the product, plus the README images
+package.json          the workspace root: the pnpm version and the turbo scripts
+pnpm-workspace.yaml   the two packages, and which dependencies may run install scripts
+turbo.json            what each task outputs and which of them are cached
+vercel.json           routes the deployment to the two services
 ```
 
 ## Running it
 
-Install once, from the root. That covers both packages.
+Install once, from the root. That covers both packages. pnpm comes with Node through
+corepack: `corepack enable` once, and `pnpm` then runs the version pinned in
+`packageManager`.
 
 ```bash
-npm install
+corepack enable
+pnpm install
 cp backend/.env.example backend/.env
 ```
 
 Then start both dev servers together:
 
 ```bash
-npm run dev
+pnpm run dev
 ```
 
 The app is on http://localhost:5173 and the API on http://localhost:3001. Configure
-chat through `backend/.env`. To run one on its own, `npm run dev -w frontend` or
-`npm run dev -w backend`.
+chat through `backend/.env`. To run one on its own, `pnpm --filter ./frontend run dev` or
+`pnpm --filter ./backend run dev`.
 
-Node 24 or newer. The root and both packages declare it in `engines`, so `npm install` warns if
+Node 24 or newer. The root and both packages declare it in `engines`, so `pnpm install` warns if
 you are on anything older.
 
 **nvm on macOS**
@@ -78,12 +82,12 @@ Before calling work done, all of these must pass from the root. Each runs in eve
 package that defines it, and turbo skips the ones whose inputs have not changed.
 
 ```bash
-npm run format-check
-npm run lint
-npm run type-check
-npm run test-unit
-npm run test-e2e
+pnpm run format-check
+pnpm run lint
+pnpm run type-check
+pnpm run test-unit
+pnpm run test-e2e
 ```
 
-`test-unit` and `test-e2e` exist in `frontend/` only. Add `-- --filter=learning-plan-backend`
+`test-unit` and `test-e2e` exist in `frontend/` only. Add `--filter=learning-plan-backend`
 to any of them to run it for one package.

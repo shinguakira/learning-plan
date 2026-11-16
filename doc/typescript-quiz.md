@@ -379,5 +379,5 @@ Write the body. Two array methods, one line. The fields are at
 | 5 | `firstOverdue(tasks: Task[]): Task \| null` | [`utils/task.ts`](../frontend/src/utils/task.ts) |
 | 6 | `skillNames(skills: Skill[], level: SkillLevel): string[]` | [`utils/skill.ts`](../frontend/src/utils/skill.ts) |
 
-Check your work with `npm run type-check` from `frontend/`. If it passes, the
+Check your work with `pnpm run type-check` from `frontend/`. If it passes, the
 types are right.

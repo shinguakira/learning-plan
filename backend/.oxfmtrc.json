@@ -1,11 +1,11 @@
 {
-  "$schema": "../node_modules/oxfmt/configuration_schema.json",
+  "$schema": "./node_modules/oxfmt/configuration_schema.json",
   "semi": false,
   "singleQuote": false,
   "printWidth": 100,
   "trailingComma": "all",
   "sortPackageJson": false,
-  "ignorePatterns": ["dist", "node_modules", "package-lock.json", "openapi.json"],
+  "ignorePatterns": ["dist", "node_modules", "pnpm-lock.yaml", "openapi.json"],
   "sortImports": {
     "groups": ["builtin", "external", ["parent", "sibling", "index"], "unknown"],
     "newlinesBetween": true
