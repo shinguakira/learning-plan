@@ -1,19 +1,19 @@
-import type { EMPLOYMENT_TYPES } from "@/constants/job"
+import type {
+  EmploymentType as ApiEmploymentType,
+  Job as ApiJob,
+  PutApiJobsByIdData,
+} from "@/api/generated"
 import type { ISODate } from "@/types/date"
 
-export type EmploymentType = (typeof EMPLOYMENT_TYPES)[number]
+export type EmploymentType = ApiEmploymentType
 
-export type Job = {
-  id: string
-  company: string
-  title: string
-  employmentType: EmploymentType
+export type Job = Omit<ApiJob, "startDate" | "endDate"> & {
   startDate: ISODate
-  /** Null while this is the current role, which is what "Present" renders from. */
   endDate: ISODate | null
-  summary: string
-  /** Full ISO timestamp, not an ISODate - only used for sorting. */
-  createdAt: string
 }
 
-export type JobDraft = Omit<Job, "id" | "createdAt">
+export type JobDraft = Omit<
+  PutApiJobsByIdData["body"],
+  "startDate" | "endDate"
+> &
+  Pick<Job, "startDate" | "endDate">
