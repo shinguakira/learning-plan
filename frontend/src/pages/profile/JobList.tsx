@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils"
 import { today } from "@/utils/date"
 import { formatDuration, formatPeriod, sortJobs } from "@/utils/job"
 import { JobEditDialog } from "@/pages/profile/JobEditDialog"
-import type { Job } from "@/types/job"
+import type { Job } from "@/api/generated"
 
 export function JobList({
   jobs,

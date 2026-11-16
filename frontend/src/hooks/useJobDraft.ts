@@ -1,11 +1,11 @@
 import { useState } from "react"
 import { EMPLOYMENT_TYPES } from "@/constants/job"
 import { today } from "@/utils/date"
-import type { Job, JobDraft } from "@/types/job"
+import type { Job, PutApiJobsByIdData } from "@/api/generated"
 
 export type JobDraftApi = {
-  draft: JobDraft
-  patch: (next: Partial<JobDraft>) => void
+  draft: PutApiJobsByIdData["body"]
+  patch: (next: Partial<PutApiJobsByIdData["body"]>) => void
   /** Errors are computed on every render but only shown once submit was tried. */
   companyError: string | null
   titleError: string | null
@@ -13,11 +13,11 @@ export type JobDraftApi = {
   invalid: boolean
   touched: boolean
   /** Mark as tried; returns the trimmed draft when it is valid, null otherwise. */
-  submit: () => JobDraft | null
+  submit: () => PutApiJobsByIdData["body"] | null
   reset: () => void
 }
 
-function emptyDraft(): JobDraft {
+function emptyDraft(): PutApiJobsByIdData["body"] {
   return {
     company: "",
     title: "",
@@ -30,7 +30,7 @@ function emptyDraft(): JobDraft {
 
 /** Owns the add-job form's state and its validation. */
 export function useJobDraft(job: Job | null = null): JobDraftApi {
-  const [draft, setDraft] = useState<JobDraft>(() =>
+  const [draft, setDraft] = useState<PutApiJobsByIdData["body"]>(() =>
     job === null
       ? emptyDraft()
       : {

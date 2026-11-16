@@ -5,7 +5,7 @@ import { createCertificate, updateCertificate } from "@/api/certificate"
 import { EMPTY_PROFILE_STATE } from "@/constants/profile"
 import type { ProfileState } from "@/types/profile"
 import type { MockUser } from "@/types/user"
-import type { Job } from "@/types/job"
+import type { Job } from "@/api/generated"
 import type { Certificate, CertificateDraft } from "@/types/certificate"
 
 export type ProfileApi = {

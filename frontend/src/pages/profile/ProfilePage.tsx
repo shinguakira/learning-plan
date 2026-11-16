@@ -22,7 +22,6 @@ import { StrengthList } from "@/pages/profile/StrengthList"
 import { ProfileSectionLoading } from "@/pages/profile/ProfileSectionLoading"
 import { ProfileFormDialog } from "@/pages/profile/ProfileFormDialog"
 import { parseISODate } from "@/utils/date"
-import { jobClient } from "@/api/jobClient"
 
 /**
  * Every section is a stack of the same card, so four of them in a column were
@@ -57,7 +56,7 @@ export function ProfilePage() {
     removeStrength,
   } = useProfile(user)
   const createSkill = useMutation(postApiSkillsMutation())
-  const createJob = useMutation(postApiJobsMutation({ client: jobClient }))
+  const createJob = useMutation(postApiJobsMutation())
   const createStrength = useMutation(postApiStrengthMutation())
   const { status: csvStatus, download: downloadCsv } = useDownloadProfileCsv()
   const { status: pdfStatus, download: downloadPdf } = useDownloadProfilePdf(user, {

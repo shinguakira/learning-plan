@@ -1,6 +1,6 @@
-import { formatMonth, parseDate } from "@/utils/date"
+import { formatMonth, parseDate, parseISODate } from "@/utils/date"
 import type { ISODate } from "@/types/date"
-import type { Job } from "@/types/job"
+import type { Job } from "@/api/generated"
 
 /**
  * Most recent first, which is the order a work history is read in. The current
@@ -12,8 +12,15 @@ export function sortJobs(jobs: readonly Job[]): Job[] {
 
 /** 'April 2024 - Present' */
 export function formatPeriod(job: Job): string {
-  const end = job.endDate === null ? "Present" : formatMonth(job.endDate)
-  return `${formatMonth(job.startDate)} - ${end}`
+  const startDate = parseISODate(job.startDate)
+  const endDate = job.endDate === null ? null : parseISODate(job.endDate)
+
+  if (startDate === null || (job.endDate !== null && endDate === null)) {
+    throw new Error("The server returned an invalid job date.")
+  }
+
+  const end = endDate === null ? "Present" : formatMonth(endDate)
+  return `${formatMonth(startDate)} - ${end}`
 }
 
 /** Whole months between the two dates, counting a part-month as one. */
@@ -26,7 +33,14 @@ export function monthsBetween(start: ISODate, end: ISODate): number {
 
 /** '2 yr 7 mo', '11 mo', '1 yr' - the shape a CV uses. */
 export function formatDuration(job: Job, until: ISODate): string {
-  const total = monthsBetween(job.startDate, job.endDate ?? until)
+  const startDate = parseISODate(job.startDate)
+  const endDate = parseISODate(job.endDate ?? until)
+
+  if (startDate === null || endDate === null) {
+    throw new Error("The server returned an invalid job date.")
+  }
+
+  const total = monthsBetween(startDate, endDate)
   const years = Math.floor(total / 12)
   const months = total % 12
 

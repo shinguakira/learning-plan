@@ -1,4 +1,4 @@
-import type { EmploymentType } from "@/types/job"
+import type { EmploymentType } from "@/api/generated"
 
 export const EMPLOYMENT_TYPES = ["full-time", "contract", "part-time", "internship"] as const
 

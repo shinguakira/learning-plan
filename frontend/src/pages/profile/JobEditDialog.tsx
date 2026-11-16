@@ -1,11 +1,10 @@
 import { toast } from "sonner"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { JobForm } from "@/pages/profile/JobForm"
-import type { Job } from "@/types/job"
+import type { Job } from "@/api/generated"
 import { useMutation } from "@tanstack/react-query"
 import { putApiJobsByIdMutation } from "@/api/generated/@tanstack/react-query.gen"
 import { parseISODate } from "@/utils/date"
-import { jobClient } from "@/api/jobClient"
 
 export function JobEditDialog({
   job,
@@ -16,7 +15,7 @@ export function JobEditDialog({
   onEdit: (id: string, job: Job) => void
   onClose: () => void
 }) {
-  const updateJob = useMutation(putApiJobsByIdMutation({ client: jobClient }))
+  const updateJob = useMutation(putApiJobsByIdMutation())
 
   return (
     <Dialog
