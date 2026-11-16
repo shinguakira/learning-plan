@@ -12,8 +12,5 @@ export type Job = Omit<ApiJob, "startDate" | "endDate"> & {
   endDate: ISODate | null
 }
 
-export type JobDraft = Omit<
-  PutApiJobsByIdData["body"],
-  "startDate" | "endDate"
-> &
+export type JobDraft = Omit<PutApiJobsByIdData["body"], "startDate" | "endDate"> &
   Pick<Job, "startDate" | "endDate">
