@@ -4,7 +4,6 @@ import { JobForm } from "@/pages/profile/JobForm"
 import type { Job } from "@/api/generated"
 import { useMutation } from "@tanstack/react-query"
 import { putApiJobsByIdMutation } from "@/api/generated/@tanstack/react-query.gen"
-import { parseISODate } from "@/utils/date"
 
 export function JobEditDialog({
   job,
@@ -40,15 +39,7 @@ export function JobEditDialog({
                 path: { id: job.id },
                 body: draft,
               })
-
-              const startDate = parseISODate(updated.startDate)
-              const endDate = updated.endDate === null ? null : parseISODate(updated.endDate)
-
-              if (startDate === null || (updated.endDate !== null && endDate === null)) {
-                throw new Error("The server returned an invalid job date.")
-              }
-
-              onEdit(job.id, { ...updated, startDate, endDate })
+              onEdit(job.id, updated)
               toast.success("Job updated successfully.")
               onClose()
             }}
