@@ -21,7 +21,6 @@ import { StrengthForm } from "@/pages/profile/StrengthForm"
 import { StrengthList } from "@/pages/profile/StrengthList"
 import { ProfileSectionLoading } from "@/pages/profile/ProfileSectionLoading"
 import { ProfileFormDialog } from "@/pages/profile/ProfileFormDialog"
-import { parseISODate } from "@/utils/date"
 
 /**
  * Every section is a stack of the same card, so four of them in a column were
@@ -258,15 +257,7 @@ export function ProfilePage() {
                   const job = await createJob.mutateAsync({
                     body: { user, ...draft },
                   })
-                  const startDate = parseISODate(job.startDate)
-                  const endDate = job.endDate === null ? null : parseISODate(job.endDate)
-
-                  if (startDate === null || (job.endDate !== null && endDate === null)) {
-                    throw new Error("The server returned an invalid job date.")
-                  }
-
-                  addJob({ ...job, startDate, endDate })
-
+                  addJob(job)
                   toast.success("Job added successfully.")
                   close()
                 }}
