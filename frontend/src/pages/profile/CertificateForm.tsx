@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { FormField } from "@/components/form/FormField"
 import { useCertificateDraft } from "@/hooks/useCertificateDraft"
-import type { Certificate, CertificateDraft } from "@/types/certificate"
+import type { Certificate, PutApiCertificateByIdData } from "@/api/generated"
 
 export function CertificateForm({
   certificate = null,
@@ -14,7 +14,7 @@ export function CertificateForm({
 }: {
   certificate?: Certificate | null
   existingNames?: readonly string[]
-  onSubmit: (draft: CertificateDraft) => Promise<void>
+  onSubmit: (draft: PutApiCertificateByIdData["body"]) => Promise<void>
 }) {
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -30,7 +30,18 @@ export function CertificateForm({
     try {
       await onSubmit(ready)
     } catch (caught: unknown) {
-      setError(caught instanceof Error ? caught.message : "Could not save the certificate.")
+      if (caught instanceof TypeError) {
+        setError("Could not reach the backend. Is it running?")
+      } else if (
+        typeof caught === "object" &&
+        caught !== null &&
+        "message" in caught &&
+        typeof caught.message === "string"
+      ) {
+        setError(caught.message)
+      } else {
+        setError("Could not save the certificate.")
+      }
     } finally {
       setSaving(false)
     }

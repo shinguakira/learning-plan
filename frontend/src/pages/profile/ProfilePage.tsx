@@ -5,6 +5,7 @@ import {
   postApiSkillsMutation,
   postApiStrengthMutation,
   postApiJobsMutation,
+  postApiCertificateMutation,
 } from "@/api/generated/@tanstack/react-query.gen"
 import { Button } from "@/components/ui/button"
 import { useDownloadProfileCsv } from "@/hooks/useDownloadProfileCsv"
@@ -57,6 +58,7 @@ export function ProfilePage() {
   const createSkill = useMutation(postApiSkillsMutation())
   const createJob = useMutation(postApiJobsMutation())
   const createStrength = useMutation(postApiStrengthMutation())
+  const createCertificate = useMutation(postApiCertificateMutation())
   const { status: csvStatus, download: downloadCsv } = useDownloadProfileCsv()
   const { status: pdfStatus, download: downloadPdf } = useDownloadProfilePdf(user, {
     skills,
@@ -306,7 +308,10 @@ export function ProfilePage() {
             {(close) => (
               <CertificateForm
                 onSubmit={async (draft) => {
-                  await addCertificate(draft)
+                  const certificate = await createCertificate.mutateAsync({
+                    body: { user, ...draft },
+                  })
+                  addCertificate(certificate)
                   toast.success("Certificate added successfully.")
                   close()
                 }}

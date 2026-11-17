@@ -4,7 +4,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { parseCredentialUrl } from "@/utils/certificate"
 import { CertificateEditDialog } from "@/pages/profile/CertificateEditDialog"
-import type { Certificate, CertificateDraft } from "@/types/certificate"
+import type { Certificate } from "@/api/generated"
 
 export function CertificateList({
   certificates,
@@ -12,7 +12,7 @@ export function CertificateList({
   onRemove,
 }: {
   certificates: Certificate[]
-  onEdit: (id: string, draft: CertificateDraft) => Promise<void>
+  onEdit: (id: string, certificate: Certificate) => void
   onRemove: (id: string) => void
 }) {
   const [editingId, setEditingId] = useState<string | null>(null)

@@ -1,11 +1,14 @@
-import type { PostApiSkillsResponse, PostApiStrengthResponse, Job } from "@/api/generated"
+import type {
+  PostApiSkillsResponse,
+  PostApiStrengthResponse,
+  Job,
+  Certificate,
+} from "@/api/generated"
 import { useEffect, useRef, useState } from "react"
 import { fetchProfile } from "@/api/profile"
-import { createCertificate, updateCertificate } from "@/api/certificate"
 import { EMPTY_PROFILE_STATE } from "@/constants/profile"
 import type { ProfileState } from "@/types/profile"
 import type { MockUser } from "@/types/user"
-import type { Certificate, CertificateDraft } from "@/types/certificate"
 
 export type ProfileApi = {
   skills: PostApiSkillsResponse[]
@@ -22,8 +25,8 @@ export type ProfileApi = {
   addJob: (job: Job) => void
   editJob: (id: string, job: Job) => void
   removeJob: (id: string) => void
-  addCertificate: (draft: CertificateDraft) => Promise<void>
-  editCertificate: (id: string, draft: CertificateDraft) => Promise<void>
+  addCertificate: (certificate: Certificate) => void
+  editCertificate: (id: string, certificate: Certificate) => void
   removeCertificate: (id: string) => void
   addStrength: (strength: PostApiStrengthResponse) => void
   editStrength: (id: string, strength: PostApiStrengthResponse) => void
@@ -134,8 +137,7 @@ export function useProfile(user: MockUser): ProfileApi {
         jobs: profile.jobs.filter((job) => job.id !== id),
       }))
     },
-    addCertificate: async (draft) => {
-      const certificate = await createCertificate(user, draft)
+    addCertificate: (certificate) => {
       updateProfile((profile) => ({
         ...profile,
         certificates: [
@@ -144,8 +146,7 @@ export function useProfile(user: MockUser): ProfileApi {
         ],
       }))
     },
-    editCertificate: async (id, draft) => {
-      const certificate = await updateCertificate(id, draft)
+    editCertificate: (id, certificate) => {
       updateProfile((profile) => ({
         ...profile,
         certificates: profile.certificates.map((existing) =>

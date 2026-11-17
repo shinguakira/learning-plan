@@ -1,7 +1,9 @@
 import { toast } from "sonner"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { CertificateForm } from "@/pages/profile/CertificateForm"
-import type { Certificate, CertificateDraft } from "@/types/certificate"
+import type { Certificate } from "@/api/generated"
+import { useMutation } from "@tanstack/react-query"
+import { putApiCertificateByIdMutation } from "@/api/generated/@tanstack/react-query.gen"
 
 export function CertificateEditDialog({
   certificate,
@@ -11,9 +13,11 @@ export function CertificateEditDialog({
 }: {
   certificate: Certificate | null
   existingNames: readonly string[]
-  onEdit: (id: string, draft: CertificateDraft) => Promise<void>
+  onEdit: (id: string, certificate: Certificate) => void
   onClose: () => void
 }) {
+  const updateCertificate = useMutation(putApiCertificateByIdMutation())
+
   return (
     <Dialog
       open={certificate !== null}
@@ -34,7 +38,11 @@ export function CertificateEditDialog({
             certificate={certificate}
             existingNames={existingNames}
             onSubmit={async (draft) => {
-              await onEdit(certificate.id, draft)
+              const updated = await updateCertificate.mutateAsync({
+                path: { id: certificate.id },
+                body: draft,
+              })
+              onEdit(certificate.id, updated)
               toast.success("Certificate updated successfully.")
               onClose()
             }}

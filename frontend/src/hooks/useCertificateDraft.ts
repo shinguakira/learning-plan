@@ -1,5 +1,5 @@
 import { useState } from "react"
-import type { Certificate, CertificateDraft } from "@/types/certificate"
+import type { Certificate, PutApiCertificateByIdData } from "@/api/generated"
 import { parseCredentialUrl } from "@/utils/certificate"
 import { parseISODate } from "@/utils/date"
 
@@ -39,7 +39,7 @@ export function useCertificateDraft(
     dateError,
     urlError,
     patch: (next: Partial<typeof draft>) => setDraft((prev) => ({ ...prev, ...next })),
-    submit: (): CertificateDraft | null => {
+    submit: (): PutApiCertificateByIdData["body"] | null => {
       setTouched(true)
       if (nameError || issuerError || dateEarned === null || urlError) return null
       const ready = {
