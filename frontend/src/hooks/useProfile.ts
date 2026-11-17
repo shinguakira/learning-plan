@@ -1,4 +1,9 @@
-import type { PostApiSkillsResponse, PostApiStrengthResponse, Job, Certificate } from "@/api/generated"
+import type {
+  PostApiSkillsResponse,
+  PostApiStrengthResponse,
+  Job,
+  Certificate,
+} from "@/api/generated"
 import { useEffect, useRef, useState } from "react"
 import { fetchProfile } from "@/api/profile"
 import { EMPTY_PROFILE_STATE } from "@/constants/profile"
