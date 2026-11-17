@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { EMPLOYMENT_TYPES } from "@/constants/job"
+import { EmploymentType } from "@/api/generated"
 import { today } from "@/utils/date"
 import type { Job, PutApiJobsByIdData } from "@/api/generated"
 
@@ -21,7 +21,7 @@ function emptyDraft(): PutApiJobsByIdData["body"] {
   return {
     company: "",
     title: "",
-    employmentType: EMPLOYMENT_TYPES[0],
+    employmentType: EmploymentType.FULL_TIME,
     startDate: today(),
     endDate: null,
     summary: "",
