@@ -1,6 +1,6 @@
 import type { PostApiSkillsResponse } from "@/api/generated"
 import type { Certificate } from "@/types/certificate"
-import type { Job } from "@/types/job"
+import type { Job } from "@/api/generated"
 import type { PostApiStrengthResponse } from "@/api/generated"
 
 export type ProfileSeed = {

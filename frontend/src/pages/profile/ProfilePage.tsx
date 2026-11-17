@@ -4,6 +4,7 @@ import { toast } from "sonner"
 import {
   postApiSkillsMutation,
   postApiStrengthMutation,
+  postApiJobsMutation,
 } from "@/api/generated/@tanstack/react-query.gen"
 import { Button } from "@/components/ui/button"
 import { useDownloadProfileCsv } from "@/hooks/useDownloadProfileCsv"
@@ -54,6 +55,7 @@ export function ProfilePage() {
     removeStrength,
   } = useProfile(user)
   const createSkill = useMutation(postApiSkillsMutation())
+  const createJob = useMutation(postApiJobsMutation())
   const createStrength = useMutation(postApiStrengthMutation())
   const { status: csvStatus, download: downloadCsv } = useDownloadProfileCsv()
   const { status: pdfStatus, download: downloadPdf } = useDownloadProfilePdf(user, {
@@ -252,7 +254,10 @@ export function ProfilePage() {
             {(close) => (
               <JobForm
                 onSubmit={async (draft) => {
-                  await addJob(draft)
+                  const job = await createJob.mutateAsync({
+                    body: { user, ...draft },
+                  })
+                  addJob(job)
                   toast.success("Job added successfully.")
                   close()
                 }}

@@ -15,14 +15,14 @@ import { EMPLOYMENT_TYPES, EMPLOYMENT_TYPE_LABEL } from "@/constants/job"
 import { useJobDraft } from "@/hooks/useJobDraft"
 import { FormField } from "@/components/form/FormField"
 import { parseISODate } from "@/utils/date"
-import type { EmploymentType, Job, JobDraft } from "@/types/job"
+import type { EmploymentType, Job, PutApiJobsByIdData } from "@/api/generated"
 
 export function JobForm({
   job = null,
   onSubmit,
 }: {
   job?: Job | null
-  onSubmit: (draft: JobDraft) => Promise<void>
+  onSubmit: (draft: PutApiJobsByIdData["body"]) => Promise<void>
 }) {
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -38,7 +38,18 @@ export function JobForm({
     try {
       await onSubmit(ready)
     } catch (caught: unknown) {
-      setError(caught instanceof Error ? caught.message : "Could not save the job.")
+      if (caught instanceof TypeError) {
+        setError("Could not reach the backend. Is it running?")
+      } else if (
+        typeof caught === "object" &&
+        caught !== null &&
+        "message" in caught &&
+        typeof caught.message === "string"
+      ) {
+        setError(caught.message)
+      } else {
+        setError("Could not save the job.")
+      }
     } finally {
       setSaving(false)
     }

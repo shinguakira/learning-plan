@@ -1,7 +1,9 @@
 import { toast } from "sonner"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { JobForm } from "@/pages/profile/JobForm"
-import type { Job, JobDraft } from "@/types/job"
+import type { Job } from "@/api/generated"
+import { useMutation } from "@tanstack/react-query"
+import { putApiJobsByIdMutation } from "@/api/generated/@tanstack/react-query.gen"
 
 export function JobEditDialog({
   job,
@@ -9,9 +11,11 @@ export function JobEditDialog({
   onClose,
 }: {
   job: Job | null
-  onEdit: (id: string, draft: JobDraft) => Promise<void>
+  onEdit: (id: string, job: Job) => void
   onClose: () => void
 }) {
+  const updateJob = useMutation(putApiJobsByIdMutation())
+
   return (
     <Dialog
       open={job !== null}
@@ -31,7 +35,11 @@ export function JobEditDialog({
             key={job.id}
             job={job}
             onSubmit={async (draft) => {
-              await onEdit(job.id, draft)
+              const updated = await updateJob.mutateAsync({
+                path: { id: job.id },
+                body: draft,
+              })
+              onEdit(job.id, updated)
               toast.success("Job updated successfully.")
               onClose()
             }}

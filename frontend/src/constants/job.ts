@@ -1,8 +1,6 @@
-import type { EmploymentType } from "@/types/job"
+import { EmploymentType } from "@/api/generated"
 
-export const JOBS_API_URL = "/api/jobs"
-
-export const EMPLOYMENT_TYPES = ["full-time", "contract", "part-time", "internship"] as const
+export const EMPLOYMENT_TYPES = Object.values(EmploymentType)
 
 export const EMPLOYMENT_TYPE_LABEL: Record<EmploymentType, string> = {
   "full-time": "Full-time",
