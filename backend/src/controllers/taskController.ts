@@ -8,18 +8,17 @@ import { serializeCsv } from "../utils/csv.js"
 
 export default async function taskController(app: FastifyInstance): Promise<void> {
   app.get("/api/tasks", { schema: { response: { 200: TASKS_SCHEMA } } }, async () => ({
-    tasks: taskService.getTasks(),
+    tasks: await taskService.getTasks(),
   }))
 
   app.get(
     "/api/tasks/csv",
     { schema: { response: { 200: CSV_RESPONSE_SCHEMA } } },
     async (_request, reply) => {
+      const tasks = await taskService.getTasks()
       const rows = [
         TASK_CSV_COLUMNS,
-        ...taskService
-          .getTasks()
-          .map((task) => TASK_CSV_COLUMNS.map((column) => String(task[column]))),
+        ...tasks.map((task) => TASK_CSV_COLUMNS.map((column) => String(task[column]))),
       ]
 
       return reply

@@ -3,7 +3,7 @@ import { taskService } from "../services/taskService.js"
 import type { MockUser } from "../types/user.js"
 
 /** Match the frontend sample dates and assignment rotation without sending tasks to the browser. */
-export function createTaskAnalysisContext(user: MockUser): string | null {
+export async function createTaskAnalysisContext(user: MockUser): Promise<string | null> {
   const base = new Date()
   base.setHours(0, 0, 0, 0)
   const dateAtOffset = (offset: number): string => {
@@ -11,7 +11,8 @@ export function createTaskAnalysisContext(user: MockUser): string | null {
     date.setDate(date.getDate() + offset)
     return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`
   }
-  const tasks = taskService.getTasks().flatMap((task, index) => {
+  const allTasks = await taskService.getTasks()
+  const tasks = allTasks.flatMap((task, index) => {
     if (MOCK_USERS[index % MOCK_USERS.length] !== user) return []
     const { offsetStart, span, ...details } = task
     return [
