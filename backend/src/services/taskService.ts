@@ -2,6 +2,7 @@ import type { Task as TaskRow } from "@prisma/client"
 
 import { taskRepository } from "../repositories/taskRepository.js"
 import type { SeedTask } from "../types/task.js"
+import type { TaskCreateRequest } from "../types/taskDraft.js"
 
 const categoryLabels = {
   frontend: "Frontend",
@@ -32,5 +33,15 @@ const toTask = (row: TaskRow): SeedTask => ({
 export const taskService = {
   async getTasks(): Promise<SeedTask[]> {
     return (await taskRepository.findAll()).map(toTask)
+  },
+  async addTask(request: TaskCreateRequest) {
+    const row = await taskRepository.create(request)
+    return {
+      ...request,
+      id: row.id,
+      title: row.title,
+      note: row.note,
+      createdAt: row.createdAt.toISOString(),
+    }
   },
 }

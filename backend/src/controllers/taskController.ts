@@ -2,11 +2,24 @@ import type { FastifyInstance } from "fastify"
 
 import { CSV_RESPONSE_SCHEMA } from "../constants/downloadSchema.js"
 import { TASK_CSV_COLUMNS } from "../constants/taskCsv.js"
-import { TASKS_SCHEMA } from "../constants/taskSchema.js"
+import { TASK_CREATE_SCHEMA, TASKS_SCHEMA } from "../constants/taskSchema.js"
 import { taskService } from "../services/taskService.js"
+import type { TaskCreateRequest } from "../types/taskDraft.js"
 import { serializeCsv } from "../utils/csv.js"
 
 export default async function taskController(app: FastifyInstance): Promise<void> {
+  app.post<{ Body: TaskCreateRequest }>(
+    "/api/tasks",
+    { schema: { body: TASK_CREATE_SCHEMA } },
+    async ({ body }, reply) => {
+      if (body.dueDate < body.startDate) {
+        return reply.code(400).send({ message: "Due date must not precede the start date." })
+      }
+
+      return reply.code(201).send(await taskService.addTask(body))
+    },
+  )
+
   app.get("/api/tasks", { schema: { response: { 200: TASKS_SCHEMA } } }, async () => ({
     tasks: await taskService.getTasks(),
   }))
