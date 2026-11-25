@@ -10,7 +10,7 @@ export async function getChatReply(
   signal: AbortSignal,
 ): Promise<ChatResult> {
   try {
-    const context = input.analyzeTasks ? createTaskAnalysisContext(input.user) : null
+    const context = input.analyzeTasks ? await createTaskAnalysisContext(input.user) : null
     if (input.analyzeTasks && context === null) {
       return {
         ok: false,

@@ -16,6 +16,7 @@ model User {
   strengths    Strength[]
   certificates Certificate[]
   jobs         Job[]
+  tasks        Task[]
 
   @@map("users")
 }
@@ -36,6 +37,33 @@ enum EmploymentType {
   internship
 
   @@map("employment_type")
+}
+
+enum TaskCategory {
+  frontend       @map("Frontend")
+  backend        @map("Backend")
+  infra_cloud    @map("Infra / Cloud")
+  database       @map("Database")
+  cs_fundamentals @map("CS Fundamentals")
+  certification  @map("Certification")
+
+  @@map("task_category")
+}
+
+enum TaskStatus {
+  todo
+  doing
+  done
+
+  @@map("task_status")
+}
+
+enum TaskPriority {
+  low
+  mid
+  high
+
+  @@map("task_priority")
 }
 
 model Skill {
@@ -75,6 +103,23 @@ model Certificate {
 
   @@unique([userId, name])
   @@map("certificates")
+}
+
+model Task {
+  id             String         @id @default(uuid())
+  assigneeId         String         @map("user_id")
+  assignee           User           @relation(fields: [assigneeId], references: [id], onDelete: Cascade)
+  title          String
+  startDate      DateTime       @map("start_date") @db.Date
+  dueDate        DateTime       @map("due_date") @db.Date
+  createdAt      DateTime       @default(now()) @map("created_at")
+  category       TaskCategory
+  status         TaskStatus
+  priority       TaskPriority
+  estimatedHours Float
+  note           String @default("")
+  @@index([assigneeId])
+  @@map("tasks")
 }
 
 model Job {
