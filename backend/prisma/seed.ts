@@ -1,10 +1,10 @@
 import type { SkillLevel } from "@prisma/client"
 import { PrismaClient } from "@prisma/client"
 
+import { taskCategoryForDb } from "../src/constants/task.js"
 import { MOCK_USERS } from "../src/constants/user.js"
 import type { SeedTask } from "../src/types/task.js"
 import type { MockUser } from "../src/types/user.js"
-
 /**
  * Re-run on every `migrate dev` and `migrate reset`, so every write is an upsert
  * rather than a create.
@@ -179,15 +179,6 @@ const CERTIFICATES: Record<MockUser, SeedCertificate[]> = {
   ],
   John: [{ name: "Responsive Web Design", issuer: "freeCodeCamp", dateEarned: "2024-07-05" }],
 }
-
-const taskCategoryForDb = {
-  Frontend: "frontend",
-  Backend: "backend",
-  "Infra / Cloud": "infra_cloud",
-  Database: "database",
-  "CS Fundamentals": "cs_fundamentals",
-  Certification: "certification",
-} as const
 
 const seedTasks: SeedTask[] = [
   {
